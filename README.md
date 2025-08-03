@@ -4,6 +4,8 @@
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
 [![A-SDLC Compliant](https://img.shields.io/badge/A--SDLC-Compliant-brightgreen.svg)](https://github.com/jota-f/asdlc-framework)
 
+- **🇺🇸 [README_EN.md](README_EN.md)** - English version of this documentation
+
 **Framework revolucionário para desenvolvimento de software com agentes de IA especializados**, focado em alta velocidade, alta qualidade e um processo estruturado baseado em personas bem definidas.
 
 > **Atenção:** Este projeto é 100% gratuito, não comercial, sem doações, sem crowdfunding, sem recompensas financeiras e sem qualquer tipo de cobrança. Todo contato deve ser feito exclusivamente via GitHub (issues, discussions, PRs).
@@ -216,7 +218,7 @@ Para mais detalhes sobre como usar o A-SDLC:
 - **📋 [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md)** - Contexto técnico completo do framework
 - **📚 [prompts/README.md](prompts/README.md)** - Como usar templates com LLMs externas
 - **📖 [examples/](examples/)** - Projetos de exemplo implementados com A-SDLC
-- **🇺🇸 [README_EN.md](README_EN.md)** - English version of this documentation
+
 
 ### 🔍 Exemplo de Comparação
 
