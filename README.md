@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
-[![A-SDLC Compliant](https://img.shields.io/badge/A--SDLC-Compliant-brightgreen.svg)](https://github.com/seu-usuario/asdlc-framework)
+[![A-SDLC Compliant](https://img.shields.io/badge/A--SDLC-Compliant-brightgreen.svg)](https://github.com/jota-f/asdlc-framework)
 
 **Framework revolucionário para desenvolvimento de software com agentes de IA especializados**, focado em alta velocidade, alta qualidade e um processo estruturado baseado em personas bem definidas.
 
@@ -251,14 +251,14 @@ Este projeto está sob a licença MIT com restrições de uso não comercial.
 Ao usar o A-SDLC Framework, inclua:
 
 ```markdown
-Desenvolvido com [A-SDLC Framework](https://github.com/seu-usuario/asdlc-framework)
+Desenvolvido com [A-SDLC Framework](https://github.com/jota-f/asdlc-framework)
 ```
 
 Ou em código:
 
 ```python
 # Desenvolvido com A-SDLC Framework
-# https://github.com/seu-usuario/asdlc-framework
+# https://github.com/jota-f/asdlc-framework
 ```
 
 ### 🏢 Licenciamento Comercial

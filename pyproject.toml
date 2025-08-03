@@ -82,11 +82,11 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/seu-usuario/asdlc-framework"
-Documentation = "https://github.com/seu-usuario/asdlc-framework#readme"
-Repository = "https://github.com/seu-usuario/asdlc-framework"
-"Bug Tracker" = "https://github.com/seu-usuario/asdlc-framework/issues"
-"Source Code" = "https://github.com/seu-usuario/asdlc-framework"
+Homepage = "https://github.com/jota-f/asdlc-framework"
+Documentation = "https://github.com/jota-f/asdlc-framework#readme"
+Repository = "https://github.com/jota-f/asdlc-framework"
+"Bug Tracker" = "https://github.com/jota-f/asdlc-framework/issues"
+"Source Code" = "https://github.com/jota-f/asdlc-framework"
 
 [project.scripts]
 asdlc = "main:main"

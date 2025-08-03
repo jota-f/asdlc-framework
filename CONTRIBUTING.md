@@ -30,7 +30,7 @@ Obrigado por considerar contribuir com o A-SDLC Framework! Este documento fornec
 
 2. **Clone seu fork:**
    ```bash
-   git clone https://github.com/seu-usuario/asdlc-framework.git
+   git clone https://github.com/jota-f/asdlc-framework.git
    cd asdlc-framework
    ```
 

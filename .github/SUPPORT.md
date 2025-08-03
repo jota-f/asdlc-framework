@@ -7,7 +7,7 @@
 Antes de pedir ajuda, verifique:
 
 1. **📖 Documentação:** Leia o [README](README.md) completo
-2. **🔍 Issues:** Procure por problemas similares nas [issues](https://github.com/seu-usuario/asdlc-framework/issues)
+2. **🔍 Issues:** Procure por problemas similares nas [issues](https://github.com/jota-f/asdlc-framework/issues)
 3. **📚 Exemplos:** Consulte os [exemplos](examples/) fornecidos
 4. **🔧 Configuração:** Verifique se o ambiente está configurado corretamente
 

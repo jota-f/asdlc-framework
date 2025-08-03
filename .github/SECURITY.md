@@ -37,7 +37,7 @@ Assunto: [SECURITY] Descrição da Vulnerabilidade
 
 ## 📞 Informações de Contato
 
-- GitHub: [seu-usuario]
+- GitHub: [jota-f]
 - Disponibilidade: [quando você está disponível]
 
 ## 🔍 Severidade
@@ -76,7 +76,7 @@ Assunto: [SECURITY] Descrição da Vulnerabilidade
 
 ## 📚 Recursos de Segurança
 
-- Guia de Segurança: [Melhores Práticas](https://github.com/seu-usuario/asdlc-framework/blob/main/SECURITY.md)
+- Guia de Segurança: [Melhores Práticas](https://github.com/jota-f/asdlc-framework/blob/main/SECURITY.md)
 
 ### Checklist de Segurança
 

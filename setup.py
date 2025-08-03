@@ -24,11 +24,11 @@ setup(
     description="Framework revolucionário para desenvolvimento de software com agentes de IA especializados",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
-    url="https://github.com/seu-usuario/asdlc-framework",
+    url="https://github.com/jota-f/asdlc-framework",
     project_urls={
-        "Bug Tracker": "https://github.com/seu-usuario/asdlc-framework/issues",
-        "Documentation": "https://github.com/seu-usuario/asdlc-framework#readme",
-        "Source Code": "https://github.com/seu-usuario/asdlc-framework",
+        "Bug Tracker": "https://github.com/jota-f/asdlc-framework/issues",
+        "Documentation": "https://github.com/jota-f/asdlc-framework#readme",
+        "Source Code": "https://github.com/jota-f/asdlc-framework",
     },
     packages=find_packages(),
     classifiers=[
