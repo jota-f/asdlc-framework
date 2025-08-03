@@ -1,0 +1,59 @@
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+categories:
+  - title: '🚀 Features'
+    labels:
+      - 'feature'
+      - 'enhancement'
+  - title: '🐛 Bug Fixes'
+    labels:
+      - 'fix'
+      - 'bugfix'
+      - 'bug'
+  - title: '🧪 Tests'
+    labels:
+      - 'test'
+  - title: '📚 Documentation'
+    labels:
+      - 'documentation'
+      - 'docs'
+  - title: '🔧 Maintenance'
+    labels:
+      - 'chore'
+      - 'dependencies'
+template: |
+  ## 🎉 Release v$RESOLVED_VERSION
+
+  $CHANGES
+
+  ## 📋 Resumo das Mudanças
+
+  $CHANGES
+
+  ## 🔗 Links Úteis
+
+  - **📖 Documentação:** [Guia de Uso](https://github.com/seu-usuario/asdlc-framework#readme)
+  - **🐛 Reportar Bugs:** [Issues](https://github.com/seu-usuario/asdlc-framework/issues)
+  - **💡 Sugerir Features:** [Feature Requests](https://github.com/seu-usuario/asdlc-framework/issues/new?template=feature_request.md)
+  - **🤝 Contribuir:** [Guia de Contribuição](https://github.com/seu-usuario/asdlc-framework/blob/main/CONTRIBUTING.md)
+
+  ## 🚀 Como Atualizar
+
+  ```bash
+  # Via pip
+  pip install --upgrade asdlc-framework
+
+  # Via git
+  git pull origin main
+  pip install -r requirements.txt
+  ```
+
+  ## 📊 Estatísticas da Release
+
+  - **Commits:** $COMMIT_COUNT
+  - **Contribuidores:** $CONTRIBUTOR_COUNT
+  - **Issues Resolvidas:** $ISSUE_COUNT
+
+  ---
+
+  **💡 Desenvolvido seguindo os princípios A-SDLC - Um framework que pratica o que ensina!** 

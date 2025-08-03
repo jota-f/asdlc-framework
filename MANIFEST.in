@@ -1,0 +1,54 @@
+# A-SDLC Framework - Manifest File
+# Inclui arquivos não-Python no pacote distribuído
+
+# Documentação
+include README.md
+include LICENSE
+include CHANGELOG.md
+include CONTRIBUTING.md
+include PROJECT_CONTEXT.md
+
+# Configurações
+include requirements.txt
+include setup.py
+include .env.example
+
+# Prompts e Templates
+recursive-include prompts *.md
+recursive-include .asdlc *.md
+recursive-include .asdlc *.yaml
+recursive-include .asdlc *.yml
+
+# Exemplos
+recursive-include examples *.md
+recursive-include examples *.html
+recursive-include examples *.css
+recursive-include examples *.js
+recursive-include examples *.py
+recursive-include examples *.json
+
+# Testes
+recursive-include tests *.py
+recursive-include tests *.md
+
+# Arquivos de configuração do projeto
+include *.md
+include *.txt
+include *.yaml
+include *.yml
+
+# Excluir arquivos desnecessários
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude *.pyd
+global-exclude __pycache__
+global-exclude .git*
+global-exclude .env
+global-exclude venv
+global-exclude .venv
+global-exclude .pytest_cache
+global-exclude .coverage
+global-exclude htmlcov
+global-exclude .mypy_cache
+global-exclude .asdlc/cache
+global-exclude .asdlc/temp 

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tarefas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📝 Minhas Tarefas</h1>
+            <p class="subtitle">Organize sua vida de forma simples e eficiente</p>
+        </header>
+
+        <main>
+            <!-- Seção para adicionar nova tarefa -->
+            <section class="add-task-section">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="taskInput" 
+                        placeholder="Digite sua nova tarefa..." 
+                        aria-label="Nova tarefa"
+                        maxlength="200"
+                    >
+                    <button id="addTaskBtn" aria-label="Adicionar tarefa">
+                        <span class="btn-text">Adicionar</span>
+                        <span class="btn-icon">+</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Controles do Kanban -->
+            <section class="controls-section">
+                <div class="kanban-controls">
+                    <div class="view-toggle">
+                        <button id="kanbanView" class="view-btn active" aria-label="Visualização Kanban">
+                            📋 Kanban
+                        </button>
+                        <button id="listView" class="view-btn" aria-label="Visualização Lista">
+                            📝 Lista
+                        </button>
+                    </div>
+                    
+                    <div class="filter-controls" id="listFilters" style="display: none;">
+                        <button class="filter-btn active" data-filter="all">
+                            Todas <span class="count" id="allCount">0</span>
+                        </button>
+                        <button class="filter-btn" data-filter="pending">
+                            Pendentes <span class="count" id="pendingCount">0</span>
+                        </button>
+                        <button class="filter-btn" data-filter="completed">
+                            Concluídas <span class="count" id="completedCount">0</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <button id="clearCompleted" class="clear-btn" aria-label="Limpar tarefas finalizadas">
+                    🗑️ Limpar Finalizadas
+                </button>
+            </section>
+
+            <!-- Kanban Board -->
+            <section class="kanban-section" id="kanbanBoard">
+                <div class="kanban-board">
+                    <div class="kanban-column" data-status="not_started">
+                        <div class="column-header">
+                            <h3 class="column-title">
+                                <span class="column-icon">📝</span>
+                                Não Iniciado
+                                <span class="task-count" id="notStartedCount">0</span>
+                            </h3>
+                        </div>
+                        <div class="column-content" id="notStartedTasks" 
+                             ondrop="taskManager.handleDrop(event)" 
+                             ondragover="taskManager.handleDragOver(event)">
+                            <!-- Tarefas não iniciadas -->
+                        </div>
+                    </div>
+                    
+                    <div class="kanban-column" data-status="in_progress">
+                        <div class="column-header">
+                            <h3 class="column-title">
+                                <span class="column-icon">⚡</span>
+                                Em Andamento
+                                <span class="task-count" id="inProgressCount">0</span>
+                            </h3>
+                        </div>
+                        <div class="column-content" id="inProgressTasks"
+                             ondrop="taskManager.handleDrop(event)" 
+                             ondragover="taskManager.handleDragOver(event)">
+                            <!-- Tarefas em andamento -->
+                        </div>
+                    </div>
+                    
+                    <div class="kanban-column" data-status="completed">
+                        <div class="column-header">
+                            <h3 class="column-title">
+                                <span class="column-icon">✅</span>
+                                Finalizado
+                                <span class="task-count" id="completedCount">0</span>
+                            </h3>
+                        </div>
+                        <div class="column-content" id="completedTasks"
+                             ondrop="taskManager.handleDrop(event)" 
+                             ondragover="taskManager.handleDragOver(event)">
+                            <!-- Tarefas finalizadas -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Lista de tarefas (view alternativa) -->
+            <section class="tasks-section" id="listSection" style="display: none;">
+                <ul id="tasksList" class="tasks-list" role="list">
+                    <!-- Tarefas serão inseridas aqui dinamicamente -->
+                </ul>
+                
+                <!-- Mensagem quando não há tarefas -->
+                <div id="emptyState" class="empty-state">
+                    <div class="empty-icon">📋</div>
+                    <h3>Nenhuma tarefa encontrada</h3>
+                    <p>Adicione sua primeira tarefa para começar a organizar sua vida!</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer com informações -->
+        <footer>
+            <p class="footer-text">
+                Dados salvos automaticamente no seu navegador 💾
+            </p>
+        </footer>
+    </div>
+
+    <!-- Modal de confirmação para exclusão -->
+    <div id="confirmModal" class="modal" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-content">
+            <h3 id="modalTitle">Confirmar Exclusão</h3>
+            <p>Tem certeza que deseja excluir esta tarefa?</p>
+            <div class="modal-actions">
+                <button id="cancelDelete" class="btn-secondary">Cancelar</button>
+                <button id="confirmDelete" class="btn-danger">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
