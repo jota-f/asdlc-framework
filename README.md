@@ -216,6 +216,7 @@ Para mais detalhes sobre como usar o A-SDLC:
 - **📋 [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md)** - Contexto técnico completo do framework
 - **📚 [prompts/README.md](prompts/README.md)** - Como usar templates com LLMs externas
 - **📖 [examples/](examples/)** - Projetos de exemplo implementados com A-SDLC
+- **🇺🇸 [README_EN.md](README_EN.md)** - English version of this documentation
 
 ### 🔍 Exemplo de Comparação
 
