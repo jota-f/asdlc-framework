@@ -1,0 +1,129 @@
+/**
+ * 🎨 Estilos do Componente Kanban - A-SDLC Framework
+ * Seguindo EXATAMENTE as especificações da story 20250803_123038_kanbam_kanbam.md
+ */
+
+/* ===== KANBAN BOARD ===== */
+.kanban {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    margin: 1rem 0;
+    min-height: 400px;
+}
+
+/* ===== KANBAN COLUMNS ===== */
+.kanban .column {
+    flex: 1;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease;
+}
+
+.kanban .column h2 {
+    margin: 0 0 1rem 0;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-light);
+}
+
+/* ===== KANBAN TASKS ===== */
+.kanban .kanban-task {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    cursor: grab;
+    transition: all 0.2s ease;
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+    word-break: break-word;
+    box-shadow: var(--shadow-sm);
+    user-select: none;
+    position: relative;
+}
+
+.kanban .kanban-task:hover {
+    background: var(--bg-tertiary);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-color);
+}
+
+.kanban .kanban-task:active {
+    cursor: grabbing;
+    transform: scale(0.98);
+}
+
+.kanban .kanban-task.dragging {
+    opacity: 0.5;
+    transform: rotate(5deg);
+    z-index: 1000;
+}
+
+/* ===== DRAG & DROP FEEDBACK ===== */
+.kanban .column.drag-over {
+    background: var(--bg-tertiary);
+    border-color: var(--primary-color);
+    transform: scale(1.02);
+}
+
+.kanban .column.drag-over h2 {
+    color: var(--primary-color);
+}
+
+/* ===== DRAG START FEEDBACK ===== */
+.kanban .kanban-task[draggable="true"]:hover {
+    cursor: grab;
+}
+
+.kanban .kanban-task[draggable="true"]:active {
+    cursor: grabbing;
+}
+
+/* ===== RESPONSIVENESS ===== */
+@media (max-width: 768px) {
+    .kanban {
+        flex-direction: column;
+        gap: 0.5rem;
+        min-height: auto;
+    }
+    
+    .kanban .column {
+        min-height: 200px;
+    }
+}
+
+/* ===== DARK MODE SUPPORT ===== */
+@media (prefers-color-scheme: dark) {
+    .kanban {
+        background: var(--bg-secondary);
+    }
+    
+    .kanban .column {
+        background: var(--bg-primary);
+        border-color: var(--border-light);
+    }
+    
+    .kanban .kanban-task {
+        background: var(--bg-secondary);
+        border-color: var(--border-medium);
+        color: var(--text-primary);
+    }
+    
+    .kanban .kanban-task:hover {
+        background: var(--bg-tertiary);
+        border-color: var(--primary-color);
+    }
+} 

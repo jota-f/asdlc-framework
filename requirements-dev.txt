@@ -1,0 +1,40 @@
+# A-SDLC Framework - Dependências de Desenvolvimento
+# Instale com: pip install -r requirements-dev.txt
+
+# Dependências principais
+-r requirements.txt
+
+# Testes
+pytest>=7.0.0
+pytest-cov>=4.0.0
+pytest-mock>=3.10.0
+pytest-asyncio>=0.21.0
+pytest-html>=3.1.0
+
+# Linting e Formatação
+black>=22.0.0
+flake8>=5.0.0
+isort>=5.10.0
+mypy>=1.0.0
+
+# Segurança
+bandit>=1.7.0
+safety>=2.3.0
+
+# Documentação
+sphinx>=5.0.0
+sphinx-rtd-theme>=1.0.0
+sphinx-autodoc-typehints>=1.19.0
+
+# Ferramentas de Desenvolvimento
+pre-commit>=2.20.0
+tox>=4.0.0
+coverage>=7.0.0
+
+# Debugging
+ipython>=8.0.0
+ipdb>=0.13.0
+
+# Análise de Código
+radon>=5.1.0
+mccabe>=0.7.0 

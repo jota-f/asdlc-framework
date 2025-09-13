@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App - A-SDLC Example</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="src/components/Kanban.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- React e ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-check-circle"></i> Todo App</h1>
+            <p>Exemplo A-SDLC - Web Frontend</p>
+        </header>
+
+        <main class="main-content">
+            <!-- ===== INPUT DE TAREFA ===== -->
+            <div class="task-input-section">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="taskInput" 
+                        placeholder="Adicione uma nova tarefa..." 
+                        maxlength="100"
+                        aria-label="Digite uma nova tarefa"
+                    >
+                    <button id="addTaskBtn" class="btn btn-primary" disabled>
+                        <i class="fas fa-plus"></i> Adicionar
+                    </button>
+                </div>
+            </div>
+
+            <!-- ===== FILTROS ===== -->
+            <div class="filter-section">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="fas fa-list"></i> Todas
+                    </button>
+                    <button class="filter-btn" data-filter="pending">
+                        <i class="fas fa-clock"></i> Pendentes
+                    </button>
+                    <button class="filter-btn" data-filter="completed">
+                        <i class="fas fa-check"></i> Concluídas
+                    </button>
+                </div>
+                <div class="task-counter">
+                    <span id="taskCount">0 tarefas</span>
+                </div>
+            </div>
+
+            <!-- ===== ALTERNÂNCIA DE MODO DE VISUALIZAÇÃO ===== -->
+            <div id="viewModeToggle" class="view-mode-toggle">
+                <!-- Botões serão inseridos via JavaScript -->
+            </div>
+
+            <div class="todo-list-section">
+                <!-- ===== LISTA DE TAREFAS ===== -->
+                <ul id="todoList" class="todo-list"></ul>
+                
+                <!-- ===== ESTADO VAZIO ===== -->
+                <div id="emptyState" class="empty-state hidden">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h3>Nenhuma tarefa encontrada</h3>
+                    <p>Adicione sua primeira tarefa para começar!</p>
+                </div>
+
+                <!-- ===== AÇÕES ===== -->
+                <div class="actions-section">
+                    <button id="clearCompletedBtn" class="btn btn-secondary" disabled>
+                        <i class="fas fa-trash"></i> Limpar Concluídas
+                    </button>
+                    <button id="clearAllBtn" class="btn btn-danger" disabled>
+                        <i class="fas fa-trash-alt"></i> Limpar Todas
+                    </button>
+                </div>
+            </div>
+
+            <!-- ===== SEÇÃO KANBAN ===== -->
+            <div id="kanbanSection" class="kanban-section" style="display: none;">
+                <div id="kanbanRoot"></div>
+            </div>
+        </main>
+
+        <!-- ===== TOAST CONTAINER ===== -->
+        <div id="toastContainer" class="toast-container"></div>
+
+        <footer class="footer">
+            <p><i class="fas fa-code"></i> Desenvolvido com A-SDLC Framework | <a href="https://github.com" target="_blank"><i class="fab fa-github"></i> GitHub</a></p>
+        </footer>
+    </div>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="script.js"></script>
+    <script type="text/babel" src="src/components/Kanban.js"></script>
+</body>
+</html>
