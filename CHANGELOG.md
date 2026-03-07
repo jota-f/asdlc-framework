@@ -5,7 +5,20 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
-## [Unreleased]
+## [1.1.0] - 2026-03-07
+
+### Adicionado
+- **🌟 Suporte Nativo a Agentes Autônomos (Agentic Mode):** Criação do diretório `agentic_templates/` fornecendo integração para ferramentas e IDEs autônomas (Cursor, Windsurf, Cline, RooCode).
+- **A-SDLC Skills:** Adição das habilidades de IA `asdlc_story_generator` e `asdlc_implementation` que transicionam a cognição da IA ativamente (Arquiteto -> QA -> Coder) sem ferramentas Python externas.
+- **A-SDLC Workflows:** Adição de gatilhos rápidos via chat (`/asdlc-create-story` e `/asdlc-execute`).
+- **Casos de Uso Práticos:** Inserção de estudo de caso prático para uso da nova abordagem de Arquitetura -> Requisitos -> Execução.
+
+### Modificado
+- Reestruturação massiva da documentação (`README.md` e `README_EN.md`), movendo a parte visual do Modo Agentic para o topo como Método 1, rebaixando a instalação e foco do app Python-CLI.
+
+---
+
+## [1.0.1] - Atualizações Recentes
 
 ### Adicionado
 - Sistema de validação automática de conformidade A-SDLC
