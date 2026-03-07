@@ -4,4 +4,4 @@ Framework para Desenvolvimento com Agentes de IA
 """
 
 __version__ = "2.0.0"
-__author__ = "A-SDLC Team" 
+__author__ = "A-SDLC Team"

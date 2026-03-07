@@ -8,6 +8,7 @@ from . import story_manager
 
 logger = logging.getLogger(__name__)
 
+
 def initialize_project(project_name: str, initial_prompt: str, project_type: str = "web_api"):
     """
     Inicializa a estrutura mínima de um projeto A-SDLC e cria a primeira story
@@ -16,7 +17,7 @@ def initialize_project(project_name: str, initial_prompt: str, project_type: str
     logger.info(f"Inicializando novo projeto A-SDLC: {project_name}")
     project_root = Path.cwd()
     project_dir = project_root / project_name
-    
+
     if project_dir.exists():
         logger.warning(f"O diretório '{project_name}' já existe. Usando o diretório existente.")
     else:
@@ -171,31 +172,29 @@ src/
 4. **Implementar testes automatizados** para garantir qualidade
 5. **Documentar APIs** com OpenAPI/Swagger
 """
-    (project_dir / "PROJECT_CONTEXT.md").write_text(context_content.strip(), encoding='utf-8')
-    
+    (project_dir / "PROJECT_CONTEXT.md").write_text(context_content.strip(), encoding="utf-8")
+
     # 3. Criar templates dos agentes automaticamente
     _create_agent_templates(project_dir)
-    
+
     # 4. Criar templates de prompts para LLMs externas
     _create_prompt_templates(project_dir)
-    
+
     # 4. Mudar para o diretório do projeto para criar a story no contexto correto
     os.chdir(project_dir)
-    
+
     # 5. Criar a primeira story com o plano de implementação inicial
     logger.info("Usando IA para gerar o plano de implementação inicial...")
-    story_manager.create_story(
-        story_title=f"Implementação Inicial do Projeto: {project_name}",
-        description=initial_prompt
-    )
+    story_manager.create_story(story_title=f"Implementação Inicial do Projeto: {project_name}", description=initial_prompt)
 
     # Voltar para o diretório original para não afetar o resto da execução
     os.chdir(project_root)
 
+
 def _create_agent_templates(project_dir: Path):
     """Cria os templates dos agentes automaticamente"""
     agents_dir = project_dir / ".asdlc/agents"
-    
+
     # 1. Code Agent - Desenvolvedor
     code_agent_content = """# Code Agent - A-SDLC Framework
 
@@ -223,7 +222,7 @@ Você é um desenvolvedor sênior especializado em criar código limpo, eficient
 - **Banco de Dados**: PostgreSQL, MongoDB, SQLite
 - **Testes**: pytest, jest, unittest
 """
-    
+
     # 2. Test Agent - QA Engineer
     test_agent_content = """# Test Agent - A-SDLC Framework
 
@@ -261,7 +260,7 @@ Você é um engenheiro de qualidade sênior especializado em criar testes abrang
 - **Java**: JUnit, Mockito, TestNG
 - **C#**: NUnit, xUnit, MSTest
 """
-    
+
     # 3. Architecture Agent - Arquiteto
     architecture_agent_content = """# Architecture Agent - A-SDLC Framework
 
@@ -298,7 +297,7 @@ Você é um arquiteto de software especializado em design de sistemas escalávei
 - **Cloud**: AWS, Azure, Google Cloud
 - **CI/CD**: GitHub Actions, Jenkins, GitLab CI
 """
-    
+
     # 4. Requirements Agent - Analista
     requirements_agent_content = """# Requirements Agent - A-SDLC Framework
 
@@ -339,7 +338,7 @@ Você é um analista especializado em elicitar, analisar e documentar requisitos
 - **Gestão**: Jira, Azure DevOps, Trello
 - **Prototipagem**: Figma, Adobe XD, Sketch
 """
-    
+
     # 5. Review Agent - Code Reviewer
     review_agent_content = """# Review Agent - A-SDLC Framework
 
@@ -393,26 +392,27 @@ Você é um revisor de código especializado em garantir qualidade, segurança e
 - **Performance**: Profilers, APM tools
 - **Documentação**: Sphinx, JSDoc, Swagger
 """
-    
+
     # Salvar todos os templates
     templates = {
         "code_agent.md": code_agent_content,
         "test_agent.md": test_agent_content,
         "architecture_agent.md": architecture_agent_content,
         "requirements_agent.md": requirements_agent_content,
-        "review_agent.md": review_agent_content
+        "review_agent.md": review_agent_content,
     }
-    
+
     for filename, content in templates.items():
-        (agents_dir / filename).write_text(content, encoding='utf-8')
-    
-    logger.info(f"{len(templates)} templates dos agentes criados automaticamente") 
+        (agents_dir / filename).write_text(content, encoding="utf-8")
+
+    logger.info(f"{len(templates)} templates dos agentes criados automaticamente")
+
 
 def _create_prompt_templates(project_root: Path) -> None:
     """Cria templates de prompts para uso com LLMs externas."""
     prompts_dir = project_root / "prompts"
     prompts_dir.mkdir(exist_ok=True)
-    
+
     # Prompt para geração de descrição de projeto
     project_description_prompt = """# 📋 PROMPT: Gerador de Descrição de Projeto A-SDLC
 
@@ -590,7 +590,7 @@ Intenção: Criar uma API para gerenciar tarefas de equipes, com autenticação 
 
 **Agora, com base nas informações fornecidas pelo usuário, gere uma descrição completa e profissional do projeto seguindo exatamente este formato.**
 """
-    
+
     # Prompt para geração de stories
     story_generator_prompt = """# 📖 PROMPT: Gerador de Stories A-SDLC
 
@@ -712,7 +712,7 @@ Gere uma story estruturada no seguinte formato:
 
 **Agora, com base na funcionalidade fornecida pelo usuário, gere uma story completa e profissional seguindo exatamente este formato. SEMPRE mencione explicitamente qual agente A-SDLC está responsável por cada tarefa e documente o processo de desenvolvimento.**
 """
-    
+
     # Prompt para execução de implementações
     implementation_executor_prompt = """# 🚀 PROMPT: Executor de Implementação A-SDLC
 
@@ -807,7 +807,7 @@ Execute a implementação seguindo este processo:
 
 **Agora, execute a implementação seguindo EXATAMENTE este processo, mencionando explicitamente cada agente, documentando todo o processo A-SDLC E IMPLEMENTANDO TESTES REAIS.**
 """
-    
+
     # Prompt para validação de implementações
     validation_checker_prompt = """# 🔍 PROMPT: Validador de Implementação A-SDLC
 
@@ -876,13 +876,13 @@ Execute a validação seguindo este processo:
 
 **Agora, valide se a implementação foi realmente executada, verificando arquivos, testando funcionalidades e confirmando que o processo A-SDLC foi seguido corretamente.**
 """
-    
+
     # Criar arquivos de prompts
-    (prompts_dir / "project_description_generator.md").write_text(project_description_prompt, encoding='utf-8')
-    (prompts_dir / "story_generator.md").write_text(story_generator_prompt, encoding='utf-8')
-    (prompts_dir / "implementation_executor.md").write_text(implementation_executor_prompt, encoding='utf-8')
-    (prompts_dir / "validation_checker.md").write_text(validation_checker_prompt, encoding='utf-8')
-    
+    (prompts_dir / "project_description_generator.md").write_text(project_description_prompt, encoding="utf-8")
+    (prompts_dir / "story_generator.md").write_text(story_generator_prompt, encoding="utf-8")
+    (prompts_dir / "implementation_executor.md").write_text(implementation_executor_prompt, encoding="utf-8")
+    (prompts_dir / "validation_checker.md").write_text(validation_checker_prompt, encoding="utf-8")
+
     # Criar README dos prompts
     prompts_readme = """# 🚀 PROMPTS A-SDLC - Guia de Uso
 
@@ -952,7 +952,7 @@ A LLM gerará uma descrição, story ou implementação completa seguindo o padr
 
 **Os prompts estão otimizados para gerar documentação profissional e implementável seguindo o framework A-SDLC, com uso explícito das personas dos agentes!** 🎉
 """
-    
-    (prompts_dir / "README.md").write_text(prompts_readme, encoding='utf-8')
-    
-    logger.info("📋 Templates de prompts criados automaticamente") 
+
+    (prompts_dir / "README.md").write_text(prompts_readme, encoding="utf-8")
+
+    logger.info("📋 Templates de prompts criados automaticamente")
