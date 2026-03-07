@@ -31,7 +31,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install black flake8
+          pip install "black==25.1.0" flake8
 
       - name: Check syntax errors with flake8
         run: |
