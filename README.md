@@ -95,66 +95,10 @@ meu-projeto/
    # Edite o arquivo .env e adicione sua OPENAI_API_KEY
    ```
 
-## 🚀 Como Usar
-
-### **1. 🖥️ Modo CLI (Recomendado)**
-
-Ideal para automação e usuários experientes:
-
-```bash
-# Ativar ambiente virtual
-source venv/bin/activate  # ou venv\Scripts\activate no Windows
-
-# Criar um novo projeto com tipo específico
-python main.py --auto --choice 1 --project-name "minha-api" --prompt "API de gestão de usuários" --project-type "web_api"
-
-# Modo interativo para criar projeto
-python main.py
-# Escolha: 1 (Inicializar novo projeto)
-```
-
-### **2. 🎮 Modo Interativo**
-
-Ideal para novos usuários e exploração das funcionalidades:
-
-```bash
-# Execute sem argumentos para menu interativo
-python main.py
-```
-
-**Menu disponível:**
-- 🚀 Inicializar novo projeto
-- 📁 Abrir projeto existente  
-- 📝 Criar/Implementar Story
-- 📋 Listar Stories
-- ❌ Sair
-
-### **3. 🤖 Modo Nativo para Agentes (NOVO: Ideal para Cline/Cursor/Windsurf)**
-
-Se você já utiliza agentes locais ou IDEs autônomas em projetos existentes, você não precisa configurar o Python CLI para adotar a metodologia. O A-SDLC suporta **Skills e Workflows** nativos!
-
-📖 **Leitura recomendada:** [Guia Rápido de Instalação e Uso do Modo Agentic](agentic_templates/README.md)
-
-1. Em seu projeto local, assegure-se de que a pasta `.agents/` (ou arquitetura similar da sua IDE, como `.cursor/rules`) está disponível.
-2. Copie a estrutura do repositório contida na pasta `agentic_templates/` para dentro do seu `.agents/` local.
-3. No chat da sua IA local, use comandos diretos no formato conversacional e a IA irá agir autonomamente (acessar, entender e codificar sem menu CLI):  
-   - `"/asdlc-create-story Implementar a funcionalidade de carrinho de compras"`
-   - `"/asdlc-execute"` 
-
-### **4. 📁 Trabalhando com Projetos Existentes (Via CLI)**
-
-```bash
-# Navegar para diretório do projeto
-cd meu-projeto-existente
-
-# Criar nova story
-python ../main.py
-# Escolha: 3 (Criar/Implementar Story)
-
-# Listar stories existentes
-python ../main.py
-# Escolha: 4 (Listar Stories)
-```
+   ```bash
+   cp .env.example .env
+   # Edite o arquivo .env e adicione sua OPENAI_API_KEY
+   ```
 
 ## 📚 Workflow A-SDLC
 

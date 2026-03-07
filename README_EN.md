@@ -67,7 +67,58 @@ my-project/
 - **📚 Professional Prompts:** Optimized templates for use with ChatGPT, Gemini, and other LLMs
 - **🎯 Automatic Compliance:** Guarantee that projects follow A-SDLC standards
 
-## ⚙️ Installation
+## 🚀 How to Use A-SDLC
+
+A-SDLC has three distinct ways of use, depending on your profile and tools:
+
+### 🌟 Option 1: Native Mode for Agents (Recommended for Cline/Cursor/Windsurf)
+If you already use local agents or autonomous IDEs in existing projects, you don't need to install the Python CLI to adopt the methodology. A-SDLC supports native **Skills and Workflows**!
+
+📖 **Recommended reading:** [Quick Install Guide & Usage of Agentic Mode](agentic_templates/README.md)
+
+1. In your local project, ensure the `.agents/` folder (or your IDE's similar architecture like `.cursor/rules`) is available.
+2. Copy the repository structure from the `agentic_templates/` folder into your local `.agents/`.
+3. In your local AI chat, use direct conversational commands and AI will act autonomously:  
+   - `"/asdlc-create-story Implement the shopping cart feature"`
+   - `"/asdlc-execute"`
+
+---
+
+### 🖥️ Option 2: Python CLI Mode (For Automation & Terminals)
+Ideal for traditional developers and automated pipelines. (Requires [Installation](#️-installation))
+
+```bash
+# Activate virtual environment
+source venv/bin/activate  # or venv\Scripts\activate on Windows
+
+# Create a new project with specific type
+python main.py --auto --choice 1 --project-name "my-api" --prompt "User management API" --project-type "web_api"
+
+# Create and Implement Story in an existing project
+python ../main.py
+# Choose: 3 (Create/Implement Story)
+```
+
+---
+
+### 🎮 Option 3: Interactive Mode (For Beginners)
+Ideal for new users and feature exploration. (Requires [Installation](#️-installation))
+
+```bash
+# Execute without arguments for visual interactive menu
+python main.py
+```
+
+**Available Menu:**
+- 🚀 Initialize new project
+- 📁 Open existing project  
+- 📝 Create/Implement Story
+- 📋 List Stories
+- ❌ Exit
+
+---
+
+## ⚙️ Installation (Required only for CLI and Interactive Mode)
 
 1. Clone the repository:
    ```bash
@@ -93,66 +144,10 @@ my-project/
    # Edit the .env file and add your OPENAI_API_KEY
    ```
 
-## 🚀 How to Use
-
-### **1. 🖥️ CLI Mode (Recommended)**
-
-Ideal for automation and experienced users:
-
-```bash
-# Activate virtual environment
-source venv/bin/activate  # or venv\Scripts\activate on Windows
-
-# Create a new project with specific type
-python main.py --auto --choice 1 --project-name "my-api" --prompt "User management API" --project-type "web_api"
-
-# Interactive mode to create project
-python main.py
-# Choose: 1 (Initialize new project)
-```
-
-### **2. 🎮 Interactive Mode**
-
-Ideal for new users and feature exploration:
-
-```bash
-# Execute without arguments for interactive menu
-python main.py
-```
-
-**Available Menu:**
-- 🚀 Initialize new project
-- 📁 Open existing project  
-- 📝 Create/Implement Story
-- 📋 List Stories
-- ❌ Exit
-
-### **3. 🤖 Native Mode for Agents (NEW: Ideal for Cline/Cursor/Windsurf)**
-
-If you already use local agents or autonomous IDEs in existing projects, you don't need to configure the Python CLI to adopt the methodology. A-SDLC supports native **Skills and Workflows**!
-
-📖 **Recommended reading:** [Quick Install Guide & Usage of Agentic Mode](agentic_templates/README.md)
-
-1. In your local project, ensure the `.agents/` folder (or your IDE's similar architecture like `.cursor/rules`) is available.
-2. Copy the repository structure from the `agentic_templates/` folder into your local `.agents/`.
-3. In your local AI chat, use direct conversational commands and AI will act autonomously (read, understand, and code without CLI menus):  
-   - `"/asdlc-create-story Implement the shopping cart feature"`
-   - `"/asdlc-execute"` 
-
-### **4. 📁 Working with Existing Projects (Via CLI)**
-
-```bash
-# Navigate to project directory
-cd my-existing-project
-
-# Create new story
-python ../main.py
-# Choose: 3 (Create/Implement Story)
-
-# List existing stories
-python ../main.py
-# Choose: 4 (List Stories)
-```
+   ```bash
+   cp .env.example .env
+   # Edit the .env file and add your OPENAI_API_KEY
+   ```
 
 ## 📚 A-SDLC Workflow
 
