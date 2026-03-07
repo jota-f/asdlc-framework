@@ -3,9 +3,11 @@
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
-e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
+O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
-## [1.1.0] - 2026-03-07
+---
+
+## [0.2.0] - 2026-03-07
 
 ### Adicionado
 - **🌟 Suporte Nativo a Agentes Autônomos (Agentic Mode):** Criação do diretório `agentic_templates/` fornecendo integração para ferramentas e IDEs autônomas (Cursor, Windsurf, Cline, RooCode).
@@ -18,7 +20,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ---
 
-## [1.0.1] - Atualizações Recentes
+## [0.1.1] - Atualizações Recentes
 
 ### Adicionado
 - Sistema de validação automática de conformidade A-SDLC
@@ -36,10 +38,12 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - Problemas de validação de entrada
 - Erros de formatação em templates
 
-## [1.0.0] - 2024-08-03
+---
+
+## [0.1.0] - 2024-08-03
 
 ### Adicionado
-- 🚀 **Framework A-SDLC completo**
+- 🚀 **Framework A-SDLC inicial**
   - Sistema de 5 agentes especializados
   - Gerador de planos inteligente
   - Interface CLI moderna
@@ -146,28 +150,22 @@ A-SDLC-Framework/
 
 ## 📝 Notas de Versão
 
-### v1.0.0 - Lançamento Inicial
-- Framework completo e funcional
-- Documentação abrangente
+### v0.1.0 - Lançamento Inicial
+- Framework base funcional
+- Documentação inicial
 - Exemplos práticos
 - Sistema de validação
 
 ### Próximas Versões Planejadas
 
-#### v1.1.0 - Melhorias de UX
+#### v0.x (Fase de Desenvolvimento Ativa)
 - Interface gráfica opcional
-- Templates visuais
-- Integração com IDEs
+- Integração profunda com IDEs nativas
+- Mais tipos de projeto e LLMs suportados
 
-#### v1.2.0 - Expansão de Tipos
-- Mais tipos de projeto
-- Templates específicos
-- Integração com mais LLMs
-
-#### v2.0.0 - Framework Avançado
-- Sistema de plugins
-- API REST
-- Dashboard web
+#### v1.0.0 - Lançamento Oficial (Stable)
+- Sistema refinado com API REST e Dashboard web
+- Casos de uso validados por comunidade em massa
 
 ---
 
