@@ -128,4 +128,12 @@ dmypy.json
 # A-SDLC specific
 .asdlc/cache/
 .asdlc/temp/
-*.asdlc 
+*.asdlc
+
+# Projetos Independentes e Artefatos do Host
+Verus/
+weldSynth/
+metodo_otimizado_para_agentes_codificadores.md
+theory_extracted.txt
+Método Otimizado para Agentes Codificadores*.pdf
+.agents/
