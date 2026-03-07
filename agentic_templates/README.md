@@ -46,6 +46,30 @@ O assistente vai abrir o backlog. A `asdlc_implementation` skill irá forçá-lo
 3. **Atuará como Test Agent:** Chamando comandos no terminal do host de forma não vista por você até a flag de "passou" brilhar.
 4. Alterará a key "status" de PENDENTE para CONCLUÍDO na história.
 
+## 💡 Estudo de Caso: Criando algo do Zero
+
+Como você usa o A-SDLC quando **ainda não sabe como codificar** uma feature complexa? O A-SDLC não serve apenas para gerar código, mas para te ajudar a estruturar e desenhar a aplicação.
+
+Imagine que você quer adicionar uma estrutura financeira de "Fatura" atrelada a "Pedidos" no seu E-Commerce.
+
+### 1. Invoque o "Architecture Agent" (Fase de Descoberta)
+Antes de criar uma Story oficial, tire a dúvida de modelagem interagindo de forma livre com sua IA local:
+> **Você:** *"Atue como o Architecture Agent do A-SDLC. Quero adicionar a entidade 'Fatura' na aplicação. Tenho 'Pedido' e 'Item', mas não sei a hierarquia correta pro banco de dados. Me dê opções de design e recomende a melhor estrutura."*
+
+A IA analisará seu domínio e sugerirá a modelagem de tabelas e dependências corretas (ex: "Criar uma tabela `Faturas` com chave estrangeira para `Pedidos`"). Vocês discutem a modelagem até chegarem a um consenso sólido.
+
+### 2. Invoque a Workflow (Transformando a ideia em Plano)
+Uma vez decidida a arquitetura na conversa, a dúvida acabou. Você invoca a formatação tática:
+> **Você:** *"/asdlc-create-story Agora que decidimos a arquitetura, atue como Requirements Agent. Crie a Story para implementar a tabela 'faturas' no banco de dados e conectar aos 'pedidos'."*
+
+**Resultado:** O A-SDLC vai pegar aquele "papo livre" e congelar em um manifesto rígido dentro de `stories/2026xxxx_feature_faturas.md`. A Story listará exatamente que arquivos serão criados (ex: `src/models/fatura.py`) e modificados.
+
+### 3. Implementação Automatizada (Code Agent & Test Agent)
+Só após você aprovar visualmente essa Story, você comanda:
+> **Você:** *"/asdlc-execute"*
+
+E o Code Agent e o Test Agent vão, de forma invisível, programar em cima dos seus arquivos estritamente o que foi metodicamente assinado no plano, executando testes de terminal e só parando quando o status mudar de "PENDENTE" para "CONCLUÍDO".
+
 ## Vantagens
 - **Agnóstico:** Funciona perfeitamente em React, Python, Kotlin, Rust. O framework te ajuda a gerir os Agentes.
 - **Rápido:** Você pula o setup Python. Apenas copia e cola `.agents/`.
