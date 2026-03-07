@@ -8,6 +8,16 @@
 
 > **Attention:** This project is 100% free, non-commercial, no donations, no crowdfunding, no financial rewards, and no charges of any kind. All contact must be made exclusively via GitHub (issues, discussions, PRs).
 
+---
+
+### 🌟 New: Native Agent Mode (Agentic Mode)
+
+You can now use A-SDLC **directly from your IDE** (Cursor, Windsurf, Cline, RooCode) without installing Python or using the terminal! Just copy the `agentic_templates/` folder into your project and start using it.
+
+👉 **[🇺🇸 Full Agentic Mode Guide](agentic_templates/README_EN.md)** | **[🇧🇷 Guia em Português](agentic_templates/README.md)**
+
+---
+
 ## 🧠 What is A-SDLC?
 
 **A-SDLC (AI-Driven Software Development Lifecycle)** is an innovative framework that integrates **specialized AI agents** into the software development lifecycle, not just as coding tools, but as **active participants** in a structured and managed process.

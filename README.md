@@ -10,6 +10,16 @@
 
 > **Atenção:** Este projeto é 100% gratuito, não comercial, sem doações, sem crowdfunding, sem recompensas financeiras e sem qualquer tipo de cobrança. Todo contato deve ser feito exclusivamente via GitHub (issues, discussions, PRs).
 
+---
+
+### 🌟 Novo: Modo Nativo para Agentes (Agentic Mode)
+
+Agora você pode usar o A-SDLC **diretamente da sua IDE** (Cursor, Windsurf, Cline, RooCode) sem precisar instalar Python ou usar o terminal! Basta copiar a pasta `agentic_templates/` para o seu projeto e começar a usar.
+
+👉 **[Guia Completo do Modo Agentic (PT-BR)](agentic_templates/README.md)** | **[🇺🇸 English Guide](agentic_templates/README_EN.md)**
+
+---
+
 ## 🧠 O que é o A-SDLC?
 
 **A-SDLC (AI-Driven Software Development Lifecycle)** é um framework inovador que integra **agentes de IA especializados** no ciclo de vida de desenvolvimento de software, não apenas como ferramentas de codificação, mas como **participantes ativos** de um processo estruturado e gerenciado.
@@ -59,6 +69,8 @@ meu-projeto/
 ├── prompts/              # Templates para LLMs externas
 └── src/                  # Código fonte do projeto
 ```
+
+> 💡 **Usando o Modo Agentic?** Você só precisa da pasta `agentic_templates/` copiada para o seu projeto. Sem necessidade de instalar Python. Veja o **[Guia do Modo Agentic](agentic_templates/README.md)** para detalhes.
 
 ## ✨ Features
 
@@ -172,6 +184,8 @@ A-SDLC-Framework/
 Para mais detalhes sobre como usar o A-SDLC:
 
 - **📋 [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md)** - Contexto técnico completo do framework
+- **🌟 [Modo Agentic (PT-BR)](agentic_templates/README.md)** - Guia completo para usar via IDE nativa com Skills e Workflows
+- **🇺🇸 [Agentic Mode (EN)](agentic_templates/README_EN.md)** - English guide for native IDE usage
 - **📚 [prompts/README.md](prompts/README.md)** - Como usar templates com LLMs externas
 - **📖 [examples/](examples/)** - Projetos de exemplo implementados com A-SDLC
 
