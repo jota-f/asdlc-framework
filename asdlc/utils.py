@@ -2,6 +2,7 @@
 """
 Módulo de utilitários para o framework A-SDLC.
 """
+
 import logging
 from pathlib import Path
 from typing import Optional

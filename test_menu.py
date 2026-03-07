@@ -2,6 +2,7 @@
 """
 Script de teste para verificar o menu interativo
 """
+
 import sys
 from io import StringIO
 from unittest.mock import patch
