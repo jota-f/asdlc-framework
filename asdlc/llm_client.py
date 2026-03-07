@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 
 logger = logging.getLogger(__name__)
 
+
 def get_llm_client():
     """Carrega a chave da API e retorna um cliente OpenAI."""
     load_dotenv()
@@ -18,6 +19,7 @@ def get_llm_client():
         # Você pode optar por levantar um erro aqui se a chave for estritamente necessária
         # raise ValueError("OPENAI_API_KEY não configurada.")
     return OpenAI(api_key=api_key)
+
 
 def call_llm(prompt: str, model: str = None, max_tokens: int = None) -> str:
     """
@@ -30,9 +32,9 @@ def call_llm(prompt: str, model: str = None, max_tokens: int = None) -> str:
             model = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
         if max_tokens is None:
             max_tokens = int(os.getenv("OPENAI_MAX_TOKENS", "2048"))
-        
+
         temperature = float(os.getenv("OPENAI_TEMPERATURE", "0.7"))
-        
+
         logger.info(f"Enviando prompt para o modelo {model}...")
         client = get_llm_client()
         if not client.api_key:
@@ -42,7 +44,7 @@ def call_llm(prompt: str, model: str = None, max_tokens: int = None) -> str:
             model=model,
             messages=[
                 {"role": "system", "content": "Você é um assistente especialista em engenharia de software."},
-                {"role": "user", "content": prompt}
+                {"role": "user", "content": prompt},
             ],
             max_tokens=max_tokens,
             temperature=temperature,
@@ -52,4 +54,4 @@ def call_llm(prompt: str, model: str = None, max_tokens: int = None) -> str:
         return content.strip()
     except Exception as e:
         logger.error(f"Erro ao chamar a API da LLM: {e}")
-        return f"ERRO: Falha ao comunicar com a API. Detalhes: {e}" 
+        return f"ERRO: Falha ao comunicar com a API. Detalhes: {e}"
