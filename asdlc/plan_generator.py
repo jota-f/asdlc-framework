@@ -6,6 +6,7 @@ from .utils import get_project_structure
 
 logger = logging.getLogger(__name__)
 
+
 def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
     """
     Usa uma LLM para atuar como arquiteto e gerar um plano de execução completo.
@@ -15,7 +16,9 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
     # 1. Coletar contexto do projeto
     try:
         context_file = project_root / "PROJECT_CONTEXT.md"
-        project_context = context_file.read_text(encoding='utf-8') if context_file.exists() else "Nenhum PROJECT_CONTEXT.md fornecido."
+        project_context = (
+            context_file.read_text(encoding="utf-8") if context_file.exists() else "Nenhum PROJECT_CONTEXT.md fornecido."
+        )
     except Exception as e:
         project_context = f"Erro ao ler PROJECT_CONTEXT.md: {e}"
 
@@ -248,6 +251,6 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
     """
 
     # 3. Chamar a LLM
-    plano_gerado = call_llm(prompt, max_tokens=3072) # Aumentar tokens para planos complexos
+    plano_gerado = call_llm(prompt, max_tokens=3072)  # Aumentar tokens para planos complexos
 
-    return plano_gerado 
+    return plano_gerado
