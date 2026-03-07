@@ -64,9 +64,9 @@ meu-projeto/
 
 - **🔄 Arquitetura Híbrida:** Use via CLI para automação ou via Menu Interativo para descoberta
 - **🧠 Plan Generator:** Crie "stories" que se transformam em planos de execução detalhados em Markdown
-- **🤖 Agentes Especializados:** 5 personas bem definidas para diferentes aspectos do desenvolvimento
+- **🤖 Agentes Especializados (Modo CLI):** 5 personas bem definidas para diferentes aspectos do desenvolvimento
+- **⚡ Model Context Protocol & Agentic (NOVO):** Suporte nativo para rodar via Skills/Workflows em ferramentas autônomas (Cursor, Windsurf, Cline)
 - **📚 Prompts Profissionais:** Templates otimizados para usar com ChatGPT, Gemini e outras LLMs
-- **⚡ CLI Inteligente:** Interface moderna com validação e feedback em tempo real
 - **🎯 Conformidade Automática:** Garantia de que projetos sigam padrões A-SDLC
 
 ## ⚙️ Instalação
@@ -129,7 +129,19 @@ python main.py
 - 📋 Listar Stories
 - ❌ Sair
 
-### **3. 📁 Trabalhando com Projetos Existentes**
+### **3. 🤖 Modo Nativo para Agentes (NOVO: Ideal para Cline/Cursor/Windsurf)**
+
+Se você já utiliza agentes locais ou IDEs autônomas em projetos existentes, você não precisa configurar o Python CLI para adotar a metodologia. O A-SDLC suporta **Skills e Workflows** nativos!
+
+📖 **Leitura recomendada:** [Guia Rápido de Instalação e Uso do Modo Agentic](agentic_templates/README.md)
+
+1. Em seu projeto local, assegure-se de que a pasta `.agents/` (ou arquitetura similar da sua IDE, como `.cursor/rules`) está disponível.
+2. Copie a estrutura do repositório contida na pasta `agentic_templates/` para dentro do seu `.agents/` local.
+3. No chat da sua IA local, use comandos diretos no formato conversacional e a IA irá agir autonomamente (acessar, entender e codificar sem menu CLI):  
+   - `"/asdlc-create-story Implementar a funcionalidade de carrinho de compras"`
+   - `"/asdlc-execute"` 
+
+### **4. 📁 Trabalhando com Projetos Existentes (Via CLI)**
 
 ```bash
 # Navegar para diretório do projeto
