@@ -2,6 +2,7 @@
 """
 A-SDLC Framework - Ponto de Entrada Híbrido (CLI + Interativo)
 """
+
 import argparse
 import sys
 import logging

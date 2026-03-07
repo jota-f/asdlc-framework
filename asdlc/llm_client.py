@@ -2,6 +2,7 @@
 """
 Módulo cliente para interação com APIs de LLM.
 """
+
 import os
 import logging
 from openai import OpenAI
