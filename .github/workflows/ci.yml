@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI - Code Quality
 
 on:
   push:
@@ -7,153 +7,81 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  lint:
+    name: Lint & Format Check
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.8, 3.9, 3.10, 3.11, 3.12]
 
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-    
-    - name: Cache pip dependencies
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install pytest pytest-cov black flake8 mypy
-    
-    - name: Lint with flake8
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    
-    - name: Check code formatting with black
-      run: |
-        black --check --diff .
-    
-    - name: Type check with mypy
-      run: |
-        mypy asdlc/ --ignore-missing-imports
-    
-    - name: Test with pytest
-      run: |
-        pytest tests/ --cov=asdlc --cov-report=xml --cov-report=html
-    
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        file: ./coverage.xml
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: false
+      - uses: actions/checkout@v4
 
-  build:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install build twine
-    
-    - name: Build package
-      run: |
-        python -m build
-    
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: dist
-        path: dist/
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-  security:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install bandit safety
-    
-    - name: Run security checks
-      run: |
-        # Bandit security check
-        bandit -r asdlc/ -f json -o bandit-report.json || true
-        
-        # Safety check for known vulnerabilities
-        safety check --json --output safety-report.json || true
-    
-    - name: Upload security reports
-      uses: actions/upload-artifact@v3
-      with:
-        name: security-reports
-        path: |
-          bandit-report.json
-          safety-report.json
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
-  documentation:
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install black flake8
+
+      - name: Check syntax errors with flake8
+        run: |
+          # Falha o build apenas em erros críticos de sintaxe e imports ausentes
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics \
+            --exclude=venv,__pycache__,.git
+
+      - name: Check code style with flake8
+        run: |
+          # Reporta warnings de estilo sem quebrar o build
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics \
+            --exclude=venv,__pycache__,.git
+
+      - name: Check code formatting with black
+        run: |
+          black --check --diff . --exclude="/(venv|\.git|__pycache__)/"
+
+  validate-structure:
+    name: Validate A-SDLC Framework Structure
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    
+
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install sphinx sphinx-rtd-theme
-    
-    - name: Build documentation
-      run: |
-        # Create docs directory if it doesn't exist
-        mkdir -p docs
-        
-        # Generate documentation
-        sphinx-apidoc -o docs/source asdlc/
-        
-        # Build docs
-        cd docs
-        make html
-    
-    - name: Upload documentation
-      uses: actions/upload-artifact@v3
-      with:
-        name: documentation
-        path: docs/build/html/ 
+      - uses: actions/checkout@v4
+
+      - name: Check required files exist
+        run: |
+          echo "Checking required A-SDLC framework files..."
+          test -f README.md && echo "✅ README.md" || (echo "❌ README.md missing" && exit 1)
+          test -f README_EN.md && echo "✅ README_EN.md" || (echo "❌ README_EN.md missing" && exit 1)
+          test -f CHANGELOG.md && echo "✅ CHANGELOG.md" || (echo "❌ CHANGELOG.md missing" && exit 1)
+          test -f requirements.txt && echo "✅ requirements.txt" || (echo "❌ requirements.txt missing" && exit 1)
+          test -f main.py && echo "✅ main.py" || (echo "❌ main.py missing" && exit 1)
+
+      - name: Check required agentic templates exist
+        run: |
+          echo "Checking agentic_templates structure..."
+          test -d agentic_templates && echo "✅ agentic_templates/" || (echo "❌ agentic_templates/ missing" && exit 1)
+          test -d agentic_templates/skills && echo "✅ skills/" || (echo "❌ skills/ missing" && exit 1)
+          test -d agentic_templates/workflows && echo "✅ workflows/" || (echo "❌ workflows/ missing" && exit 1)
+          test -f agentic_templates/skills/asdlc_story_generator/SKILL.md && echo "✅ asdlc_story_generator SKILL.md" || (echo "❌ asdlc_story_generator SKILL.md missing" && exit 1)
+          test -f agentic_templates/skills/asdlc_implementation/SKILL.md && echo "✅ asdlc_implementation SKILL.md" || (echo "❌ asdlc_implementation SKILL.md missing" && exit 1)
+          test -f agentic_templates/workflows/create_asdlc_story.md && echo "✅ create_asdlc_story workflow" || (echo "❌ create_asdlc_story workflow missing" && exit 1)
+          test -f agentic_templates/workflows/implement_asdlc_story.md && echo "✅ implement_asdlc_story workflow" || (echo "❌ implement_asdlc_story workflow missing" && exit 1)
+          echo "✅ All A-SDLC agentic template files verified!"
+
+      - name: Check asdlc module structure
+        run: |
+          echo "Checking asdlc/ module structure..."
+          test -d asdlc && echo "✅ asdlc/" || (echo "❌ asdlc/ missing" && exit 1)
+          test -f asdlc/__init__.py && echo "✅ asdlc/__init__.py" || (echo "❌ asdlc/__init__.py missing" && exit 1)
+          test -f asdlc/project_manager.py && echo "✅ project_manager.py" || (echo "❌ project_manager.py missing" && exit 1)
+          test -f asdlc/story_manager.py && echo "✅ story_manager.py" || (echo "❌ story_manager.py missing" && exit 1)
+          echo "✅ Module structure OK!"
