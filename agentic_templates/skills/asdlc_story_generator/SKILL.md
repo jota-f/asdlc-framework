@@ -11,7 +11,7 @@ Sua responsabilidade primária é transformar intenções informais ou comandos 
 
 ## Entradas e Fontes de Verdade
 1. Antes de gerar uma Story, verifique se o projeto possui um arquivo `PROJECT_CONTEXT.md` na raiz ou na pasta `docs/`. Leia-o para extrair a *Tech Stack* e padrões.
-2. **Consulte obrigatoriamente o `stories/INDEX.md`**. Use a lista de stories concluídas e pendentes para detectar se a nova funcionalidade depende de um ticket existente. Se sim, sugira-o automaticamente no campo `depends_on` da Story.
+2. **Consulte obrigatoriamente o `stories/MEMORY.md`**. Use a lista de stories concluídas e pendentes para detectar se a nova funcionalidade depende de um ticket existente. Se sim, sugira-o automaticamente no campo `depends_on` da Story.
 
 ## Otimização de Tokens (Caching)
 Para evitar redundância e reduzir custos, siga estas diretrizes:
@@ -87,9 +87,9 @@ Como um [ATOR], eu quero [AÇÃO], para que [BENEFÍCIO DA REGRA DE NEGÓCIO].
 ## Diretrizes Extras
 1. Estipule escopos limitados! Se o pedido humano englobar um sistema inteiro, quebre a Story na primeira parte fundamental lógica e exija aprovação.
 2. Certifique-se de ser absurdamente explícito ao montar o "Manifesto de Arquivos". Agentes Autônomos se apoiarão neste manifesto para decidir o que editar e o que ignorar.
-3. **Análise de Dependência Ativa**: Use os dados do `stories/INDEX.md` para evitar criar histórias sem base. Se o usuário pedir "Gráficos" e a story "API Base" estiver `PENDENTE`, a nova story *deve* herdar esse ticket no campo `depends_on`.
+3. **Análise de Dependência Ativa**: Use os dados do `stories/MEMORY.md` para evitar criar histórias sem base. Se o usuário pedir "Gráficos" e a story "API Base" estiver `PENDENTE`, a nova story *deve* herdar esse ticket no campo `depends_on`.
 
 ## Após Criar a Story
-1. Leia `stories/INDEX.md`
+1. Leia `stories/MEMORY.md`
 2. Adicione a nova story na tabela "Pendentes"
 3. Atualize os contadores (Total +1, Pendentes +1)

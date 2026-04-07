@@ -1,6 +1,6 @@
-# 📋 Índice de Stories A-SDLC
+# 🧠 Memória A-SDLC
 
-Resumo do histórico do projeto. O agente lê este arquivo primeiro (~200 tokens) em vez de iterar todas as stories.
+Resumo do histórico do projeto. O agente lê este arquivo de memória primeiro (~200 tokens) em vez de iterar todas as stories do passado.
 
 ## Resumo
 - **Total**: 2 stories
@@ -28,6 +28,6 @@ Resumo do histórico do projeto. O agente lê este arquivo primeiro (~200 tokens
 ## Atualização
 
 Ao concluir uma story com `/asdlc-execute`, o agente DEVE:
-1. Ler `stories/INDEX.md`
+1. Ler `stories/MEMORY.md`
 2. Mover a entry de "Pendentes" para "Concluídas"
 3. Atualizar contadores

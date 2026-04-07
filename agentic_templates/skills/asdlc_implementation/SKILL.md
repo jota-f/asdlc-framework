@@ -48,7 +48,7 @@ Ao iniciar seu trabalho com uma Story recebida, siga os tópicos abaixo passo a 
 1. Após a provação irrestrita do Passo 3, você usará `replace_file_content` na própria Story referencial (dentro de `stories/`).
 2. Altere a key `status: "PENDENTE"` no *frontmatter* YAML no topo do arquivo estritamente para `status: "CONCLUÍDO"`.
 3. Opcionalmente (se aplicável), você pode marcar `[x]` nos checkboxes internos do Markdown da Story, como prova visual de evolução.
-4. **ATUALIZE O ÍNDICE**: Leia `stories/INDEX.md`, mova esta story de "Pendentes" para "Concluídas", atualize os contadores.
+4. **ATUALIZE A MEMÓRIA**: Leia `stories/MEMORY.md`, mova esta story de "Pendentes" para "Concluídas", atualize os contadores.
 
 ## Mensagens e Postura
 Mantenha-se comunicacionalmente enxuto. Não gere resumos enormes das modificações se o desenvolvedor humano não solicitou. Comunique-se ao estilo:
