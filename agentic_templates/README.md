@@ -41,6 +41,7 @@ cp -r agentic_templates/ seu-projeto/
 | `/asdlc-architecture` | Perguntas de arquitetura e modelagem (antes de criar story) |
 | `/asdlc-plan` | Analisar escopo grande e quebrar em múltiplas stories |
 | `/asdlc-create-story` | Criar uma story formal após ter contexto definido |
+| `/asdlc-bug` | Iniciar diagnóstico e resolução de uma falha ou regressão |
 | `/asdlc-execute` | Executar/implementar uma story pendente |
 
 ---
@@ -61,12 +62,14 @@ O agente analisa o escopo e cria múltiplas stories sequenciais se necessário:
 - Auth v3: API Endpoints
 - Auth v4: OAuth
 
-### Fase 3: Criação da Story
+### Fase 3: Criação da Story ou Bug Report
 > **Você:** `/asdlc-create-story Sistema de notificações via WebSocket`
+> Ou:
+> **Você:** `/asdlc-bug Erro 500 ao salvar usuário`
 
-O agente cria a story em `stories/` seguindo o template A-SDLC.
+O agente cria a story (ou bug report) em `stories/` seguindo o template correspondente.
 
-### Fase 4: Implementação
+### Fase 4: Implementação e Validação
 > **Você:** `/asdlc-execute`
 
 O agente executa a story: cria arquivos, roda testes, marca como CONCLUÍDO e atualiza o índice.
@@ -80,6 +83,7 @@ O agente executa a story: cria arquivos, roda testes, marca como CONCLUÍDO e at
 | `/asdlc-architecture` | Workflow de descoberta arquitetural |
 | `/asdlc-plan` | Análise de escopo com quebra automática em sub-stories |
 | `depends_on` | Sistema de dependências entre stories |
+| `/asdlc-bug` | Workflow especializado para resolução de Bugs e Regressões |
 | `MEMORY.md` | Memória consolidada do projeto (otimiza tokens) |
 | `Context Compactor` | Skill para reduzir tokens em sessões longas |
 | `TOOL_GUIDE.md` | Guia de otimização de tools |
