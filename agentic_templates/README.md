@@ -80,7 +80,7 @@ O agente executa a story: cria arquivos, roda testes, marca como CONCLUÍDO e at
 | `/asdlc-architecture` | Workflow de descoberta arquitetural |
 | `/asdlc-plan` | Análise de escopo com quebra automática em sub-stories |
 | `depends_on` | Sistema de dependências entre stories |
-| `INDEX.md` | Índice consolidado do projeto (otimiza tokens) |
+| `MEMORY.md` | Memória consolidada do projeto (otimiza tokens) |
 | `Context Compactor` | Skill para reduzir tokens em sessões longas |
 | `TOOL_GUIDE.md` | Guia de otimização de tools |
 
@@ -136,7 +136,7 @@ O Agentic Mode minimiza tokens automaticamente:
 
 ### Dicas
 
-1. **INDEX.md primeiro** - visão geral sem iterar stories
+1. **MEMORY.md primeiro** - visão geral da memória sem iterar stories
 2. **PROJECT_CONTEXT** - inclua apenas seção relevante
 3. **Context Compactor** - invoque após 30+ mensagens
 4. **Cache local** - guarde convenções do projeto
@@ -161,7 +161,7 @@ agentic_templates/
 │   ├── create_asdlc_story.md
 │   └── implement_asdlc_story.md
 └── stories/
-    ├── INDEX.md                # Índice do projeto
+    ├── MEMORY.md                # Memória do projeto
     └── exemplo/                # Exemplos
 ```
 
@@ -171,7 +171,7 @@ agentic_templates/
 
 ### Sempre leia primeiro:
 ```bash
-stories/INDEX.md  # ~200 tokens vs 5000+ de todas stories
+stories/MEMORY.md  # ~200 tokens vs 5000+ de todas stories
 ```
 
 ### Para perguntas de arquitetura:
@@ -198,4 +198,4 @@ stories/INDEX.md  # ~200 tokens vs 5000+ de todas stories
 
 - **[stories/exemplo/README.md](stories/exemplo/README.md)** - Guia completo de versionamento
 - **[TOOL_GUIDE.md](TOOL_GUIDE.md)** - Otimização de tools e tokens
-- **[stories/INDEX.md](stories/INDEX.md)** - Índice do projeto (gerado automaticamente)
+- **[stories/MEMORY.md](stories/MEMORY.md)** - Memória do projeto (gerado automaticamente)
