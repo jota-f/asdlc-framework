@@ -12,6 +12,18 @@ Você está atuando no modo híbrido executando as responsabilidades de múltipl
 Para processar esta instrução de forma autônoma, você DEVE ter o caminho ou nome de um arquivo referenciando uma Story.
 Se o humano invocou esse passo sem te dar uma Story alvo, pergunte de volta: *"Qual a Story na pasta /stories/ devo implementar hoje?"* ou mande listar os arquivos do diretório.
 
+### Verificação de Dependências (OBRIGATÓRIA)
+Antes de iniciar a implementação, você DEVE verificar as dependências:
+1. Leia o frontmatter YAML da Story alvo
+2. Verifique o campo `depends_on: []`
+3. Para cada ticket em `depends_on`:
+   - Busque o arquivo correspondente em `stories/` (padrão: `YYYYMMDD_*`)
+   - Verifique se `status: "CONCLUÍDO"`
+4. Se alguma dependência não estiver concluída, ABORTE e informe:
+   - Qual dependency está faltando
+   - Qual o status atual dela
+   - "Implemente a dependência X primeiro"
+
 ## O Ciclo A-SDLC de Implementação
 
 Ao iniciar seu trabalho com uma Story recebida, siga os tópicos abaixo passo a passo, preferencialmente emitindo mensagens curtas confirmando que você os fez.
@@ -36,8 +48,29 @@ Ao iniciar seu trabalho com uma Story recebida, siga os tópicos abaixo passo a 
 1. Após a provação irrestrita do Passo 3, você usará `replace_file_content` na própria Story referencial (dentro de `stories/`).
 2. Altere a key `status: "PENDENTE"` no *frontmatter* YAML no topo do arquivo estritamente para `status: "CONCLUÍDO"`.
 3. Opcionalmente (se aplicável), você pode marcar `[x]` nos checkboxes internos do Markdown da Story, como prova visual de evolução.
+4. **ATUALIZE O ÍNDICE**: Leia `stories/INDEX.md`, mova esta story de "Pendentes" para "Concluídas", atualize os contadores.
 
 ## Mensagens e Postura
 Mantenha-se comunicacionalmente enxuto. Não gere resumos enormes das modificações se o desenvolvedor humano não solicitou. Comunique-se ao estilo:
 `[A-SDLC Code Agent] Arquivos injetados. Procedendo aos testes de Aceitação...` 
 `[A-SDLC Test Agent] Testes passando. Story XYZ concluída.`
+
+## Otimização de Tokens
+
+### Durante a Implementação
+1. **Leia o PROJECT_CONTEXT apenas uma vez** no início da sessão
+2. **Guarde informações importantes** em variáveis para reuse
+3. **Não repita o conteúdo da Story** em resumos - referencie apenas o arquivo
+
+### Ao Buscar Arquivos
+- Use search patterns específicos em vez de globbing ampla
+- Leia apenas seções relevantes de arquivos grandes
+- Cache local das convenções do projeto (não releia a cada arquivo)
+
+### Context Budget (Meta)
+- Sistema + Tools: ~15% do contexto
+- Story atual: ~25%
+- Histórico recente: ~50%
+- Output buffer: ~10%
+
+Se sentir que o contexto está crescendo muito, invoque a skill `asdlc_context_compactor` antes de continuar.

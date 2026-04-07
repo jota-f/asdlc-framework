@@ -12,9 +12,15 @@
 
 ---
 
-### 🌟 Novo: Modo Nativo para Agentes (Agentic Mode)
+### 🌟 Novo: Modo Nativo para Agentes (Agentic Mode v2.0.0)
 
 Agora você pode usar o A-SDLC **diretamente da sua IDE** (Cursor, Windsurf, Cline, RooCode) sem precisar instalar Python ou usar o terminal! Basta copiar a pasta `agentic_templates/` para o seu projeto e começar a usar.
+
+**Novidades v2.0.0:**
+- `/asdlc-architecture` - Descoberta arquitetural
+- `/asdlc-plan` - Análise de escopo com quebra automática
+- Sistema de dependências entre stories (`depends_on`)
+- Índice automático do projeto (otimiza tokens)
 
 👉 **[Guia Completo do Modo Agentic (PT-BR)](agentic_templates/README.md)** | **[🇺🇸 English Guide](agentic_templates/README_EN.md)**
 
