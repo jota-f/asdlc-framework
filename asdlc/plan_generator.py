@@ -24,9 +24,14 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
 
     project_structure = get_project_structure(project_root)
 
-    # 2. Construir o prompt de "Arquiteto" para a LLM
+    # 2. Determinar se é uma Bug Story para ajustar o prompt
+    is_bug = story_data.get('type') == 'bug_fix'
+    
+    # 3. Construir o prompt de "Arquiteto" para a LLM
     prompt = f"""
     **PERSONA:** Você é um Arquiteto de Software Sênior e especialista no framework A-SDLC.
+    
+    {"**MODO DEBUG:** Estamos tratando um BUG. Seu objetivo principal é a identificação da causa raiz (RCA) e a criação de testes de regressão." if is_bug else ""}
 
     **TAREFA:** Sua missão é transformar uma solicitação de alto nível em um plano de execução detalhado em Markdown. Você deve analisar a solicitação, considerar o contexto do projeto e, o mais importante, **criar um Manifesto de Arquivos específico e acionável com os arquivos de CÓDIGO FONTE necessários.**
 
@@ -34,7 +39,8 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
     1.  Seu foco é **EXCLUSIVAMENTE** na solicitação do usuário.
     2.  O Manifesto de Arquivos deve conter **APENAS arquivos de código fonte** (ex: `.html`, `.py`, `.js`, `.css`, etc.) ou de configuração (ex: `Dockerfile`, `requirements.txt`).
     3.  **NUNCA** inclua arquivos do próprio framework A-SDLC (como `.md` da pasta `.asdlc/` ou `stories/`) no Manifesto.
-    4.  **CONSIDERE O TIPO DE PROJETO:**
+    { "**4. PARA BUGS:** Você DEVE incluir uma seção de 'Análise de Causa Raiz (RCA)' e priorizar a criação de um 'Teste de Regressão' que reproduza o erro antes do fix." if is_bug else ""}
+    5.  **CONSIDERE O TIPO DE PROJETO:**
        - `web_frontend`: Use HTML, CSS, JavaScript (ex: `index.html`, `style.css`, `script.js`)
        - `web_api`: Use Python/Node.js (ex: `app.py`, `requirements.txt` ou `server.js`, `package.json`)
        - `web_fullstack`: Combine frontend e backend
@@ -44,6 +50,14 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
 
     **EXEMPLOS DE BONS RESULTADOS POR TIPO:**
     ---
+    {"""**Bug Fix API:**
+    - Título: "Erro 500 no endpoint de Login"
+    - Descrição: "O endpoint /auth/login falha quando o email contém caracteres especiais"
+    - **RCA:** Falha na regex de validação que não cobre caracteres unicode.
+    - **Manifesto:** `src/auth/validator.py`, `tests/test_auth_bugs.py`
+    - **Tarefas:** Criar teste de reprodução, ajustar regex, validar sanitzation
+    - **Critérios:** Teste de regressão passa, endpoint retorna 400 para emails inválidos e 200 para unicode válidos""" if is_bug else ""}
+    
     **Web Frontend:**
     - Título: "Implementar relógio analógico HTML"
     - Descrição: "Criar uma página web estática que exibe um relógio analógico funcional e estilizado"
@@ -80,7 +94,7 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
     - **Critérios:** Interface clara, comandos intuitivos, documentação completa
     ---
 
-    **CONTEXTO DO PROJETO ATUAL:**
+    **CONTEXTO DO PROJETO ATUAL (STORY):**
     ---
     **CONSTITUIÇÃO DO PROJETO (PROJECT_CONTEXT.md):**
     {project_context}
@@ -89,46 +103,26 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
     {project_structure}
     ---
 
-    **SOLICITAÇÃO DO USUÁRIO ATUAL (STORY):**
+    **STORY ATUAL:**
     - Título: {story_data.get('title', 'N/A')}
     - Descrição: {story_data.get('description', 'N/A')}
+    - Tipo: {story_data.get('type', 'user_story')}
     - Tipo de Projeto: {project_context.split('**Tipo:**')[1].split('**')[0].strip() if '**Tipo:**' in project_context else 'N/A'}
 
     **SUA SAÍDA:**
-    Agora, com base na solicitação do usuário atual e no contexto fornecido, gere o conteúdo completo do arquivo Markdown para o plano de execução. 
+    Gere o Markdown completo seguindo a estrutura:
     
-    **IMPORTANTE:** 
-    1. **ADAPTE AO TIPO DE PROJETO:**
-       - `web_frontend`: Foque em HTML/CSS/JS, responsividade, UX web
-       - `web_api`: Foque em Python/Node.js, segurança, documentação API
-       - `web_fullstack`: Combine frontend e backend, arquitetura completa
-       - `mobile`: Foque em React Native/Flutter, UX móvel, performance
-       - `desktop`: Foque em Electron/Python GUI, UX desktop, instalação
-       - `cli`: Foque em Python/Node.js CLI, interface de linha de comando
-    
-    2. **INCLUA SEMPRE** as instruções para os agentes de IA (Code Agent, Test Agent, Review Agent, etc.) na seção "🤖 Instruções para Agentes de IA".
-    
-    3. **SEJA ESPECÍFICO** nas tarefas, critérios de aceitação e métricas de sucesso.
-    
-    4. **FORNEÇA EXEMPLOS DE CÓDIGO** concretos e implementáveis nas tarefas, usando a linguagem apropriada para o tipo de projeto.
-    
-    5. **DEFINA PADRÕES OBRIGATÓRIOS** e princípios específicos para o tipo de projeto:
-       - **Web Frontend**: Responsividade, acessibilidade, performance
-       - **Web API**: Segurança, documentação, testes de integração
-       - **Mobile**: UX móvel, performance, compatibilidade
-       - **Desktop**: UX desktop, instalação, atualizações
-       - **CLI**: Interface clara, documentação, comandos intuitivos
-    
-    Siga ESTRITAMENTE a estrutura de saída abaixo. Preencha TODAS as seções de forma detalhada e específica. Não adicione nenhuma outra explicação ou texto antes ou depois da sua resposta em Markdown.
-
-    **ESTRUTURA DE SAÍDA (MARKDOWN):**
     ---
     title: "{story_data.get('title', 'N/A')}"
     ticket: "{story_data.get('id', 'N/A')}"
     status: "PENDENTE"
+    type: "{story_data.get('type', 'user_story')}"
     ---
 
     # Plano de Execução: {story_data.get('title', 'N/A')}
+
+    {"## 🔍 Análise de Causa Raiz (RCA)" if is_bug else ""}
+    {"[Descreva aqui o que causou o bug e como o fix endereça a raiz]" if is_bug else ""}
 
     ## 📝 Especificações da Story
 
@@ -140,6 +134,8 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
     - **MODIFICAR:** [Liste arquivos existentes que precisam ser alterados]
 
     ## 🎯 Tarefas Detalhadas
+    { "### Tarefa 0: Reprodução do Bug (Teste de Regressão)" if is_bug else ""}
+    { "1. Crie um teste que falha atualmente para garantir a reprodução." if is_bug else ""}
 
     ### Tarefa 1: [Nome da primeira tarefa]
     1. **Arquivo a criar/modificar**: [Nome do arquivo]
@@ -219,9 +215,12 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
     **Impacto**: [Alto/Médio/Baixo] para [aspecto específico]
     **Risco**: [Alto/Médio/Baixo] ([justificativa])
 
-    ## 🤖 Instruções para Agentes de IA
+    ## 📋 Padrões e Instruções para Agentes
+    
+    ### **Bug Hunter Agent (Fase de Diagnóstico)**:
+    Combine a persona do `.asdlc/agents/bug_hunter_agent.md` com a tarefa: "Valide se a RCA descrita faz sentido técnico e se o teste de reprodução cobre o cenário relatado."
 
-    ### **Code Agent (Fase 1)**:
+    ### **Code Agent (Implementação)**:
     Combine a persona do `.asdlc/agents/code_agent.md` com a tarefa: "Implemente EXATAMENTE as tarefas detalhadas acima, criando e modificando os arquivos EXATAMENTE como listado no Manifesto de Arquivos. Siga TODOS os padrões obrigatórios e princípios definidos. Use os exemplos de código fornecidos como referência."
 
     ### **Test Agent (Fase 2)**:

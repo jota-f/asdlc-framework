@@ -16,8 +16,8 @@
 
 ### **Componentes Principais**:
 - **Core Framework**: Lógica principal em Python com módulos especializados
-- **Agentes A-SDLC**: Templates de personas para diferentes responsabilidades
-- **Plan Generator**: Motor de geração de planos usando LLMs
+- **Agentes A-SDLC**: Templates de personas para diferentes responsabilidades (Code, Test, Architecture, Requirements, Review, Bug Hunter)
+- **Plan Generator**: Motor de geração de planos usando LLMs (Suporta Feature e Bug Fix)
 - **Prompts Engine**: Sistema de prompts profissionais para LLMs externas
 - **CLI Interface**: Interface híbrida (interativa + linha de comando)
 
@@ -49,8 +49,9 @@
 
 ### **Core Features**:
 - [ ] **Criação de Projetos**: Inicialização automática com estrutura A-SDLC
-- [ ] **Agentes Especializados**: 5 agentes com personas bem definidas
-- [ ] **Geração de Stories**: Transformação de requisitos em planos executáveis
+- [x] **Agentes Especializados**: 6 agentes com personas bem definidas (Adicionado Bug Hunter)
+- [x] **Geração de Stories**: Transformação de requisitos em planos executáveis
+- [x] **Suporte a Bugs**: Processo de RCA e Regressão integrado
 - [ ] **Plan Generator**: Motor inteligente usando LLMs
 - [ ] **Prompts Profissionais**: Templates para uso com LLMs externas
 - [ ] **CLI Híbrido**: Interface flexível (interativa + comandos)
@@ -124,7 +125,7 @@ A-SDLC/
 │   ├── ui_manager.py         # Interface de usuário
 │   └── llm_client.py         # Cliente LLM
 ├── .asdlc/                   # Configuração A-SDLC
-│   └── agents/               # Agentes do framework
+│   └── agents/               # Agentes (Code, Test, Review, Bug Hunter, etc.)
 ├── prompts/                  # Templates de prompts
 ├── examples/                 # Projetos de exemplo
 ├── tests/                    # Testes automatizados
