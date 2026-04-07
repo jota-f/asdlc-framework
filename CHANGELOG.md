@@ -7,6 +7,31 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.
 
 ---
 
+## [2.0.0] - 2026-04-07
+
+### Adicionado
+- **🌟 `/asdlc-architecture`**: Workflow de descoberta arquitetural para perguntas livres de modelagem e design
+- **🌟 `/asdlc-plan`**: Análise de escopo com quebra automática de features grandes em múltiplas stories
+- **🌟 Sistema de Dependências**: Campo `depends_on` no frontmatter YAML com verificação automática
+- **🌟 INDEX.md**: Índice consolidado do projeto (~200 tokens vs 5000+ de todas stories)
+- **🌟 Context Compactor Skill**: Skill para reduzir tokens em sessões longas (40-50% de redução)
+- **🌟 TOOL_GUIDE.md**: Guia de otimização de tools com padrão Tool Search Tool (60-85% redução)
+- **🌟 Stories de Exemplo**: Exemplos completos de stories independentes e com dependências
+- **🌟 Validador de Stories**: Script Python para validar estrutura de stories
+
+### Modificado
+- **Skills atualizadas**: `asdlc_story_generator` e `asdlc_implementation` agora mantêm INDEX.md atualizado
+- **README atualizado**: Guia completo com Quick Start e referência de comandos
+- **Template de Story**: Novo campo `depends_on` e verificação automática
+
+### Otimização de Tokens
+- Elementos cacheáveis separados dos dinâmicos
+- Context budget recomendado (Sistema ~15%, Story ~25%, Histórico ~50%)
+- Few-shot examples reduzidos a 2-3
+- PROJECT_CONTEXT não deve ser incluído completo
+
+---
+
 ## [0.2.0] - 2026-03-07
 
 ### Adicionado

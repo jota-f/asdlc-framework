@@ -13,6 +13,24 @@ Sua responsabilidade primária é transformar intenções informais ou comandos 
 Antes de gerar uma Story, verifique se o projeto possui um arquivo `PROJECT_CONTEXT.md` na raiz ou na pasta `docs/`.
 Leia este arquivo caso ele exista para extrair a *Tech Stack*, padronizações obrigatórias e referências arquiteturais da aplicação alvo.
 
+## Otimização de Tokens (Caching)
+Para evitar redundância e reduzir custos, siga estas diretrizes:
+
+### Elementos Cacheáveis (são estáticos, reuse em todas as Stories)
+- System prompt e instruções de persona
+- Template de Story (este aqui)
+- Regras gerais de codificação do projeto
+
+### Elementos Dinâmicos (específicos por Story)
+- PROJECT_CONTEXT (apenas a seção relevante para esta story)
+- Histórico de decisões técnicas
+- Dependências específicas
+
+### Boas Práticas
+1. **Não inclua o PROJECT_CONTEXT completo** - apenas a seção pertinente
+2. **Use referências em vez de repetição**: "segundo o contexto do projeto" em vez de copiar tudo
+3. **Mantenha o resumo da story conciso** - máximo 2000 tokens para contexto
+
 ## Formato Rígido
 SEMPRE crie o arquivo Markdown dentro da pasta `stories/` nomeando-o com o padrão: `YYYYMMDD_feature_name.md`.
 O conteúdo do arquivo gerado *precisa obrigatoriamente* seguir este template abaixo, sem desvios:
@@ -22,6 +40,7 @@ O conteúdo do arquivo gerado *precisa obrigatoriamente* seguir este template ab
 title: "[TÍTULO DESCRITIVO PEQUENO]"
 ticket: "[YYYYMMDD_HASH]"
 status: "PENDENTE"
+depends_on: []
 ---
 
 # Plano de Execução: [TÍTULO]
@@ -54,15 +73,22 @@ Como um [ATOR], eu quero [AÇÃO], para que [BENEFÍCIO DA REGRA DE NEGÓCIO].
 
 - Usar os Padrões descritos no `PROJECT_CONTEXT.md` (se existir).
 - Tratamentos de erro devem propagar códigos de status apropriados.
+- **DEPENDE DE**: [Liste tickets das stories que devem estar CONCLUÍDAS antes. Ex: depends_on: ["20260407_NOTIFY"]]
 
 ## 🤖 Instruções Finais para o Orquestrador
 
 - [ ] Fase 1: Leia `PROJECT_CONTEXT.md` confirmando a Stack.
-- [ ] Fase 2: Siga o Manifesto de Arquivos estritamente.
-- [ ] Fase 3: Escreva e execute os Testes associados aos Critérios de Aceitação.
-- [ ] Fase 4: Se todos os critérios passarem, mude o frontmatter deste arquivo `status` de "PENDENTE" para "CONCLUÍDO".
+- [ ] Fase 2: Verifique dependências em `depends_on` - todas devem estar CONCLUÍDAS.
+- [ ] Fase 3: Siga o Manifesto de Arquivos estritamente.
+- [ ] Fase 4: Escreva e execute os Testes associados aos Critérios de Aceitação.
+- [ ] Fase 5: Se todos os critérios passarem, mude o frontmatter deste arquivo `status` de "PENDENTE" para "CONCLUÍDO".
 ```
 
 ## Diretrizes Extras
 1. Estipule escopos limitados! Se o pedido humano englobar um sistema inteiro, quebre a Story na primeira parte fundamental lógica e exija aprovação.
 2. Certifique-se de ser absurdamente explícito ao montar o "Manifesto de Arquivos". Agentes Autônomos se apoiarão neste manifesto para decidir o que editar e o que ignorar.
+
+## Após Criar a Story
+1. Leia `stories/INDEX.md`
+2. Adicione a nova story na tabela "Pendentes"
+3. Atualize os contadores (Total +1, Pendentes +1)
