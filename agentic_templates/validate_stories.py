@@ -1,56 +1,20 @@
-# A-SDLC Story Validator
-
-Script simples para validar Stories antes da execução.
-
-## Uso
-
-```bash
-# Validar todas as stories
-python validate_stories.py
-
-# Validar uma story específica  
-python validate_stories.py stories/20260407_notificacao_push.md
-```
-
-## Regras de Validação
-
-### Frontmatter
-- [ ] `title`: Obrigatório, não vazio
-- [ ] `ticket`: Obrigatório, padrão YYYYMMDD_*
-- [ ] `status`: Obrigatório, deve ser "PENDENTE" ou "CONCLUÍDO"
-- [ ] `depends_on`: Opcional, array de strings
-
-### Corpo da Story
-- [ ] Deve ter pelo menos uma seção "Manifesto de Arquivos"
-- [ ] Deve ter pelo menos uma tarefa em "Tarefas Detalhadas"
-- [ ] Deve ter pelo menos um critério em "Critérios de Aceitação"
-
-### Dependências
-- [ ] Se `depends_on` tem valores, todos os tickets referenciados devem existir
-- [ ] Se dependência existe, deve estar com status "CONCLUÍDO" para execução
-
-## Saída
-
-```
-✓ Validando: stories/20260407_notificacao_push.md
-  ✓ Frontmatter válido
-  ✓ Manifestos de arquivos definidos
-  ✓ Tarefas detalhadas OK
-  ✓ Critérios de aceitação OK
-  ✓ Dependências verificadas (0 dependências)
-
-✓ Story válida!
-```
-
-## Implementação
-
-```python
 #!/usr/bin/env python3
-"""Validador de Stories A-SDLC"""
+"""
+A-SDLC Story Validator
+
+Script simples para validar Stories antes da execucao.
+
+Uso:
+
+  python validate_stories.py
+
+  python validate_stories.py stories/20260407_notificacao_push.md
+"""
 
 import sys
 import re
 from pathlib import Path
+
 
 def parse_frontmatter(content):
     """Extrai frontmatter YAML do arquivo."""
@@ -70,6 +34,7 @@ def parse_frontmatter(content):
             if val:
                 fm[key] = val
     return fm
+
 
 def validate_story(filepath):
     """Valida uma story."""
@@ -110,9 +75,10 @@ def validate_story(filepath):
                     found = True
                     break
             if not found:
-                errors.append(f"Dependência referenceda não encontrada: {dep}")
+                errors.append(f"Dependência referenciada não encontrada: {dep}")
     
     return errors
+
 
 def main():
     stories_dir = Path('stories')
@@ -134,6 +100,7 @@ def main():
             print(f"✓ {f.name}")
     
     return 0 if all_valid else 1
+
 
 if __name__ == '__main__':
     sys.exit(main())
