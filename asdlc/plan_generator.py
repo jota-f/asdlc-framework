@@ -50,13 +50,13 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
 
     **EXEMPLOS DE BONS RESULTADOS POR TIPO:**
     ---
-    {"""**Bug Fix API:**
+    {("""**Bug Fix API:**
     - Título: "Erro 500 no endpoint de Login"
     - Descrição: "O endpoint /auth/login falha quando o email contém caracteres especiais"
     - **RCA:** Falha na regex de validação que não cobre caracteres unicode.
     - **Manifesto:** `src/auth/validator.py`, `tests/test_auth_bugs.py`
     - **Tarefas:** Criar teste de reprodução, ajustar regex, validar sanitzation
-    - **Critérios:** Teste de regressão passa, endpoint retorna 400 para emails inválidos e 200 para unicode válidos""" if is_bug else ""}
+    - **Critérios:** Teste de regressão passa, endpoint retorna 400 para emails inválidos e 200 para unicode válidos""" if is_bug else "")}
     
     **Web Frontend:**
     - Título: "Implementar relógio analógico HTML"
