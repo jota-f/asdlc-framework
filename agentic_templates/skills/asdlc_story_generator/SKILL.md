@@ -13,6 +13,11 @@ Sua responsabilidade primária é transformar intenções informais ou comandos 
 1. Antes de gerar uma Story, verifique se o projeto possui um arquivo `PROJECT_CONTEXT.md` na raiz ou na pasta `docs/`. Leia-o para extrair a *Tech Stack* e padrões.
 2. **Consulte obrigatoriamente o `stories/MEMORY.md`**. Use a lista de stories concluídas e pendentes para detectar se a nova funcionalidade depende de um ticket existente. Se sim, sugira-o automaticamente no campo `depends_on` da Story.
 
+## ⚠️ REGRA CRÍTICA: Testes são OBRIGATÓRIOS
+NENHUMA story pode ser criada sem testes. A seção `Critérios de Aceitação` é **OBRIGATÓRIA** e não pode ser vazia.
+- Se você não souber como testar, inclua pelo menos um critério genérico como "npm run test passa"
+- Sempre reference arquivos de teste existentes ou crie novos no manifesto
+
 ## Otimização de Tokens (Caching)
 Para evitar redundância e reduzir custos, siga estas diretrizes:
 
@@ -64,23 +69,26 @@ Como um [ATOR], eu quero [AÇÃO], para que [BENEFÍCIO DA REGRA DE NEGÓCIO].
 ### Tarefa N: ...
 
 ## ✅ Critérios de Aceitação (Test Agent)
+**ESTA SEÇÃO É OBRIGATÓRIA.** Inclua critérios específicos e testáveis:
 
-- [ ] Critério Testável 1
-- [ ] O componente X renderiza na tela sem exceptions
-- [ ] O sistema bloqueia adequadamente usuários não autenticados no endpoint Y
+- [ ] Critério Testável 1 (ex: "função X retorna Y quando Z")
+- [ ] Critério Testável 2 (ex: "componente renderiza sem exceptions")
+- [ ] Execute teste: [identifique o comando adequado ao projeto - npm test, pytest, cargo test, go test, etc.]
 
 ## 📋 Regras Ocultas (Architecture & Review Agent)
 
 - Usar os Padrões descritos no `PROJECT_CONTEXT.md` (se existir).
 - Tratamentos de erro devem propagar códigos de status apropriados.
-- **DEPENDE DE**: [Liste tickets das stories que devem estar CONCLUÍDAS antes. Ex: depends_on: ["20260407_NOTIFY"]]
 
 ## 🤖 Instruções Finais para o Orquestrador
 
 - [ ] Fase 1: Leia `PROJECT_CONTEXT.md` confirmando a Stack.
 - [ ] Fase 2: Verifique dependências em `depends_on` - todas devem estar CONCLUÍDAS.
 - [ ] Fase 3: Siga o Manifesto de Arquivos estritamente.
-- [ ] Fase 4: Escreva e execute os Testes associados aos Critérios de Aceitação.
+- [ ] Fase 4: Execute validação:
+  - Identifique o sistema de teste usado no projeto (busque por `package.json` → scripts de test, `pytest.ini`, `Cargo.toml`, `go.mod`, etc.)
+  - Execute o comando de teste adequado (ex: `npm test`, `pytest`, `cargo test`, `go test`)
+  - Execute lint/typecheck se aplicável (ex: `npm run lint`, `ruff check`, `cargo clippy`)
 - [ ] Fase 5: Se todos os critérios passarem, mude o frontmatter deste arquivo `status` de "PENDENTE" para "CONCLUÍDO".
 ```
 

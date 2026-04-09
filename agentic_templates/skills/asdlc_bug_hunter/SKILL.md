@@ -30,10 +30,11 @@ Use a técnica dos "5 Porquês" internamente:
 
 ### 4. Ciclo de Fix A-SDLC
 1. **Prepare a Story**: Use `/asdlc-bug` ou crie uma story manual com `type: bug_fix`.
-2. **Implemente o Fix**: Foque exclusivamente em resolver a causa raiz.
-3. **Valide a Regressão**:
-   - O teste de reprodução agora PASSA?
-   - A suite de testes completa continua PASSANDO?
+2. **Manenha a MESMA story até resolver**: NAO crie novas stories para o mesmo bug. Se descobrir que a correção não resolve completamente, CONTINUE na mesma story - adicione tarefas extras ate resolver.
+3. **Implemente o Fix**: Foque exclusivamente em resolver a causa raiz.
+4. **Valide a Regressão**:
+    - O teste de reprodução agora PASSA?
+    - A suite de testes completa continua PASSANDO?
 
 ## 🚫 Anti-Patterns (O que NÃO fazer)
 - **"Shotgun Debugging"**: Mudar várias coisas aleatoriamente esperando que o erro suma.

@@ -77,6 +77,15 @@ def validate_story(filepath):
             if not found:
                 errors.append(f"Dependencia referenciada nao encontrada: {dep}")
 
+    # Valida presence of test tasks (OBRIGATORIO para todas stories)
+    has_test_section = "Critérios de Aceitação" in content or "Criteria" in content or "Aceitação" in content
+    has_test_tasks = re.search(r"(test[e]?s?|spec|teste|pytest|cargo test|go test|npm test)", content, re.IGNORECASE)
+    has_test_files = re.search(r"(\.test\.|spec\.|\.spec\.|/tests/)", content)
+    has_test_commands = re.search(r"(execute|rode|roda|run command|cmd)", content, re.IGNORECASE)
+    
+    if not (has_test_section or has_test_tasks or has_test_files or has_test_commands):
+        errors.append("Story deve incluir secao 'Criterios de Aceitação' com criterio testavel")
+
     return errors
 
 
