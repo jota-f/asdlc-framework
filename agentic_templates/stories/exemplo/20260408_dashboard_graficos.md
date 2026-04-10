@@ -2,6 +2,8 @@
 title: "Tela de Dashboard com Gráficos"
 ticket: "20260408_DASH"
 status: "PENDENTE"
+priority: "P2"
+labels: ["frontend", "dashboard"]
 depends_on: ["20260407_NOTIFY"]
 ---
 

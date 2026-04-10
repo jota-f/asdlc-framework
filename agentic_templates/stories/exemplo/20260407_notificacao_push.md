@@ -2,6 +2,8 @@
 title: "Sistema de Notificações Push via WebSocket"
 ticket: "20260407_NOTIFY"
 status: "CONCLUÍDO"
+priority: "P1"
+labels: ["backend", "realtime"]
 depends_on: []
 ---
 
