@@ -2,6 +2,7 @@
 import logging
 from pathlib import Path
 import os
+from typing import Optional, Any
 
 # Importar o story_manager para criar a primeira story
 from . import story_manager
@@ -9,14 +10,18 @@ from . import story_manager
 logger = logging.getLogger(__name__)
 
 
-def initialize_project(project_name: str, initial_prompt: str, project_type: str = "web_api"):
+def initialize_project(project_name: str, initial_prompt: str, project_type: str = "web_api", project_path: Optional[str] = None):
     """
     Inicializa a estrutura mínima de um projeto A-SDLC e cria a primeira story
     com o plano de implementação inicial.
     """
     logger.info(f"Inicializando novo projeto A-SDLC: {project_name}")
-    project_root = Path.cwd()
-    project_dir = project_root / project_name
+    
+    if project_path:
+        project_dir = Path(project_path)
+    else:
+        project_root = Path.cwd()
+        project_dir = project_root / project_name
 
     if project_dir.exists():
         logger.warning(f"O diretório '{project_name}' já existe. Usando o diretório existente.")

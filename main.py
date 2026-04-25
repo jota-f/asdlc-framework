@@ -32,11 +32,15 @@ def setup_cli_parser():
     p_create.add_argument("--name", required=True, help="Nome do projeto.")
     p_create.add_argument("--prompt", required=True, help="O objetivo de alto nível do projeto.")
     p_create.add_argument("--type", default="web_api", help="Tipo do projeto.")
+    p_create.add_argument("--path", help="Caminho customizado para o projeto.")
 
     # Comando: create-story
     s_create = subparsers.add_parser("create-story", help="Cria uma nova story com plano de execução.")
     s_create.add_argument("--title", required=True, help="Título da story.")
-    # Adicionar mais argumentos conforme o story_manager.py evoluir
+
+    # Comando: implement
+    p_implement = subparsers.add_parser("implement", help="Executa a implementação de uma story (Multi-Agent).")
+    p_implement.add_argument("--id", required=True, help="ID da story a ser implementada.")
 
     # Comando: list-stories
     subparsers.add_parser("list-stories", help="Lista todas as stories do projeto atual.")
@@ -54,9 +58,16 @@ def setup_cli_parser():
 
 def execute_cli_command(args):
     if args.command == "create-project":
-        project_manager.initialize_project(project_name=args.name, initial_prompt=args.prompt, project_type=args.type)
+        project_manager.initialize_project(
+            project_name=args.name, 
+            initial_prompt=args.prompt, 
+            project_type=args.type,
+            project_path=args.path
+        )
     elif args.command == "create-story":
         story_manager.create_story(story_title=args.title)
+    elif args.command == "implement":
+        story_manager.implement_story(story_id=args.id)
     elif args.command == "list-stories":
         story_manager.list_stories()
     elif args.command == "validate":

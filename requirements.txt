@@ -1,10 +1,12 @@
-﻿# A-SDLC Framework Dependencies
+# A-SDLC Framework Dependencies
 # Dependências essenciais para o framework
 
 # Core dependencies
 PyYAML>=6.0
 python-dotenv>=1.0.0
 openai>=1.0.0
+mcp
+fastmcp
 
 # Development tools
 black==25.1.0

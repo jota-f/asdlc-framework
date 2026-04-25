@@ -12,6 +12,7 @@ import re
 # Importar gerador de planos e utilitários
 from .plan_generator import gerar_plano_de_execucao
 from .utils import find_project_root
+from .agent_executor import spawn_agent, validate_and_fix
 
 # Configurar logging
 logger = logging.getLogger(__name__)
@@ -45,8 +46,8 @@ def create_story(
         # 1. ENCONTRAR A RAIZ DO PROJETO
         project_root = find_project_root()
         if not project_root:
-            logger.error("❌ Operação cancelada. Execute este comando de dentro de um projeto A-SDLC.")
-            logger.error("💡 Use 'python main.py create-project' para criar um novo projeto.")
+            logger.error("Operacao cancelada. Execute este comando de dentro de um projeto A-SDLC.")
+            logger.error("Dica: Use 'python main.py create-project' para criar um novo projeto.")
             return None
 
         logger.info(f"Criando nova story no projeto: {project_root.name}")
@@ -386,6 +387,36 @@ def _mostrar_lista_stories(stories: List[Dict[str, Any]]) -> None:
     print("Listagem concluida")
 
 
+def implement_story(story_id: str) -> bool:
+    """
+    Inicia o processo de implementação de uma story usando Agentes Especialistas.
+    """
+    story_path = _encontrar_story_por_id(story_id)
+    if not story_path:
+        logger.error(f"Story com ID {story_id} não encontrada.")
+        return False
+
+    story_info = _extrair_info_story(story_path)
+    if not story_info:
+        logger.error(f"Não foi possível ler os dados da story {story_id}.")
+        return False
+
+    # Atualizar status para In Progress
+    _atualizar_status_story(story_path, "In Progress")
+
+    # Executar implementação
+    success = _executar_etapas_implementacao(story_info)
+
+    if success:
+        _atualizar_status_story(story_path, "Done")
+        logger.info(f"Implementação da story {story_id} concluída com sucesso.")
+    else:
+        _atualizar_status_story(story_path, "Failed")
+        logger.error(f"Falha na implementação da story {story_id}.")
+
+    return success
+
+
 def _executar_etapas_implementacao(story_info: Dict[str, Any]) -> bool:
     """
     Executa etapas de implementação da story
@@ -400,22 +431,33 @@ def _executar_etapas_implementacao(story_info: Dict[str, Any]) -> bool:
         title = story_info.get("title", "Story")
         logger.info(f"Executando etapas de implementação para: {title}")
 
-        # Simular etapas de implementação
-        etapas = [
-            "Análise de requisitos",
-            "Design da arquitetura",
-            "Desenvolvimento de código",
-            "Criação de testes",
-            "Code review",
-            "Deploy",
-        ]
+        # 1. Análise e Design (Architecture Agent)
+        logger.info(f"Etapa 1/4: Design da Arquitetura (Architecture Agent)")
+        design_task = f"Analise a story '{title}' e defina a melhor abordagem arquitetural seguindo o PROJECT_CONTEXT.md."
+        spawn_agent("architecture", story_info.get("story_id"), design_task, [])
 
-        for i, etapa in enumerate(etapas, 1):
-            logger.info(f"Etapa {i}/{len(etapas)}: {etapa}")
-            # Aqui seria implementada a lógica real de cada etapa
-            # Por enquanto, apenas simula o processo
+        # 2. Desenvolvimento com Feedback Loop (Code Agent + Sensors)
+        logger.info(f"Etapa 2/4: Desenvolvimento de Código com Feedback Loop (Code Agent)")
+        files_to_create = story_info.get("files_to_create", "").split(",")
+        files_to_modify = story_info.get("files_to_modify", "").split(",")
+        relevant_files = [f.strip() for f in files_to_create + files_to_modify if f.strip()]
+        
+        code_task = f"Implemente a story '{title}' focando nos seguintes arquivos: {', '.join(relevant_files)}. Siga os critérios de aceitação."
+        
+        # Aqui usamos validate_and_fix em vez de spawn_agent para ativar os sensores de feedback
+        code_result = validate_and_fix("code", story_info.get("story_id"), code_task, relevant_files)
 
-        logger.info("Todas as etapas de implementação concluídas")
+        # 3. Testes com Validação (Test Agent)
+        logger.info(f"Etapa 3/4: Criação e Validação de Testes (Test Agent)")
+        test_task = f"Crie testes unitários para o código gerado: \n{code_result}\nGaranta 80%+ de cobertura."
+        spawn_agent("test", story_info.get("story_id"), test_task, relevant_files)
+
+        # 4. Revisão (Review Agent)
+        logger.info(f"Etapa 4/4: Code Review (Review Agent)")
+        review_task = f"Revise a implementação e os testes para a story '{title}'. Verifique segurança e performance."
+        spawn_agent("review", story_info.get("story_id"), review_task, relevant_files)
+
+        logger.info("Todas as etapas de implementação concluídas com Agentes Especialistas (Spawned Agents)")
         return True
 
     except Exception as e:

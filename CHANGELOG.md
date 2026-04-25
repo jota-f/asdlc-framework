@@ -7,6 +7,26 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.
 
 ---
 
+## [2.2.0] - 2026-04-25
+
+### Adicionado
+- **🚀 A-SDLC MCP Server**: Implementação do Model Context Protocol para integração nativa com IDEs (Cursor, Windsurf).
+- **🤖 Multi-Agent Execution Engine**: Nova engine em `agent_executor.py` com suporte a **Recursive Handoffs** (`[DELEGATE]`).
+- **🛡️ Harness Sensors**: Sistema de feedback em tempo real que executa testes/compilação e corrige erros automaticamente.
+- **📁 Suporte a Múltiplos Projetos**: Comando `create-project` e ferramentas MCP agora aceitam `--path` customizado.
+- **🧬 Agente Especialista (Spawn)**: Capacidade de invocar agentes específicos para tarefas ad-hoc via CLI e MCP.
+
+### Modificado
+- **README Revitalizado**: Novo sumário clicável, guia de integração MCP e estrutura de workspace recomendada.
+- **CLI Melhorada**: Comando `implement` adicionado à interface de linha de comando.
+- **Resiliência Windows**: Remoção de emojis problemáticos que causavam `UnicodeEncodeError` no terminal Windows.
+
+### Corrigido
+- Importação ausente de `Optional` no `project_manager.py`.
+- Lógica de detecção de sensores agora analisa a lista real de arquivos do projeto.
+
+---
+
 ## [2.0.0] - 2026-04-07
 
 ### Adicionado

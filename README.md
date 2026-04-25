@@ -1,249 +1,110 @@
-# 🚀 A-SDLC Framework
+# 🌌 A-SDLC Framework (v2.2.0)
+**AI-Driven Software Development Lifecycle**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
-[![A-SDLC Compliant](https://img.shields.io/badge/A--SDLC-Compliant-brightgreen.svg)](https://github.com/jota-f/asdlc-framework)
-
-- **🇺🇸 [README_EN.md](README_EN.md)** - English version of this documentation
-
-**Framework revolucionário para desenvolvimento de software com agentes de IA especializados**, focado em alta velocidade, alta qualidade e um processo estruturado baseado em personas bem definidas.
-
-> **Atenção:** Este projeto é 100% gratuito, não comercial, sem doações, sem crowdfunding, sem recompensas financeiras e sem qualquer tipo de cobrança. Todo contato deve ser feito exclusivamente via GitHub (issues, discussions, PRs).
+O A-SDLC é um framework de engenharia de software desenhado para transformar IAs em agentes autônomos capazes de gerenciar o ciclo de vida completo de um projeto. Ele utiliza **Harness Engineering**, **Recursive Handoffs** e **Feedback Loops** para garantir código de alta fidelidade.
 
 ---
 
-### 🌟 Novo: Modo Nativo para Agentes (Agentic Mode v2.0.0)
-
-Agora você pode usar o A-SDLC **diretamente da sua IDE** (Cursor, Windsurf, Cline, RooCode) sem precisar instalar Python ou usar o terminal! Basta copiar a pasta `agentic_templates/` para o seu projeto e começar a usar.
-
-**Novidades v2.0.0:**
-- `/asdlc-architecture` - Descoberta arquitetural
-- `/asdlc-plan` - Análise de escopo com quebra automática
-- Sistema de dependências entre stories (`depends_on`)
-- Índice automático do projeto (otimiza tokens)
-
-👉 **[Guia Completo do Modo Agentic (PT-BR)](agentic_templates/README.md)** | **[🇺🇸 English Guide](agentic_templates/README_EN.md)**
+## 📍 Sumário
+- [🚀 O que é o A-SDLC?](#-o-que-é-o-a-sdlc)
+- [⚙️ Instalação e Setup](#️-instalação-e-setup)
+- [🧠 Modo MCP (Antigravity Power)](#-modo-mcp-antigravity-power)
+- [🛠️ Modo Agentic (IDE Templates)](#️-modo-agentic-ide-templates)
+- [🏃 Como Começar (Workflow)](#-como-começar-workflow)
+- [📂 Estrutura de Trabalho Recomendada](#-estrutura-de-trabalho-recomendada)
+- [📖 Exemplos e Casos de Uso](#-exemplos-e-casos-de-uso)
+- [📄 Termos de Uso](#-termos-de-uso)
 
 ---
 
-## 🧠 O que é o A-SDLC?
-
-**A-SDLC (AI-Driven Software Development Lifecycle)** é um framework inovador que integra **agentes de IA especializados** no ciclo de vida de desenvolvimento de software, não apenas como ferramentas de codificação, mas como **participantes ativos** de um processo estruturado e gerenciado.
-
-### **📚 Conceitos Fundamentais:**
-
-#### **1. 🤖 Agentes Especializados com Personas:**
-O framework utiliza 5 agentes com responsabilidades bem definidas:
-
-- **Code Agent** 💻 - Desenvolvedor Sênior Full-Stack
-  - Implementação de código limpo e eficiente
-  - Seguimento de padrões e boas práticas
-  - Documentação inline e estruturação modular
-
-- **Test Agent** 🧪 - QA Engineer Sênior  
-  - Criação de testes abrangentes (unitários, integração, e2e)
-  - Validação de critérios de aceitação
-  - Cobertura de casos edge
-
-- **Architecture Agent** 🏗️ - Arquiteto de Software Sênior
-  - Definição de arquitetura e tecnologias
-  - Padrões de design e escalabilidade
-  - Tomada de decisões técnicas estratégicas
-
-- **Requirements Agent** 📋 - Analista de Requisitos Sênior
-  - Elicitação e análise de requisitos
-  - Definição de critérios de aceitação
-  - Documentação técnica e funcional
-
-- **Review Agent** 👀 - Code Reviewer Sênior
-  - Revisão de código e qualidade
-  - Verificação de segurança e performance
-  - Conformidade com padrões estabelecidos
-
-#### **2. 📝 Geração Inteligente de Planos:**
-A principal inovação é a **geração de planos de execução detalhados** para cada "story", que guiam o desenvolvedor (e seus assistentes de IA) através de um checklist de melhores práticas, desde a análise de requisitos até a implementação, testes e documentação.
-
-#### **3. 🏗️ Estrutura Padronizada:**
-Cada projeto A-SDLC segue uma estrutura consistente:
-
-```
-meu-projeto/
-├── PROJECT_CONTEXT.md     # Contexto técnico completo
-├── .asdlc/
-│   └── agents/           # Personas dos 5 agentes especializados
-├── stories/              # Planejamento detalhado de funcionalidades
-├── prompts/              # Templates para LLMs externas
-└── src/                  # Código fonte do projeto
-```
-
-> 💡 **Usando o Modo Agentic?** Você só precisa da pasta `agentic_templates/` copiada para o seu projeto. Sem necessidade de instalar Python. Veja o **[Guia do Modo Agentic](agentic_templates/README.md)** para detalhes.
-
-## ✨ Features
-
-- **🔄 Arquitetura Híbrida:** Use via CLI para automação ou via Menu Interativo para descoberta
-- **🧠 Plan Generator:** Crie "stories" que se transformam em planos de execução detalhados em Markdown
-- **🤖 Agentes Especializados (Modo CLI):** 5 personas bem definidas para diferentes aspectos do desenvolvimento
-- **⚡ Model Context Protocol & Agentic (NOVO):** Suporte nativo para rodar via Skills/Workflows em ferramentas autônomas (Cursor, Windsurf, Cline)
-- **📚 Prompts Profissionais:** Templates otimizados para usar com ChatGPT, Gemini e outras LLMs
-- **🎯 Conformidade Automática:** Garantia de que projetos sigam padrões A-SDLC
-
-## ⚙️ Instalação
-
-1. Clone o repositório:
-   ```bash
-   git clone [URL-DO-SEU-REPOSITORIO]
-   cd asdlc-framework
-   ```
-
-2. Crie e ative um ambiente virtual:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # Linux/macOS
-   # venv\Scripts\activate  # Windows
-   ```
-
-3. Instale as dependências:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Configure sua API key da OpenAI:
-   ```bash
-   cp .env.example .env
-   # Edite o arquivo .env e adicione sua OPENAI_API_KEY
-   ```
-
-   ```bash
-   cp .env.example .env
-   # Edite o arquivo .env e adicione sua OPENAI_API_KEY
-   ```
-
-## 📚 Workflow A-SDLC
-
-### **🔄 Processo Típico:**
-
-1. **📋 Inicialização:** 
-   - Criação automática da estrutura A-SDLC
-   - Geração do `PROJECT_CONTEXT.md` detalhado
-   - Instalação dos 5 agentes especializados
-   - Criação dos templates de prompts
-
-2. **📝 Planejamento:**
-   - Criação de stories com descrição de alto nível
-   - Geração automática de planos detalhados pela LLM
-   - Definição de manifestos de arquivos específicos
-   - Estabelecimento de critérios de aceitação
-
-3. **⚡ Implementação:**
-   - Uso dos prompts profissionais com LLMs externas
-   - Seguimento dos checklists dos agentes especializados
-   - Implementação guiada por personas bem definidas
-   - Validação contínua de conformidade
-
-4. **✅ Validação:**
-   - Verificação automática de implementação real
-   - Validação de testes funcionais
-   - Conformidade com padrões A-SDLC
-   - Documentação atualizada
-
-## 🎯 Tipos de Projeto Suportados
-
-O A-SDLC adapta seus planos e agentes para diferentes tipos de projeto:
-
-- **🌐 web_frontend** - Aplicações web frontend (HTML/CSS/JS, React, Vue)
-- **🔌 web_api** - APIs web backend (Python FastAPI, Node.js Express)
-- **🌐 web_fullstack** - Aplicações web completas (Frontend + Backend)
-- **📱 mobile** - Aplicações móveis (React Native, Flutter)
-- **💻 desktop** - Aplicações desktop (Electron, Tkinter)
-- **🤖 cli** - Aplicações linha de comando
-
-## 📁 Estrutura de Arquivos
-
-```
-A-SDLC-Framework/
-├── asdlc/                    # 🧠 Core framework
-│   ├── project_manager.py    # Gestão de projetos
-│   ├── story_manager.py      # Gestão de stories
-│   ├── plan_generator.py     # Geração de planos com LLM
-│   ├── ui_manager.py         # Interface de usuário
-│   └── llm_client.py         # Cliente para APIs de LLM
-├── .asdlc/                   # 🤖 Configuração A-SDLC do framework
-│   └── agents/               # Agentes especializados
-├── prompts/                  # 📚 Templates para LLMs externas
-├── examples/                 # 📖 Projetos de exemplo
-├── tests/                    # 🧪 Testes do framework
-├── main.py                   # 🚀 Ponto de entrada
-├── PROJECT_CONTEXT.md        # 📋 Contexto do próprio framework
-└── README.md                 # 📖 Esta documentação
-```
-
-## 🔧 Tecnologias
-
-- **Python 3.8+** - Linguagem principal
-- **OpenAI API** - Integração com GPT para geração de planos
-- **argparse** - Interface de linha de comando
-- **PyYAML** - Configurações e metadados
-- **python-dotenv** - Gerenciamento de variáveis de ambiente
-
-## 📖 Documentação
-
-Para mais detalhes sobre como usar o A-SDLC:
-
-- **📋 [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md)** - Contexto técnico completo do framework
-- **🌟 [Modo Agentic (PT-BR)](agentic_templates/README.md)** - Guia completo para usar via IDE nativa com Skills e Workflows
-- **🇺🇸 [Agentic Mode (EN)](agentic_templates/README_EN.md)** - English guide for native IDE usage
-- **📚 [prompts/README.md](prompts/README.md)** - Como usar templates com LLMs externas
-- **📖 [examples/](examples/)** - Projetos de exemplo implementados com A-SDLC
-
-
-### 🔍 Exemplo de Comparação
-
-Para demonstrar a diferença entre desenvolvimento tradicional e com A-SDLC:
-
-- **📝 [examples/No A-SDLC/](examples/No%20A-SDLC/)** - TodoList implementada sem framework (para comparação)
-- **📖 [examples/web_frontend/](examples/web_frontend/)** - TodoList implementada com A-SDLC
-
-**Compare os dois exemplos** para ver como o A-SDLC melhora a qualidade, estrutura e profissionalismo do código.
-
-## 🤝 Contribuição
-
-Contribuições seguindo o processo A-SDLC são bem-vindas! 
-
-1. Faça um fork do projeto
-2. Crie uma story para sua melhoria usando o próprio A-SDLC
-3. Implemente seguindo as personas dos agentes
-4. Abra um Pull Request com documentação completa
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT com restrições de uso não comercial.
-
-### 📋 Termos de Uso
-
-- **✅ Uso Livre:** Para projetos pessoais, educacionais e não comerciais
-- **❌ Uso Comercial:** Proibido sem autorização explícita
-- **📝 Atribuição:** Obrigatória em todos os usos
-- **🔗 Citação:** Deve incluir referência ao framework A-SDLC
-
-### 📝 Como Atribuir
-
-Ao usar o A-SDLC Framework, inclua:
-
-```markdown
-Desenvolvido com [A-SDLC Framework](https://github.com/jota-f/asdlc-framework)
-```
-
-Ou em código:
-
-```python
-# Desenvolvido com A-SDLC Framework
-# https://github.com/jota-f/asdlc-framework
-```
-
-### 🏢 Licenciamento Comercial
-
-Para uso comercial, entre em contato para licenciamento específico.
+## 🚀 O que é o A-SDLC?
+Diferente de simples assistentes de chat, o A-SDLC trata a IA como um **Sistema Multi-Agente (MAS)**. Cada tarefa é passada por especialistas (Requisitos, Arquitetura, Código, Testes) que validam o trabalho uns dos outros através de um "Harness" (arreio) que monitora erros em tempo real.
 
 ---
 
-**💡 Desenvolvido seguindo seus próprios padrões A-SDLC - Um framework que pratica o que ensina!**
+## ⚙️ Instalação e Setup
+
+### 1. Requisitos
+- Python 3.10+
+- Git
+
+### 2. Clonagem e Dependências
+```bash
+git clone https://github.com/jota-f/A-SDLC.git
+cd A-SDLC
+pip install -r requirements.txt
+cp .env.example .env
+```
+
+---
+
+## 🧠 Modo MCP (Antigravity Power)
+Este é o modo mais avançado. Ele conecta o framework diretamente à sua IDE (Cursor/Windsurf) via **Model Context Protocol**, permitindo que o framework use a inteligência da IDE sem precisar de chaves de API externas.
+
+### Como instalar o servidor MCP:
+1. **Instale as bibliotecas**: `pip install fastmcp mcp`
+2. **Configure sua IDE**: Adicione o servidor ao seu arquivo `mcp_config.json`:
+```json
+"asdlc": {
+  "command": "python",
+  "args": ["C:/Caminho/Para/A-SDLC/asdlc/mcp_server.py"],
+  "env": { "PYTHONPATH": "C:/Caminho/Para/A-SDLC" }
+}
+```
+3. **Reinicie a IDE**. Agora eu (Antigravity) terei "ferramentas" nativas do A-SDLC para criar projetos e stories para você!
+
+---
+
+## 🛠️ Modo Agentic (IDE Templates)
+Se você não quer usar a Engine Python e prefere trabalhar apenas no chat da IDE:
+1. Copie a pasta `agentic_templates/` para o seu projeto.
+2. Use `@asdlc-plan.md` para planejar e `@asdlc-coder.md` para codificar.
+3. [Veja o Guia Detalhado aqui](agentic_templates/README.md).
+
+---
+
+## 🏃 Como Começar (Workflow)
+
+### Cenário A: Projeto Novo
+```bash
+python main.py create-project --name "meu_app" --prompt "Descrição do app"
+```
+
+### Cenário B: Projeto Existente (Integração)
+```bash
+python main.py create-project --name "meu_projeto" --path "C:/pasta/do/projeto" --prompt "Análise"
+```
+
+---
+
+## 📂 Estrutura de Trabalho Recomendada
+Para evitar confusão entre os arquivos do framework e seus códigos, recomendamos:
+```text
+C:/Dev/
+  ├── A-SDLC/             <-- O Framework (central)
+  ├── Projeto_Alpha/      <-- Seu projeto (com .asdlc e stories instalados)
+  └── Projeto_Beta/       <-- Outro projeto seu
+```
+
+---
+
+## 📖 Exemplos e Casos de Uso
+
+### 🚗 Sensor de Fadiga (Arduino/ESP32)
+Um exemplo real de como o A-SDLC pode ser usado em sistemas embarcados.
+- **Local**: `test_projects/drowsinessSensor`
+- **Destaque**: Uso de sensores de feedback para validar compilação de firmware.
+
+### 📝 TodoList Fullstack
+Exemplo clássico para entender o fluxo de requisitos até o teste E2E.
+- **Local**: `examples/web_fullstack`
+
+---
+
+## 📄 Termos de Uso
+Este framework é sob licença MIT, mas com restrição: **Uso comercial proibido sem autorização**.
+- **Livre**: Uso pessoal, acadêmico e open-source.
+- **Atribuição**: Obrigatório citar "Desenvolvido com A-SDLC Framework".
+
+---
+**💡 A-SDLC: Onde o código não é apenas escrito, ele é projetado por máquinas e validado por regras.**
