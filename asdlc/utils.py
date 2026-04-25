@@ -40,3 +40,55 @@ def get_project_structure(project_root: Path) -> str:
 
         structure.append(f"{indent}└── {marker} {path.name}")
     return "\n".join(structure)
+
+
+def detect_test_framework(project_root: Path) -> Optional[str]:
+    """
+    Detecta o framework de testes baseado nos arquivos e contexto do projeto.
+    """
+    # 1. Verificar PROJECT_CONTEXT.md
+    context_file = project_root / "PROJECT_CONTEXT.md"
+    if context_file.exists():
+        content = context_file.read_text(encoding="utf-8").lower()
+        if "pytest" in content:
+            return "pytest"
+        if "jest" in content:
+            return "jest"
+        if "unittest" in content:
+            return "unittest"
+        if "cypress" in content:
+            return "cypress"
+
+    # 2. Verificar arquivos de configuração
+    indicators = {
+        "pytest.ini": "pytest",
+        "conftest.py": "pytest",
+        "jest.config.js": "jest",
+        "package.json": "npm_test",  # Pode ser jest, mocha, etc.
+        "requirements.txt": "python_test",
+        "pyproject.toml": "python_test",
+    }
+
+    for file, framework in indicators.items():
+        if (project_root / file).exists():
+            # Se for package.json, tentar ler o script de test
+            if file == "package.json":
+                try:
+                    import json
+                    with open(project_root / file, "r") as f:
+                        data = json.load(f)
+                        test_script = data.get("scripts", {}).get("test", "")
+                        if "jest" in test_script: return "jest"
+                        if "mocha" in test_script: return "mocha"
+                except:
+                    pass
+            
+            # Se for python, verificar se pytest está no requirements
+            if file in ["requirements.txt", "pyproject.toml"]:
+                content = (project_root / file).read_text(encoding="utf-8").lower()
+                if "pytest" in content: return "pytest"
+                if "unittest" in content: return "unittest"
+
+            return framework
+
+    return None

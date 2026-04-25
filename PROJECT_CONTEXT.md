@@ -9,22 +9,29 @@
 **Objetivo do Projeto**: Criar um framework completo que permita desenvolvedores integrarem agentes de IA no desenvolvimento de software através de:
 1. **Geração de Planos de Execução Detalhados**: Transformar requisitos em stories estruturadas com checklists de melhores práticas
 2. **Agentes Especializados**: Utilizar personas específicas (Code, Test, Architecture, Requirements, Review) para diferentes aspectos do desenvolvimento
-3. **Automação Inteligente**: Fornecer CLI híbrido e prompts profissionais para LLMs externas
-4. **Processo Estruturado**: Garantir qualidade, consistência e rastreabilidade em todo o ciclo de desenvolvimento
+3. **Automação Inteligente**: Fornecer CLI híbrido e prompts profissionais para LLMs externas.
+4. **Harness Engineering & Feedback Loops**: Ambientes operacionais isolados com sensores que validam o código e fornecem feedback para autocorreção automática (Self-Healing).
+5. **Recursive Handoffs**: Capacidade de agentes delegarem subtarefas para outros especialistas de forma recursiva.
 
 ## 2. Arquitetura do Sistema
 
 ### **Componentes Principais**:
 - **Core Framework**: Lógica principal em Python com módulos especializados
 - **Agentes A-SDLC**: Templates de personas para diferentes responsabilidades (Code, Test, Architecture, Requirements, Review, Bug Hunter)
-- **Plan Generator**: Motor de geração de planos usando LLMs (Suporta Feature e Bug Fix)
-- **Prompts Engine**: Sistema de prompts profissionais para LLMs externas
-- **CLI Interface**: Interface híbrida (interativa + linha de comando)
+- **Plan Generator**: Motor de geração de planos usando LLMs (Suporta Feature e Bug Fix).
+- **Agent Executor (Engine)**: Motor que spawna agentes em ambientes isolados (Harness) e gerencia delegações.
+- **Prompts Engine**: Sistema de prompts profissionais para LLMs externas.
+- **CLI Interface**: Interface híbrida (interativa + linha de comando).
 
 ### **Fluxo de Dados**:
 ```
-🚀 Usuário → 📋 CLI/Interface → 🧠 Plan Generator → 🤖 Agentes A-SDLC → 📝 Stories → 💻 Implementação
+🚀 Usuário → 🧠 Plan Generator → 🛠️ Agent Executor → 🛡️ Harness (Feed Forward) → 🤖 Agente → 🔍 Sensor (Feedback) → ✅ Resultado
 ```
+
+### **Conceitos de Operação**:
+- **Feed Forward**: Contexto preparado (`PROJECT_CONTEXT.md` + Story) antes da execução.
+- **Feedback Loop**: Validação automática via testes/linting com retentativas de correção.
+- **Recursive Handoff**: Delegação de tarefas entre agentes usando a tag `[DELEGATE]`.
 
 ## 3. Pilha de Tecnologia (Tech Stack)
 
@@ -57,10 +64,12 @@
 - [ ] **CLI Híbrido**: Interface flexível (interativa + comandos)
 
 ### **Funcionalidades Avançadas**:
-- [ ] **Validação de Implementações**: Verificação se código foi realmente implementado
-- [ ] **Métricas de Qualidade**: Rastreamento de conformidade com padrões
-- [ ] **Templates Adaptativos**: Agentes que se adaptam ao tipo de projeto
-- [ ] **Integração Git**: Hooks para aplicar A-SDLC em workflows
+- [x] **Spawn de Agentes**: Execução isolada de especialistas em contextos separados.
+- [x] **Harness Engineering**: Sensores automáticos para detecção de erros e feedback loop.
+- [x] **Recursive Handoffs**: Delegação inteligente entre agentes.
+- [ ] **Métricas de Qualidade**: Rastreamento de conformidade com padrões.
+- [ ] **Templates Adaptativos**: Agentes que se adaptam ao tipo de projeto.
+- [ ] **Integração Git**: Hooks para aplicar A-SDLC em workflows.
 
 ## 5. Padrões e Convenções Obrigatórios
 
@@ -120,10 +129,12 @@
 A-SDLC/
 ├── asdlc/                    # Core framework
 │   ├── project_manager.py    # Gestão de projetos
-│   ├── story_manager.py      # Gestão de stories
+│   ├── story_manager.py      # Gestão de stories e orquestração
 │   ├── plan_generator.py     # Geração de planos
+│   ├── agent_executor.py     # Engine de execução de agentes (Spawn/Harness)
 │   ├── ui_manager.py         # Interface de usuário
-│   └── llm_client.py         # Cliente LLM
+│   ├── llm_client.py         # Cliente LLM
+│   └── utils.py              # Utilitários e detecção de sensores
 ├── .asdlc/                   # Configuração A-SDLC
 │   └── agents/               # Agentes (Code, Test, Review, Bug Hunter, etc.)
 ├── prompts/                  # Templates de prompts
