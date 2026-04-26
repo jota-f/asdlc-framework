@@ -7,6 +7,12 @@ import argparse
 import sys
 import logging
 
+# Força UTF-8 no Windows para evitar erros de encoding com emojis e caracteres especiais
+if sys.platform == "win32":
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
@@ -84,7 +90,7 @@ def execute_cli_command(args):
         # Saída
         if args.output:
             Path(args.output).write_text(formatted_report, encoding="utf-8")
-            print(f"📄 Relatório salvo em: {args.output}")
+            print(f"Relatorio salvo em: {args.output}")
         else:
             print(formatted_report)
 
@@ -104,9 +110,9 @@ def main():
     # Adicionar contexto de projeto
     project_root = find_project_root()
     if project_root:
-        logger.info(f"📍 Contexto do Projeto Ativo: {project_root.name}")
+        logger.info(f"[PROJETO ATIVO]: {project_root.name}")
     else:
-        logger.info("📍 Nenhum projeto A-SDLC ativo. Apenas 'create-project' está disponível.")
+        logger.info("[SEM PROJETO]: Nenhum projeto A-SDLC ativo. Apenas 'create-project' está disponível.")
 
     # Se nenhum argumento (além do nome do script) for passado, entra no modo interativo
     if len(sys.argv) == 1:

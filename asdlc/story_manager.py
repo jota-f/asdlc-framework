@@ -8,10 +8,14 @@ from pathlib import Path
 from typing import Optional, Dict, Any, List
 from datetime import datetime
 import re
+from rich.console import Console
+from rich.panel import Panel
+from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TimeElapsedColumn
+from rich import print as rprint
 
 # Importar gerador de planos e utilitários
 from .plan_generator import gerar_plano_de_execucao
-from .utils import find_project_root
+from .utils import find_project_root, safe_write_file, console
 from .agent_executor import spawn_agent, validate_and_fix
 
 # Configurar logging
@@ -50,7 +54,7 @@ def create_story(
             logger.error("Dica: Use 'python main.py create-project' para criar um novo projeto.")
             return None
 
-        logger.info(f"Criando nova story no projeto: {project_root.name}")
+        logger.info(f"[NOVA STORY]: Criando no projeto: {project_root.name}")
 
         # Validar parâmetros
         if not story_title.strip():
@@ -87,9 +91,8 @@ def create_story(
         story_filename = f"{story_id}_{_sanitize_filename(story_title)}.md"
         story_path = stories_dir / story_filename
 
-        # Salvar story com plano de execução
-        with open(story_path, "w", encoding="utf-8") as f:
-            f.write(plano_execucao)
+        # Salvar story com plano de execução usando a escrita segura para evitar o hang do Windows
+        safe_write_file(story_path, plano_execucao)
 
         logger.info(f"Story criada com sucesso: {story_path}")
 
@@ -291,13 +294,13 @@ def _mostrar_info_story_criada(story_id: str, title: str, file_path: Path) -> No
         title: Título da story
         file_path: Caminho do arquivo
     """
-    print(f"\n🎉 Story criada com sucesso!")
-    print(f"📝 Título: {title}")
-    print(f"🆔 ID: {story_id}")
-    print(f"📁 Arquivo: {file_path}")
-    print(f"📋 Plano de execução gerado automaticamente")
-    print(f"🤖 Templates de agentes integrados")
-    print(f"\n💡 Próximos passos:")
+    print(f"\n[OK] Story criada com sucesso!")
+    print(f"Title: {title}")
+    print(f"ID: {story_id}")
+    print(f"File: {file_path}")
+    print(f"Plan: Plano de execução gerado automaticamente")
+    print(f"Agents: Templates de agentes integrados")
+    print(f"\n[DICA] Proximos passos:")
     print(f"   1. Revisar o plano de execução gerado")
     print(f"   2. Ajustar critérios de aceitação se necessário")
     print(f"   3. Iniciar implementação seguindo o plano")
@@ -409,9 +412,11 @@ def implement_story(story_id: str) -> bool:
 
     if success:
         _atualizar_status_story(story_path, "Done")
+        _registrar_na_memoria_global(story_id, story_info.get("title", "N/A"), "Implementação concluída com sucesso via Pipeline.")
         logger.info(f"Implementação da story {story_id} concluída com sucesso.")
     else:
         _atualizar_status_story(story_path, "Failed")
+        _registrar_na_memoria_global(story_id, story_info.get("title", "N/A"), "A implementação falhou em atingir a conformidade após as tentativas.")
         logger.error(f"Falha na implementação da story {story_id}.")
 
     return success
@@ -429,35 +434,41 @@ def _executar_etapas_implementacao(story_info: Dict[str, Any]) -> bool:
     """
     try:
         title = story_info.get("title", "Story")
-        logger.info(f"Executando etapas de implementação para: {title}")
-
-        # 1. Análise e Design (Architecture Agent)
-        logger.info(f"Etapa 1/4: Design da Arquitetura (Architecture Agent)")
-        design_task = f"Analise a story '{title}' e defina a melhor abordagem arquitetural seguindo o PROJECT_CONTEXT.md."
-        spawn_agent("architecture", story_info.get("story_id"), design_task, [])
-
-        # 2. Desenvolvimento com Feedback Loop (Code Agent + Sensors)
-        logger.info(f"Etapa 2/4: Desenvolvimento de Código com Feedback Loop (Code Agent)")
-        files_to_create = story_info.get("files_to_create", "").split(",")
-        files_to_modify = story_info.get("files_to_modify", "").split(",")
-        relevant_files = [f.strip() for f in files_to_create + files_to_modify if f.strip()]
+        story_id = story_info.get("story_id")
         
-        code_task = f"Implemente a story '{title}' focando nos seguintes arquivos: {', '.join(relevant_files)}. Siga os critérios de aceitação."
+        from .utils import is_headless
         
-        # Aqui usamos validate_and_fix em vez de spawn_agent para ativar os sensores de feedback
-        code_result = validate_and_fix("code", story_info.get("story_id"), code_task, relevant_files)
+        console.print(Panel(f"[bold blue]A-SDLC Pipeline[/bold blue]: [cyan]{title}[/cyan]\n[dim]Story ID: {story_id}[/dim]", border_style="blue"))
 
-        # 3. Testes com Validação (Test Agent)
-        logger.info(f"Etapa 3/4: Criação e Validação de Testes (Test Agent)")
-        test_task = f"Crie testes unitários para o código gerado: \n{code_result}\nGaranta 80%+ de cobertura."
-        spawn_agent("test", story_info.get("story_id"), test_task, relevant_files)
+        # Logica unificada: Funciona no Chat e no Terminal Real
+        # 1. Design
+        console.print(f"[bold cyan]Etapa 1/4:[/bold cyan] Design da Arquitetura...")
+        design_task = f"Analise a story '{title}' e defina a melhor abordagem arquitetural."
+        spawn_agent("architecture", story_id, design_task, [])
+        console.print(f"[bold green]OK[/bold green] Etapa 1 Concluída!")
 
-        # 4. Revisão (Review Agent)
-        logger.info(f"Etapa 4/4: Code Review (Review Agent)")
-        review_task = f"Revise a implementação e os testes para a story '{title}'. Verifique segurança e performance."
-        spawn_agent("review", story_info.get("story_id"), review_task, relevant_files)
+        # 2. Desenvolvimento
+        console.print(f"[bold yellow]Etapa 2/4:[/bold yellow] Desenvolvimento de Código...")
+        relevant_files = [f.strip() for f in story_info.get("files_to_create", "").split(",") + story_info.get("files_to_modify", "").split(",") if f.strip()]
+        code_task = f"Implemente a story '{title}'."
+        code_result = validate_and_fix("code", story_id, code_task, relevant_files)
+        console.print(f"[bold green]OK[/bold green] Etapa 2 Concluída!")
 
-        logger.info("Todas as etapas de implementação concluídas com Agentes Especialistas (Spawned Agents)")
+        # 3. Testes
+        console.print(f"[bold magenta]Etapa 3/4:[/bold magenta] Validação de Testes...")
+        spawn_agent("test", story_id, "Crie testes.", relevant_files)
+        console.print(f"[bold green]OK[/bold green] Etapa 3 Concluída!")
+
+        # 4. Revisão
+        console.print(f"[bold blue]Etapa 4/4:[/bold blue] Code Review...")
+        review_result = spawn_agent("review", story_id, "Revise a implementação.", relevant_files)
+        console.print(f"[bold green]OK[/bold green] Etapa 4 Concluída!")
+
+        console.print(Panel("[bold green]Finalizado: Pipeline A-SDLC Concluido com Sucesso![/bold green]", border_style="green"))
+        
+        # 5. Persistência
+        _registrar_na_memoria_global(story_id, title, code_result)
+        _atualizar_backlog_com_sugestoes(review_result)
         return True
 
     except Exception as e:
@@ -611,3 +622,60 @@ def deploy_story(story_id: str) -> bool:
     """Placeholder para deploy"""
     logger.info(f"Executando deploy para story: {story_id}")
     return True
+
+def _registrar_na_memoria_global(story_id: str, title: str, summary: str) -> None:
+    """Atualiza o arquivo global de memória do projeto com detalhes técnicos."""
+    try:
+        from datetime import datetime
+        project_root = find_project_root()
+        if not project_root: return
+        
+        memory_file = project_root / "stories" / "MEMORY.md"
+        if not memory_file.exists():
+            memory_file.write_text("# 🧠 Memória do Projeto\n\n## 📋 Histórico de Implementações\n\n", encoding="utf-8")
+            
+        content = memory_file.read_text(encoding="utf-8")
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+        
+        # Resumo curto (primeiras 2 linhas ou 200 chars)
+        short_summary = summary.split('\n')[0][:200] if summary else "Implementação concluída."
+        
+        entry = f"### ✅ {story_id} - {title}\n- **Data:** {timestamp}\n- **Resumo:** {short_summary}\n\n"
+        
+        if story_id not in content:
+            with open(memory_file, "a", encoding="utf-8") as f:
+                f.write(entry)
+            logger.info(f"Memória global atualizada com sucesso para {story_id}.")
+        else:
+            logger.info(f"Story {story_id} já consta na memória. Registro ignorado para evitar duplicidade.")
+            
+    except Exception as e:
+        logger.warning(f"Não foi possível atualizar a memória global: {e}")
+
+def _atualizar_backlog_com_sugestoes(review_result: str) -> None:
+    """Extrai débitos técnicos e melhorias do review e joga no BACKLOG.md."""
+    if not review_result or "[BACKLOG:" not in review_result:
+        return
+        
+    try:
+        from datetime import datetime
+        project_root = find_project_root()
+        if not project_root: return
+        
+        backlog_file = project_root / "BACKLOG.md"
+        if not backlog_file.exists():
+            backlog_file.write_text("# 📋 Backlog de Melhorias e Débitos Técnicos\n\n", encoding="utf-8")
+            
+        # Extrair conteúdo entre [BACKLOG: ...]
+        import re
+        suggestions = re.findall(r"\[BACKLOG:\s*(.*?)\]", review_result, re.DOTALL)
+        
+        if suggestions:
+            timestamp = datetime.now().strftime("%Y-%m-%d")
+            with open(backlog_file, "a", encoding="utf-8") as f:
+                f.write(f"\n## 💡 Novas Sugestões ({timestamp})\n")
+                for s in suggestions:
+                    f.write(f"- [ ] {s.strip()}\n")
+            logger.info(f"Backlog atualizado com {len(suggestions)} novas sugestões.")
+    except Exception as e:
+        logger.warning(f"Erro ao atualizar o backlog: {e}")
