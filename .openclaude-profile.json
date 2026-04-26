@@ -1,9 +1,0 @@
-{
-  "profile": "openai",
-  "env": {
-    "OPENAI_BASE_URL": "https://openrouter.ai/api/v1",
-    "OPENAI_MODEL": "deepseek/deepseek-v4-pro",
-    "OPENAI_API_KEY": "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"
-  },
-  "createdAt": "2026-04-26T14:04:54.805Z"
-}
