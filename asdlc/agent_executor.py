@@ -29,20 +29,22 @@ class AgentHarness:
         persona_path = self.project_root / ".asdlc" / "agents" / f"{self.agent_type}_agent.md"
         persona = persona_path.read_text(encoding="utf-8") if persona_path.exists() else f"Você é um agente do tipo {self.agent_type}."
 
-        # 2. Carregar PROJECT_CONTEXT.md (apenas partes vitais)
+        # 2. Carregar PROJECT_CONTEXT.md (apenas os primeiros 3000 caracteres para evitar 429)
         project_context_path = self.project_root / "PROJECT_CONTEXT.md"
-        full_context = project_context_path.read_text(encoding="utf-8") if project_context_path.exists() else ""
+        lean_context = ""
+        if project_context_path.exists():
+            full_context = project_context_path.read_text(encoding="utf-8")
+            lean_context = full_context[:3000] + "\n[Conteúdo truncado para economizar tokens...]" if len(full_context) > 3000 else full_context
         
-        # Simplificar contexto (Ex: pegar apenas Tech Stack e Padrões)
-        # TODO: Implementar um compactador de contexto real aqui
-        lean_context = full_context
-
-        # 3. Carregar conteúdo dos arquivos relevantes
+        # 3. Carregar conteúdo dos arquivos relevantes (com limite de tamanho por arquivo)
         files_content = ""
         for file_rel_path in relevant_files:
             file_path = self.project_root / file_rel_path
             if file_path.exists() and file_path.is_file():
+                # Limite de 5000 chars por arquivo para proteção
                 content = file_path.read_text(encoding="utf-8")
+                if len(content) > 5000:
+                    content = content[:5000] + "\n[... Arquivo muito grande, truncado ...]"
                 files_content += f"\n--- ARQUIVO: {file_rel_path} ---\n{content}\n"
 
         # 4. Montar o prompt final
@@ -116,8 +118,13 @@ def validate_and_fix(agent_type: str, story_id: str, task_description: str, rele
     if not validation_cmd:
         logger.info("Solicitando ao Architecture Agent para detectar o framework de testes...")
         
-        # Obter lista de arquivos para dar contexto real
-        files = [str(p.relative_to(project_root)) for p in project_root.rglob("*") if p.is_file() and ".git" not in p.parts and ".asdlc" not in p.parts][:50]
+        # Obter lista de arquivos ignorando diretórios pesados (node_modules, etc)
+        ignore_dirs = {".git", ".asdlc", "node_modules", "venv", "build", "dist", "__pycache__", "target"}
+        files = []
+        for p in project_root.rglob("*"):
+            if p.is_file() and not any(d in p.parts for d in ignore_dirs):
+                files.append(str(p.relative_to(project_root)))
+                if len(files) >= 50: break
         file_list_str = "\n".join(files)
 
         detection_prompt = f"""
