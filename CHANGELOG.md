@@ -7,7 +7,27 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.
 
 ---
 
+## [2.3.0] - 2026-04-25
+
+### Adicionado
+- **Dual-Mode Engine**: Toggle `ASDLC_ENGINE` no `.env` para alternar entre Antigravity (sem custo) e External API (OpenAI).
+- **Lei Inviolável**: NUNCA marcar story DONE sem `run_command` com exit code 0.
+- **Categorização MCP**: Ferramentas separadas em Gestão e Execução.
+
+### Corrigido
+- Circuito Morto MCP-API removido da Skill.
+- Falso Positivo de DONE eliminado.
+- `llm_client.py` respeita `ASDLC_ENGINE`.
+
+### Modificado
+- Skill reescrita para Antigravity-Native.
+- MCP Server com fallback inteligente.
+- README com tabela comparativa dos dois modos.
+
+---
+
 ## [2.2.0] - 2026-04-25
+
 
 ### Adicionado
 - **🚀 A-SDLC MCP Server**: Implementação do Model Context Protocol para integração nativa com IDEs (Cursor, Windsurf).

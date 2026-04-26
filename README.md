@@ -1,4 +1,4 @@
-# 🌌 A-SDLC Framework (v2.2.0)
+# 🌌 A-SDLC Framework (v2.3.0)
 **AI-Driven Software Development Lifecycle**
 
 O A-SDLC é um framework de engenharia de software desenhado para transformar IAs em agentes autônomos capazes de gerenciar o ciclo de vida completo de um projeto. Ele utiliza **Harness Engineering**, **Recursive Handoffs** e **Feedback Loops** para garantir código de alta fidelidade.
@@ -8,7 +8,9 @@ O A-SDLC é um framework de engenharia de software desenhado para transformar IA
 ## 📍 Sumário
 - [🚀 O que é o A-SDLC?](#-o-que-é-o-a-sdlc)
 - [⚙️ Instalação e Setup](#️-instalação-e-setup)
-- [🧠 Modo MCP (Antigravity Power)](#-modo-mcp-antigravity-power)
+- [🔀 Escolhendo o Motor de Execução](#-escolhendo-o-motor-de-execução)
+- [🧠 Modo Antigravity (Padrão)](#-modo-antigravity-padrão)
+- [⚡ Modo API Externa](#-modo-api-externa)
 - [🛠️ Modo Agentic (IDE Templates)](#️-modo-agentic-ide-templates)
 - [🏃 Como Começar (Workflow)](#-como-começar-workflow)
 - [📂 Estrutura de Trabalho Recomendada](#-estrutura-de-trabalho-recomendada)
@@ -36,14 +38,11 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
----
-
-## 🧠 Modo MCP (Antigravity Power)
-Este é o modo mais avançado. Ele conecta o framework diretamente à sua IDE (Cursor/Windsurf) via **Model Context Protocol**, permitindo que o framework use a inteligência da IDE sem precisar de chaves de API externas.
-
-### Como instalar o servidor MCP:
-1. **Instale as bibliotecas**: `pip install fastmcp mcp`
-2. **Configure sua IDE**: Adicione o servidor ao seu arquivo `mcp_config.json`:
+### 3. Configurar o MCP (IDE Integration)
+```bash
+pip install fastmcp mcp
+```
+Adicione ao `mcp_config.json` da sua IDE:
 ```json
 "asdlc": {
   "command": "python",
@@ -51,7 +50,69 @@ Este é o modo mais avançado. Ele conecta o framework diretamente à sua IDE (C
   "env": { "PYTHONPATH": "C:/Caminho/Para/A-SDLC" }
 }
 ```
-3. **Reinicie a IDE**. Agora eu (Antigravity) terei "ferramentas" nativas do A-SDLC para criar projetos e stories para você!
+Reinicie a IDE após configurar.
+
+---
+
+## 🔀 Escolhendo o Motor de Execução
+
+O A-SDLC tem **dois motores** que podem ser trocados a qualquer momento via `.env`:
+
+| | 🧠 Modo Antigravity (Padrão) | ⚡ Modo API Externa |
+|---|---|---|
+| **Quem pensa?** | A IDE (Antigravity/Cursor) | API OpenAI |
+| **Custo** | Zero (usa o modelo da IDE) | Pago (tokens da OpenAI) |
+| **Configuração** | `ASDLC_ENGINE=antigravity` | `ASDLC_ENGINE=external` |
+| **Como funciona** | Você pede no chat, a IDE codifica e testa | Script Python roda sozinho no terminal |
+| **Ideal para** | Projetos grandes, economia, controle | Automação 100% sem intervenção |
+
+### Como trocar:
+Edite o arquivo `.env` na raiz do A-SDLC:
+```env
+# Para usar o Antigravity (padrão, sem custo):
+ASDLC_ENGINE=antigravity
+
+# Para usar a API OpenAI (requer OPENAI_API_KEY):
+ASDLC_ENGINE=external
+```
+
+---
+
+## 🧠 Modo Antigravity (Padrão)
+Neste modo, a IDE é o "cérebro". O MCP serve como **ferramenta de gestão** (criar stories, atualizar status, métricas).
+
+### Ferramentas MCP disponíveis:
+| Ferramenta | Função |
+|---|---|
+| `asdlc_create_project` | Inicializa um projeto A-SDLC |
+| `asdlc_create_story` | Cria uma nova story |
+| `asdlc_get_story_details` | Lê o conteúdo de uma story |
+| `asdlc_update_story_status` | Atualiza status (Todo/Done/Failed) |
+| `asdlc_list_stories` | Lista todas as stories |
+| `asdlc_get_project_metrics` | Métricas de progresso |
+| `asdlc_validate_project` | Valida conformidade A-SDLC |
+
+### Como implementar uma story:
+No chat da IDE, diga:
+> *"Use a Skill @asdlc_implementation para implementar a story @stories/ID_DA_STORY.md"*
+
+A IDE vai: ler a story → codificar → rodar testes → corrigir erros → marcar DONE.
+
+---
+
+## ⚡ Modo API Externa
+Neste modo, o script Python assume o controle total. Ele usa a API OpenAI para spawnar agentes autônomos.
+
+### Ferramentas MCP adicionais:
+| Ferramenta | Função |
+|---|---|
+| `asdlc_implement_story` | Execução autônoma via agentes Python |
+| `asdlc_spawn_specialist` | Invoca um agente ad-hoc |
+
+### Como implementar uma story:
+```bash
+python main.py implement --id 20260425_204837
+```
 
 ---
 
@@ -78,7 +139,6 @@ python main.py create-project --name "meu_projeto" --path "C:/pasta/do/projeto" 
 ---
 
 ## 📂 Estrutura de Trabalho Recomendada
-Para evitar confusão entre os arquivos do framework e seus códigos, recomendamos:
 ```text
 C:/Dev/
   ├── A-SDLC/             <-- O Framework (central)
