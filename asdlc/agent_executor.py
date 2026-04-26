@@ -4,7 +4,7 @@ import subprocess
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from .llm_client import call_llm
-from .utils import find_project_root, detect_test_framework
+from .utils import find_project_root, detect_test_framework, console
 
 logger = logging.getLogger(__name__)
 
@@ -86,8 +86,9 @@ def spawn_agent(agent_type: str, story_id: str, task_description: str, relevant_
     harness = AgentHarness(agent_type, story_id, project_root)
     lean_prompt = harness.prepare_context(task_description, relevant_files)
     
-    # Chamada isolada à LLM
-    result = call_llm(lean_prompt, max_tokens=2048)
+    # Chamada isolada à LLM com roteamento de modelo
+    with console.status(f"[bold cyan]Agente {agent_type}[/bold cyan] consultando inteligência...", spinner="dots12"):
+        result = call_llm(lean_prompt, agent_type=agent_type)
     
     # 2. Lógica de Recursive Handoff (Delegação)
     if "[DELEGATE:" in result:
@@ -147,7 +148,8 @@ Se não houver framework configurado ou se for um tipo de projeto que você não
             return spawn_agent("architecture", story_id, suggestion_prompt, [])
         
         validation_cmd = detected_cmd.strip().strip("'").strip('"')
-        logger.info(f"Comando detectado pelo agente: {validation_cmd}")
+        from .utils import live_print
+        live_print(f"[bold cyan]Framework detectado:[/bold cyan] {validation_cmd}")
 
     harness = AgentHarness(agent_type, story_id, project_root)
     
@@ -158,7 +160,7 @@ Se não houver framework configurado ou se for um tipo de projeto que você não
         logger.info(f"Tentativa {attempt + 1} para o agente {agent_type}...")
         
         prompt = harness.prepare_context(current_task, relevant_files)
-        result = call_llm(prompt, max_tokens=2048)
+        result = call_llm(prompt, agent_type=agent_type)
         
         # Simular a aplicação do resultado (em um sistema real, salvaríamos os arquivos)
         # Por enquanto, apenas rodamos a validação se o comando for fornecido
@@ -169,10 +171,10 @@ Se não houver framework configurado ou se for um tipo de projeto que você não
             process = subprocess.run(validation_cmd, shell=True, capture_output=True, text=True, cwd=project_root)
             
             if process.returncode == 0:
-                logger.info("OK: Validacao passou!")
+                logger.info("OK: Validação passou!")
                 return result
             else:
-                logger.warning(f"ERRO: Validacao falhou (Tentativa {attempt + 1})")
+                logger.warning(f"ERRO: Validação falhou (Tentativa {attempt + 1})")
                 error_feedback = f"A validação falhou com o seguinte erro:\n{process.stderr}\n{process.stdout}\nPor favor, corrija o código."
                 current_task = f"{task_description}\n\n### FEEDBACK DE ERRO:\n{error_feedback}"
                 attempt += 1

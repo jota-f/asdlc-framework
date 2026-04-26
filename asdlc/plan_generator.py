@@ -13,15 +13,20 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
     """
     logger.info(f"Iniciando planejamento com IA para a story: {story_data.get('title')}")
 
-    # 1. Coletar contexto do projeto
+    # 1. Coletar contexto do projeto (com limite de segurança)
     try:
         context_file = project_root / "PROJECT_CONTEXT.md"
-        project_context = (
-            context_file.read_text(encoding="utf-8") if context_file.exists() else "Nenhum PROJECT_CONTEXT.md fornecido."
-        )
+        if context_file.exists():
+            # Limitar contexto a 3000 caracteres para evitar estouro de tokens
+            project_context = context_file.read_text(encoding="utf-8")
+            if len(project_context) > 3000:
+                project_context = project_context[:3000] + "\n... (contexto truncado para economizar tokens)"
+        else:
+            project_context = "Nenhum PROJECT_CONTEXT.md fornecido."
     except Exception as e:
         project_context = f"Erro ao ler PROJECT_CONTEXT.md: {e}"
 
+    # 2. Obter estrutura de arquivos (já otimizada no utils.py)
     project_structure = get_project_structure(project_root)
 
     # 2. Determinar se é uma Bug Story para ajustar o prompt
@@ -249,7 +254,7 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
       - **Instrução para o Cursor:** "Modifique o frontmatter deste arquivo, alterando o `status` para 'CONCLUÍDO'."
     """
 
-    # 3. Chamar a LLM
-    plano_gerado = call_llm(prompt, max_tokens=3072)  # Aumentar tokens para planos complexos
+    # 3. Chamar a LLM com roteamento para Arquiteto
+    plano_gerado = call_llm(prompt, agent_type="architecture")
 
     return plano_gerado
