@@ -1,4 +1,4 @@
-# 🤖 A-SDLC Agentic Mode Guide (v2.3.0)
+# 🤖 A-SDLC Agentic Mode Guide (v2.4.0)
 
 ## O que é este diretório?
 
