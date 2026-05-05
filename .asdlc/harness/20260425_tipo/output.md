@@ -1,1 +1,0 @@
-Por favor, informe a descrição da sua tarefa atual para que eu possa ajudar.
