@@ -7,6 +7,17 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.
 
 ---
 
+## [2.4.0] - 2026-05-05
+
+### Adicionado
+- **Harness Auto-Cleanup**: Limpeza automática de sessões antigas no diretório `.asdlc/harness/` (mantém as últimas 30).
+- **Harness Engineering Logic**: Refatoração da lógica de gerenciamento de ambiente operacional dos agentes para maior robustez.
+
+### Corrigido
+- **Windows Stability**: Melhoria no tratamento de encoding (UTF-8) para evitar erros de leitura/escrita em sistemas Windows.
+- **Git Hygiene**: Adição de `.kilo/` e `.asdlc/harness/` ao `.gitignore` e remoção do rastreamento de arquivos temporários.
+- **Style Fixes**: Formatação completa dos módulos `agent_executor.py` e `utils.py` com `black`.
+
 ## [2.3.0] - 2026-05-04
 
 ### Adicionado
