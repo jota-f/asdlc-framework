@@ -120,6 +120,13 @@ class UIManager:
                 return
 
             # FASE DE GRILL (Opcional no CLI)
+            project_root = utils.find_project_root()
+            glossary_path = project_root / "GLOSSARY.md" if project_root else None
+
+            if glossary_path and (not glossary_path.exists() or glossary_path.stat().st_size < 50):
+                print("\n⚠️ AVISO: Nenhum GLOSSARY.md válido foi encontrado neste projeto.")
+                print("   É altamente recomendado 'grelhar' esta ideia para estabelecer a linguagem de domínio inicial.")
+
             want_grill = input("\n🔥 Deseja 'grelhar' (grill) esta ideia para validar domínio e arquitetura? (s/n): ").lower()
             if want_grill == "s":
                 print("\n🔍 Iniciando Grill...")
