@@ -1,10 +1,11 @@
 import logging
 import os
 import subprocess
+import shutil
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Tuple
 from .llm_client import call_llm
-from .utils import find_project_root, detect_test_framework, console
+from .utils import find_project_root, detect_test_framework, console, cleanup_old_harnesses
 
 logger = logging.getLogger(__name__)
 
@@ -57,6 +58,9 @@ class AgentHarness:
         self.project_root = project_root
         self.harness_dir = project_root / ".asdlc" / "harness" / f"{story_id}_{agent_type}"
         self.harness_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Realiza limpeza automática de logs antigos (mantém os últimos 30)
+        cleanup_old_harnesses(project_root / ".asdlc" / "harness", max_folders=30)
 
     def prepare_context(self, task_description: str, relevant_files: List[str]) -> str:
         """
