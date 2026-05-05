@@ -32,11 +32,12 @@ mcp = FastMCP("A-SDLC Framework")
 # FERRAMENTAS DE GESTÃO (sempre disponíveis)
 # ============================================
 
+
 @mcp.tool()
 def asdlc_create_project(name: str, prompt: str, path: Optional[str] = None, type: str = "web_api") -> str:
     """
     Cria ou inicializa um novo projeto A-SDLC.
-    
+
     Args:
         name: Nome do projeto
         prompt: Objetivo principal do projeto
@@ -44,15 +45,11 @@ def asdlc_create_project(name: str, prompt: str, path: Optional[str] = None, typ
         type: Tipo do projeto (web_api, embedded, mobile, etc)
     """
     try:
-        project_manager.initialize_project(
-            project_name=name,
-            initial_prompt=prompt,
-            project_type=type,
-            project_path=path
-        )
+        project_manager.initialize_project(project_name=name, initial_prompt=prompt, project_type=type, project_path=path)
         return f"Projeto '{name}' inicializado com sucesso em {path or os.getcwd()}."
     except Exception as e:
         return f"Erro ao criar projeto: {str(e)}"
+
 
 @mcp.tool()
 def asdlc_create_story(title: str, description: Optional[str] = None) -> str:
@@ -67,6 +64,7 @@ def asdlc_create_story(title: str, description: Optional[str] = None) -> str:
     except Exception as e:
         return f"Erro ao criar story: {str(e)}"
 
+
 @mcp.tool()
 def asdlc_validate_project(project_path: str = ".") -> str:
     """
@@ -80,6 +78,7 @@ def asdlc_validate_project(project_path: str = ".") -> str:
     except Exception as e:
         return f"Erro ao validar projeto: {str(e)}"
 
+
 @mcp.tool()
 def asdlc_get_story_details(story_id: str) -> str:
     """
@@ -92,6 +91,7 @@ def asdlc_get_story_details(story_id: str) -> str:
         return f"Erro: Story {story_id} não encontrada."
     except Exception as e:
         return f"Erro ao ler story: {str(e)}"
+
 
 @mcp.tool()
 def asdlc_update_story_status(story_id: str, status: str) -> str:
@@ -107,6 +107,7 @@ def asdlc_update_story_status(story_id: str, status: str) -> str:
     except Exception as e:
         return f"Erro ao atualizar status: {str(e)}"
 
+
 @mcp.tool()
 def asdlc_get_project_metrics() -> str:
     """
@@ -116,20 +117,21 @@ def asdlc_get_project_metrics() -> str:
         project_root = utils.find_project_root()
         if not project_root:
             return "Erro: Projeto não encontrado."
-        
+
         stories_dir = project_root / "stories"
         if not stories_dir.exists():
             return "Sem métricas: Nenhuma story encontrada."
-        
+
         all_metrics = []
         for f in stories_dir.glob("*.md"):
             m = story_manager._calcular_metricas_story(f)
             story_id = f.stem.split("_")[0]
             all_metrics.append(f"Story {story_id}: {m.get('progress_percentage', 0)}% concluída")
-            
+
         return "Métricas do Projeto:\n" + "\n".join(all_metrics)
     except Exception as e:
         return f"Erro ao calcular métricas: {str(e)}"
+
 
 @mcp.tool()
 def asdlc_list_stories() -> str:
@@ -140,22 +142,24 @@ def asdlc_list_stories() -> str:
         project_root = utils.find_project_root()
         if not project_root:
             return "Erro: Nenhum projeto A-SDLC encontrado."
-        
+
         stories_dir = project_root / "stories"
         if not stories_dir.exists():
             return "Nenhuma story encontrada (pasta /stories vazia)."
-        
+
         stories = []
         for f in stories_dir.glob("*.md"):
             stories.append(f"- {f.name}")
-        
+
         return "Stories encontradas:\n" + "\n".join(stories)
     except Exception as e:
         return f"Erro ao listar stories: {str(e)}"
 
+
 # ============================================
 # FERRAMENTAS DE EXECUÇÃO (requerem ASDLC_ENGINE=external)
 # ============================================
+
 
 @mcp.tool()
 def asdlc_implement_story(story_id: str, project_path: Optional[str] = None) -> str:
@@ -163,15 +167,16 @@ def asdlc_implement_story(story_id: str, project_path: Optional[str] = None) -> 
     [REQUER ASDLC_ENGINE=external] Inicia a implementação automatizada de uma story
     usando o motor Python com API externa. Se ASDLC_ENGINE=antigravity, retorna
     instrução para usar a Skill no chat.
-    
+
     Args:
         story_id: O ID da story (timestamp no início do nome do arquivo)
         project_path: Caminho opcional para a pasta do projeto
     """
     from dotenv import load_dotenv
+
     load_dotenv()
     engine = os.getenv("ASDLC_ENGINE", "antigravity").lower()
-    
+
     if engine != "external":
         return (
             f"MODO ANTIGRAVITY ATIVO: Esta ferramenta requer ASDLC_ENGINE=external no .env.\n"
@@ -181,7 +186,7 @@ def asdlc_implement_story(story_id: str, project_path: Optional[str] = None) -> 
             f"3. Execute os passos manualmente usando view_file, write_file e run_command\n"
             f"4. Atualize o status com asdlc_update_story_status('{story_id}', 'Done')"
         )
-    
+
     try:
         if project_path:
             os.chdir(project_path)
@@ -192,12 +197,13 @@ def asdlc_implement_story(story_id: str, project_path: Optional[str] = None) -> 
     except Exception as e:
         return f"Erro durante a implementação: {str(e)}"
 
+
 @mcp.tool()
 def asdlc_spawn_specialist(agent_type: str, task: str, files: Optional[str] = None, project_path: Optional[str] = None) -> str:
     """
     [REQUER ASDLC_ENGINE=external] Invoca um agente especialista isolado para uma
     tarefa específica usando o motor Python com API externa.
-    
+
     Args:
         agent_type: code, test, architecture, requirements, review, bug_hunter
         task: Descrição da tarefa
@@ -205,16 +211,17 @@ def asdlc_spawn_specialist(agent_type: str, task: str, files: Optional[str] = No
         project_path: Caminho opcional para a pasta do projeto
     """
     from dotenv import load_dotenv
+
     load_dotenv()
     engine = os.getenv("ASDLC_ENGINE", "antigravity").lower()
-    
+
     if engine != "external":
         return (
             f"MODO ANTIGRAVITY ATIVO: Esta ferramenta requer ASDLC_ENGINE=external no .env.\n"
             f"No modo Antigravity, a IDE assume o papel de '{agent_type}' diretamente.\n"
             f"Use a Skill @asdlc_implementation e peça a tarefa no chat."
         )
-    
+
     try:
         if project_path:
             os.chdir(project_path)
@@ -223,6 +230,7 @@ def asdlc_spawn_specialist(agent_type: str, task: str, files: Optional[str] = No
         return result
     except Exception as e:
         return f"Erro ao invocar especialista: {str(e)}"
+
 
 if __name__ == "__main__":
     mcp.run()

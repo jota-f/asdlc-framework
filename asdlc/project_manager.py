@@ -10,15 +10,17 @@ from . import story_manager
 logger = logging.getLogger(__name__)
 
 
-def initialize_project(project_name: str, initial_prompt: str, project_type: str = "web_api", project_path: Optional[str] = None):
+def initialize_project(
+    project_name: str, initial_prompt: str, project_type: str = "web_api", project_path: Optional[str] = None
+):
     """
     Inicializa a estrutura mínima de um projeto A-SDLC e cria a primeira story
     com o plano de implementação inicial.
     """
     logger.info(f"Inicializando novo projeto A-SDLC: {project_name}")
-    
+
     original_dir = Path.cwd()
-    
+
     if project_path:
         project_dir = Path(project_path)
     else:

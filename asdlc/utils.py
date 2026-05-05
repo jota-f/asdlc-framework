@@ -10,15 +10,13 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 # Instância central do Console
-console = Console(
-    force_terminal=True, 
-    color_system="auto", 
-    width=100
-)
+console = Console(force_terminal=True, color_system="auto", width=100)
+
 
 def is_headless() -> bool:
     """Detecta se o terminal é interativo."""
     return not sys.stdout.isatty() or os.getenv("TERM") == "dumb"
+
 
 def find_project_root() -> Optional[Path]:
     """Encontra a raiz do projeto A-SDLC."""
@@ -27,6 +25,7 @@ def find_project_root() -> Optional[Path]:
         if (parent / ".asdlc").exists() or (parent / "PROJECT_CONTEXT.md").exists() or (parent / "asdlc").exists():
             return parent
     return None
+
 
 def get_project_structure(project_root: Path) -> str:
     """Gera uma representação em string da estrutura de arquivos do projeto."""
@@ -41,6 +40,7 @@ def get_project_structure(project_root: Path) -> str:
             structure.append(f"{sub_indent}{f}")
     return "\n".join(structure)
 
+
 def safe_write_file(path: Path, content: str):
     """Escreve um arquivo de forma segura."""
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -49,6 +49,7 @@ def safe_write_file(path: Path, content: str):
         f.flush()
         os.fsync(f.fileno())
     print(f"--- [ARQUIVO CRIADO]: {path.absolute()} ---")
+
 
 def detect_test_framework(project_root: Path) -> str:
     """Detecta qual framework de teste está sendo usado."""
