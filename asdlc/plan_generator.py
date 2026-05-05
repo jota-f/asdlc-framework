@@ -30,8 +30,8 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
     project_structure = get_project_structure(project_root)
 
     # 2. Determinar se é uma Bug Story para ajustar o prompt
-    is_bug = story_data.get('type') == 'bug_fix'
-    
+    is_bug = story_data.get("type") == "bug_fix"
+
     # 3. Construir o prompt de "Arquiteto" para a LLM
     prompt = f"""
     **PERSONA:** Você é um Arquiteto de Software Sênior e especialista no framework A-SDLC.
