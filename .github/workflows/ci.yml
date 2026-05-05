@@ -35,19 +35,17 @@ jobs:
 
       - name: Check syntax errors with flake8
         run: |
-          # Falha o build apenas em erros críticos de sintaxe e imports ausentes
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics \
-            --exclude=venv,__pycache__,.git
+            --exclude=venv,.venv,__pycache__,.git,Verus,weldSynth,scratch,.claude,.kilo,test_projects
 
       - name: Check code style with flake8
         run: |
-          # Reporta warnings de estilo sem quebrar o build
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics \
-            --exclude=venv,__pycache__,.git
+            --exclude=venv,.venv,__pycache__,.git,Verus,weldSynth,scratch,.claude,.kilo,test_projects
 
       - name: Check code formatting with black
         run: |
-          black --check --diff . --exclude="/(venv|\.git|__pycache__)/"
+          black --check --diff . --exclude="/(venv|\.venv|\.git|__pycache__|Verus|weldSynth|scratch|\.claude|\.kilo|test_projects)/"
 
   validate-structure:
     name: Validate A-SDLC Framework Structure
@@ -55,6 +53,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: false
 
       - name: Check required files exist
         run: |

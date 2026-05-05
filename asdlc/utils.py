@@ -5,20 +5,20 @@ from pathlib import Path
 from typing import Optional
 from rich.console import Console
 from rich.panel import Panel
+import shutil
+import time
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 # Instância central do Console
-console = Console(
-    force_terminal=True, 
-    color_system="auto", 
-    width=100
-)
+console = Console(force_terminal=True, color_system="auto", width=100)
+
 
 def is_headless() -> bool:
     """Detecta se o terminal é interativo."""
     return not sys.stdout.isatty() or os.getenv("TERM") == "dumb"
+
 
 def find_project_root() -> Optional[Path]:
     """Encontra a raiz do projeto A-SDLC."""
@@ -27,6 +27,7 @@ def find_project_root() -> Optional[Path]:
         if (parent / ".asdlc").exists() or (parent / "PROJECT_CONTEXT.md").exists() or (parent / "asdlc").exists():
             return parent
     return None
+
 
 def get_project_structure(project_root: Path) -> str:
     """Gera uma representação em string da estrutura de arquivos do projeto."""
@@ -41,6 +42,7 @@ def get_project_structure(project_root: Path) -> str:
             structure.append(f"{sub_indent}{f}")
     return "\n".join(structure)
 
+
 def safe_write_file(path: Path, content: str):
     """Escreve um arquivo de forma segura."""
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -50,6 +52,7 @@ def safe_write_file(path: Path, content: str):
         os.fsync(f.fileno())
     print(f"--- [ARQUIVO CRIADO]: {path.absolute()} ---")
 
+
 def detect_test_framework(project_root: Path) -> str:
     """Detecta qual framework de teste está sendo usado."""
     if (project_root / "pytest.ini").exists() or (project_root / "tests").exists():
@@ -57,3 +60,32 @@ def detect_test_framework(project_root: Path) -> str:
     if (project_root / "jest.config.js").exists() or (project_root / "package.json").exists():
         return "jest"
     return "unittest"
+
+
+def cleanup_old_harnesses(harness_parent_dir: Path, max_folders: int = 20):
+    """
+    Mantém apenas as X pastas mais recentes no diretório de harness.
+    """
+    try:
+        if not harness_parent_dir.exists():
+            return
+
+        # Lista todos os subdiretórios
+        folders = [f for f in harness_parent_dir.iterdir() if f.is_dir()]
+
+        if len(folders) <= max_folders:
+            return
+
+        # Ordena por data de modificação (mais antigos primeiro)
+        folders.sort(key=lambda x: x.stat().st_mtime)
+
+        # Quantos folders precisamos remover?
+        to_remove = len(folders) - max_folders
+
+        for i in range(to_remove):
+            folder = folders[i]
+            logger.info(f"Limpando harness antigo: {folder.name}")
+            shutil.rmtree(folder)
+
+    except Exception as e:
+        logger.error(f"Erro ao realizar limpeza do harness: {e}")

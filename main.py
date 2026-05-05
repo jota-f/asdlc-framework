@@ -10,8 +10,9 @@ import logging
 # Força UTF-8 no Windows para evitar erros de encoding com emojis e caracteres especiais
 if sys.platform == "win32":
     import io
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8")
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
@@ -65,10 +66,7 @@ def setup_cli_parser():
 def execute_cli_command(args):
     if args.command == "create-project":
         project_manager.initialize_project(
-            project_name=args.name, 
-            initial_prompt=args.prompt, 
-            project_type=args.type,
-            project_path=args.path
+            project_name=args.name, initial_prompt=args.prompt, project_type=args.type, project_path=args.path
         )
     elif args.command == "create-story":
         story_manager.create_story(story_title=args.title)
