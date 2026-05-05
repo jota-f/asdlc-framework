@@ -1,4 +1,4 @@
-﻿# Python
+# Python
 __pycache__/
 *.py[cod]
 *.class
@@ -47,3 +47,5 @@ REFACTOR_PLAN.md
 .asdlc/temp/
 BACKLOG.md
 .agents/
+.kilo/
+.asdlc/harness/

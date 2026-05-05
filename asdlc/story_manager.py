@@ -412,11 +412,15 @@ def implement_story(story_id: str) -> bool:
 
     if success:
         _atualizar_status_story(story_path, "Done")
-        _registrar_na_memoria_global(story_id, story_info.get("title", "N/A"), "Implementação concluída com sucesso via Pipeline.")
+        _registrar_na_memoria_global(
+            story_id, story_info.get("title", "N/A"), "Implementação concluída com sucesso via Pipeline."
+        )
         logger.info(f"Implementação da story {story_id} concluída com sucesso.")
     else:
         _atualizar_status_story(story_path, "Failed")
-        _registrar_na_memoria_global(story_id, story_info.get("title", "N/A"), "A implementação falhou em atingir a conformidade após as tentativas.")
+        _registrar_na_memoria_global(
+            story_id, story_info.get("title", "N/A"), "A implementação falhou em atingir a conformidade após as tentativas."
+        )
         logger.error(f"Falha na implementação da story {story_id}.")
 
     return success
@@ -425,21 +429,30 @@ def implement_story(story_id: str) -> bool:
 def _executar_etapas_implementacao(story_info: Dict[str, Any]) -> bool:
     """
     Executa etapas de implementação da story com TDD obrigatório.
-    
+
     Fluxo TDD: Architecture → Test (Red) → Code (Green) → Review
-    
+
     Se testes já existirem para o cenário (ex: bug com teste de regressão),
     pula a fase Red e vai direto para Code.
     """
     try:
         title = story_info.get("title", "Story")
         story_id = story_info.get("story_id")
-        
-        from .utils import is_headless
-        
-        console.print(Panel(f"[bold blue]A-SDLC Pipeline (TDD)[/bold blue]: [cyan]{title}[/cyan]\n[dim]Story ID: {story_id}[/dim]", border_style="blue"))
 
-        relevant_files = [f.strip() for f in story_info.get("files_to_create", "").split(",") + story_info.get("files_to_modify", "").split(",") if f.strip()]
+        from .utils import is_headless
+
+        console.print(
+            Panel(
+                f"[bold blue]A-SDLC Pipeline (TDD)[/bold blue]: [cyan]{title}[/cyan]\n[dim]Story ID: {story_id}[/dim]",
+                border_style="blue",
+            )
+        )
+
+        relevant_files = [
+            f.strip()
+            for f in story_info.get("files_to_create", "").split(",") + story_info.get("files_to_modify", "").split(",")
+            if f.strip()
+        ]
 
         # 1. Design
         console.print(f"[bold cyan]Etapa 1/5:[/bold cyan] Design da Arquitetura...")
@@ -487,8 +500,10 @@ def _executar_etapas_implementacao(story_info: Dict[str, Any]) -> bool:
         review_result = spawn_agent("review", story_id, "Revise a implementação.", relevant_files)
         console.print(f"[bold green]OK[/bold green] Etapa 5 Concluída!")
 
-        console.print(Panel("[bold green]Finalizado: Pipeline A-SDLC (TDD) Concluido com Sucesso![/bold green]", border_style="green"))
-        
+        console.print(
+            Panel("[bold green]Finalizado: Pipeline A-SDLC (TDD) Concluido com Sucesso![/bold green]", border_style="green")
+        )
+
         # 6. Persistência
         _registrar_na_memoria_global(story_id, title, code_result)
         _atualizar_backlog_com_sugestoes(review_result)
@@ -503,7 +518,7 @@ def _verificar_testes_existentes(story_info: Dict[str, Any]) -> bool:
     """
     Verifica se já existem testes para o cenário da story.
     Útil para bug fixes onde testes de regressão já podem existir.
-    
+
     Returns:
         bool: True se testes relevantes já existem
     """
@@ -691,53 +706,60 @@ def deploy_story(story_id: str) -> bool:
     logger.info(f"Executando deploy para story: {story_id}")
     return True
 
+
 def _registrar_na_memoria_global(story_id: str, title: str, summary: str) -> None:
     """Atualiza o arquivo global de memória do projeto com detalhes técnicos."""
     try:
         from datetime import datetime
+
         project_root = find_project_root()
-        if not project_root: return
-        
+        if not project_root:
+            return
+
         memory_file = project_root / "stories" / "MEMORY.md"
         if not memory_file.exists():
             memory_file.write_text("# 🧠 Memória do Projeto\n\n## 📋 Histórico de Implementações\n\n", encoding="utf-8")
-            
+
         content = memory_file.read_text(encoding="utf-8")
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
-        
+
         # Resumo curto (primeiras 2 linhas ou 200 chars)
-        short_summary = summary.split('\n')[0][:200] if summary else "Implementação concluída."
-        
+        short_summary = summary.split("\n")[0][:200] if summary else "Implementação concluída."
+
         entry = f"### ✅ {story_id} - {title}\n- **Data:** {timestamp}\n- **Resumo:** {short_summary}\n\n"
-        
+
         if story_id not in content:
             with open(memory_file, "a", encoding="utf-8") as f:
                 f.write(entry)
             logger.info(f"Memória global atualizada com sucesso para {story_id}.")
         else:
             logger.info(f"Story {story_id} já consta na memória. Registro ignorado para evitar duplicidade.")
-            
+
     except Exception as e:
         logger.warning(f"Não foi possível atualizar a memória global: {e}")
+
 
 def _atualizar_backlog_com_sugestoes(review_result: str) -> None:
     """Extrai débitos técnicos e melhorias do review e joga no BACKLOG.md."""
     if not review_result or "[BACKLOG:" not in review_result:
         return
-        
+
     try:
         from datetime import datetime
+
         project_root = find_project_root()
-        if not project_root: return
-        
+        if not project_root:
+            return
+
         backlog_file = project_root / "BACKLOG.md"
         if not backlog_file.exists():
             backlog_file.write_text("# 📋 Backlog de Melhorias e Débitos Técnicos\n\n", encoding="utf-8")
-            
+
         # Extrair conteúdo entre [BACKLOG: ...]
         import re
+
         suggestions = re.findall(r"\[BACKLOG:\s*(.*?)\]", review_result, re.DOTALL)
-        
+
         if suggestions:
             timestamp = datetime.now().strftime("%Y-%m-%d")
             with open(backlog_file, "a", encoding="utf-8") as f:
