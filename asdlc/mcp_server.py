@@ -57,10 +57,19 @@ def asdlc_create_story(title: str, description: Optional[str] = None) -> str:
     Cria uma nova story com plano de execução no projeto ativo.
     """
     try:
+        project_root = utils.find_project_root()
+        if not project_root:
+            return "Erro: Não foi possível criar a story. Verifique se você está em um projeto A-SDLC."
+
+        glossary_path = project_root / "GLOSSARY.md"
+        warning = ""
+        if not glossary_path.exists() or glossary_path.stat().st_size < 50:
+            warning = "\n\n⚠️ AVISO: Nenhum glossário detectado ou o arquivo está quase vazio.\nRecomendamos fortemente usar a tool 'asdlc_grill_story' antes para definir a linguagem ubíqua do projeto."
+
         story_id = story_manager.create_story(story_title=title, story_description=description)
         if story_id:
-            return f"Story '{title}' criada com sucesso! ID: {story_id}"
-        return "Erro: Não foi possível criar a story. Verifique se você está em um projeto A-SDLC."
+            return f"Story '{title}' criada com sucesso! ID: {story_id}{warning}"
+        return "Erro ao criar story."
     except Exception as e:
         return f"Erro ao criar story: {str(e)}"
 
