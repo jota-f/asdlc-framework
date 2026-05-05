@@ -34,8 +34,13 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
 
     # 3. Construir o prompt de "Arquiteto" para a LLM
     # Textos condicionais para bugs (fora do f-string para evitar syntax errors)
-    bug_rule = "4.  **PARA BUGS:** Você DEVE incluir uma seção de 'Análise de Causa Raiz (RCA)' e priorizar a criação de um 'Teste de Regressão' que reproduza o erro antes do fix." if is_bug else "4.  (Bugs não aplicam-se a este projeto)"
-    bug_example = """
+    bug_rule = (
+        "4.  **PARA BUGS:** Você DEVE incluir uma seção de 'Análise de Causa Raiz (RCA)' e priorizar a criação de um 'Teste de Regressão' que reproduza o erro antes do fix."
+        if is_bug
+        else "4.  (Bugs não aplicam-se a este projeto)"
+    )
+    bug_example = (
+        """
     **Bug Fix API:**
     - Título: "Erro 500 no endpoint de Login"
     - Descrição: "O endpoint /auth/login falha quando o email contém caracteres especiais"
@@ -43,7 +48,10 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
     - **Manifesto:** `src/auth/validator.py`, `tests/test_auth_bugs.py`
     - **Tarefas:** Criar teste de reprodução, ajustar regex, validar sanitzation
     - **Critérios:** Teste de regressão passa, endpoint retorna 400 para emails inválidos e 200 para unicode válidos
-    """ if is_bug else ""
+    """
+        if is_bug
+        else ""
+    )
 
     prompt = f"""
     **PERSONA:** Você é um Arquiteto de Software Sênior e especialista no framework A-SDLC.
