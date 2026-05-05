@@ -121,18 +121,18 @@ class UIManager:
 
             # FASE DE GRILL (Opcional no CLI)
             want_grill = input("\n🔥 Deseja 'grelhar' (grill) esta ideia para validar domínio e arquitetura? (s/n): ").lower()
-            if want_grill == 's':
+            if want_grill == "s":
                 print("\n🔍 Iniciando Grill...")
                 questions = grill_story_idea(story_title, story_description)
                 print(f"\n{questions}")
                 print("\n💡 Responda às perguntas e forneça detalhes adicionais abaixo (ou 'pular'):")
                 answers = input("📝 Respostas: ")
-                
-                if answers.lower() != 'pular':
+
+                if answers.lower() != "pular":
                     discussion = f"Título: {story_title}\nDescrição Original: {story_description}\nPerguntas: {questions}\nRespostas: {answers}"
                     apply_grill_decisions(discussion)
                     print("✅ Glossário e ADRs atualizados com base na discussão.")
-                    
+
                     # Atualizar descrição com as respostas para a criação da story
                     story_description = f"{story_description}\n\nDetalhamento do Grill:\n{answers}"
 

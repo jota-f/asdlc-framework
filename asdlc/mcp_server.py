@@ -154,7 +154,8 @@ def asdlc_list_stories() -> str:
         return "Stories encontradas:\n" + "\n".join(stories)
     except Exception as e:
         return f"Erro ao listar stories: {str(e)}"
-    
+
+
 @mcp.tool()
 def asdlc_grill_story(title: str, description: str) -> str:
     """

@@ -771,6 +771,7 @@ def _atualizar_backlog_com_sugestoes(review_result: str) -> None:
     except Exception as e:
         logger.warning(f"Erro ao atualizar o backlog: {e}")
 
+
 def grill_story_idea(title: str, description: str) -> str:
     """
     Analisa a ideia da story contra o contexto do projeto e glossário.
@@ -783,10 +784,10 @@ def grill_story_idea(title: str, description: str) -> str:
     # 1. Carregar contexto e glossário
     context_file = project_root / "PROJECT_CONTEXT.md"
     glossary_file = project_root / "GLOSSARY.md"
-    
+
     context = context_file.read_text(encoding="utf-8") if context_file.exists() else ""
     glossary = glossary_file.read_text(encoding="utf-8") if glossary_file.exists() else ""
-    
+
     prompt = f"""
     Você é um Requirements Agent especialista em A-SDLC. Sua tarefa é fazer o "GRILL" desta ideia de story.
     
@@ -806,7 +807,7 @@ def grill_story_idea(title: str, description: str) -> str:
     FORMATO DE RESPOSTA:
     Apresente as perguntas de forma clara no terminal.
     """
-    
+
     return call_llm(prompt, agent_type="requirements")
 
 
@@ -836,13 +837,14 @@ def apply_grill_decisions(summary_of_discussion: str):
     }}
     Se não houver ADR, deixe o campo adr como null.
     """
-    
+
     import json
+
     response = call_llm(prompt + "\nRESPONDA APENAS O JSON.", agent_type="architecture")
-    
+
     try:
         data = json.loads(response.strip("`json\n").strip("`"))
-        
+
         # Atualizar Glossário
         if data.get("glossary_updates"):
             glossary_file = project_root / "GLOSSARY.md"
@@ -854,13 +856,13 @@ def apply_grill_decisions(summary_of_discussion: str):
         if data.get("adr"):
             adr_dir = project_root / "docs/adr"
             adr_dir.mkdir(parents=True, exist_ok=True)
-            
+
             # Contar arquivos existentes para o prefixo
             count = len(list(adr_dir.glob("*.md"))) + 1
             filename = f"{count:04d}_{_sanitize_filename(data['adr']['title'])}.md"
-            (adr_dir / filename).write_text(data['adr']['content'], encoding="utf-8")
+            (adr_dir / filename).write_text(data["adr"]["content"], encoding="utf-8")
             logger.info(f"ADR criado: {filename}")
-            
+
     except Exception as e:
         logger.error(f"Erro ao processar decisões do grill: {e}")
         logger.error(f"Resposta da LLM: {response}")
