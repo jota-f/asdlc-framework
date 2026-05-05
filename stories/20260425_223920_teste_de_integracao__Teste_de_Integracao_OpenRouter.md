@@ -1,0 +1,1 @@
+ERRO: Error code: 400 - {'error': {'message': 'deepseek/deepseek-v3 is not a valid model ID', 'code': 400}, 'user_id': 'user_307QcP72qtZ3uezjMGS8repm5r7'}

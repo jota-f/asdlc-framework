@@ -7,22 +7,42 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.
 
 ---
 
-## [2.3.0] - 2026-04-25
+## [2.3.0] - 2026-05-04
 
 ### Adicionado
-- **Dual-Mode Engine**: Toggle `ASDLC_ENGINE` no `.env` para alternar entre Antigravity (sem custo) e External API (OpenAI).
+- **Dual-Mode Engine**: Toggle `ASDLC_ENGINE` no `.env` para alternar entre Antigravity (sem custo) e External API (OpenAI/OpenRouter).
 - **Lei Inviolável**: NUNCA marcar story DONE sem `run_command` com exit code 0.
 - **Categorização MCP**: Ferramentas separadas em Gestão e Execução.
+- **🔥 `/asdlc-grill`**: Workflow de questionamento proativo para demandas vagas. O agente "grelha" o humano sobre requisitos antes de criar stories.
+- **🧪 TDD Obrigatório**: Pipeline alterado para Architecture → Test Red → Code Green → Validation → Review. Testes são criados ANTES do código.
+- **🎯 Tracer Bullets**: Orientação de fatias verticais (DB → API → UI) no plan_generator e story_generator.
+- **📊 Smart Zone Monitoramento**: Funções `estimate_token_count()` e `log_context_density()` no agent_executor. Warnings em 80k tokens, errors em 100k.
+- **🏗️ Deep Modules**: Orientação de arquitetura no architecture_agent e plan_generator — preferir módulos com interfaces simples que escondem complexidade.
+- **🐛 Bug Hunter Agent**: Agente especialista em diagnóstico e causa raiz (RCA) com 5 Whys.
+- **📋 `asdlc_bug_hunter` Skill**: Skill de resolução de bugs com workflow de 5 fases.
+- **Workflow `/asdlc-bug`**: Ciclo completo de diagnóstico → reprodução → RCA → fix → regressão.
 
 ### Corrigido
 - Circuito Morto MCP-API removido da Skill.
 - Falso Positivo de DONE eliminado.
 - `llm_client.py` respeita `ASDLC_ENGINE`.
+- **`project_manager.py`**: Bug onde `project_root` não era definida quando `project_path` era fornecido (causava `UnboundLocalError`).
+- **`test_framework.py`**: Reescrito completamente — imports corrigidos para API funcional (era referências a classes que não existem).
+- **`test_bug_asdlc.py`**: Adicionado mock de `call_llm` que faltava, causando hang no teste.
 
 ### Modificado
-- Skill reescrita para Antigravity-Native.
-- MCP Server com fallback inteligente.
-- README com tabela comparativa dos dois modos.
+- Skill `asdlc_implementation` reescrita com ciclo TDD de 6 passos (antes 4 passos sem TDD).
+- `story_manager.py` pipeline alterado de 4 para 5 etapas com TDD.
+- `agent_executor.py` com monitoramento de contexto (Smart Zone).
+- `story_manager.py` com `_verificar_testes_existentes()` para pular Red Phase em bug fixes.
+- README.md e README_EN.md completamente reescritos com documentação das 3 formas de uso.
+- agentic_templates/README.md e README_EN.md atualizados com novos comandos e features.
+- `.env.example` atualizado com variáveis OpenRouter e per-agent models.
+- `.gitignore` limpo e organizado.
+
+### Removido
+- Referências a `@asdlc-plan.md` e `@asdlc-coder.md` (arquivos inexistentes).
+- Entradas duplicadas no `.gitignore`.
 
 ---
 
