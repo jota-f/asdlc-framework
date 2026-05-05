@@ -27,32 +27,54 @@ Antes de iniciar a implementação, você DEVE verificar as dependências:
    - Verifique se `status: "CONCLUÍDO"`
 4. Se alguma dependência não estiver concluída, ABORTE e informe.
 
-## O Ciclo A-SDLC de Implementação
+## O Ciclo A-SDLC de Implementação (TDD Obrigatório)
 
 Ao iniciar seu trabalho com uma Story recebida, siga os tópicos abaixo passo a passo, preferencialmente emitindo mensagens curtas confirmando que você os fez.
+
+> **FILOSOFIA TDD**: O código funcional só existe DEPOIS do teste que falha. Isso garante que o agente não "trapaceie" escrevendo testes superficiais que sempre passam.
 
 ### Passo 1: Assimilar Contexto (Architecture Agent)
 1. Use `view_file` e leia a Story selecionada. Repare se ela já tem o valor `status: "CONCLUÍDO"`. Se sim, avise o usuário que essa task já foi feita.
 2. Verifique o **Manifesto de Arquivos**.
 3. (Opcional, mas Altamente Recomendado) Leia o `PROJECT_CONTEXT.md` ou README da raiz para garantir as convenções, lints e sintaxes fixas do projeto atual.
 
-### Passo 2: Ação Deliberada (Code Agent)
+### Passo 2: Verificar Testes Existentes
+Antes de criar novos testes, verifique se já existem testes para o cenário:
+1. Busque arquivos de teste relacionados (ex: `test_*.py`, `*.test.ts`, `*_test.go`)
+2. Se testes JÁ EXISTEM e cobrem os critérios de aceitação → Pule para o Passo 3 (Code Agent)
+3. Se NÃO existem testes → Prossiga para o Passo 2.1 (TDD Red Phase)
+
+### Passo 2.1: TDD Red Phase (Test Agent)
+1. Leia a seção de **Critérios de Aceitação** da Story.
+2. Para cada critério, crie um teste que descreva o comportamento esperado.
+3. **OBRIGATÓRIO**: Execute os testes com `run_command` e confirme que ELES FALHAM.
+4. Se os testes passarem imediatamente (sem código implementado), algo está errado — revise o teste.
+5. Comunique: `[A-SDLC Test Agent] Red Phase: N testes criados, todos falhando. Pronto para implementação.`
+
+### Passo 3: Code Green Phase (Code Agent)
 1. Crie os arquivos definidos em `- **CRIAR:**`.
 2. Modifique os arquivos referenciados em `- **MODIFICAR:**`.
 3. Siga o bloco passo-a-passo (Tarefa 1, Tarefa 2) escrito na Story. Foco extremo na qualidade. Evite apagar lógicas de negócio adjacentes não mencionadas na Story.
 4. Documente as funções públicas criadas.
+5. **OBRIGATÓRIO**: Execute os testes com `run_command` após cada mudança significativa.
+6. Continue até TODOS os testes passarem (Green Phase).
 
-### Passo 3: Garantia da Qualidade (Test Agent)
-1. Reprodutibilidade: Leia a seção de **Critérios de Aceitação** da Story.
-2. Todo critério DEVE ganhar evidências materializadas (seja criando um arquivo `test_algo.py` ou validando um endpoint manual).
-3. Se você rodar os testes localmente usando `run_command` (ex: `pytest`, `npm test`) e detectar falhas relacionadas ao código que você gerou no Passo 2, **não avise o humano ainda**. Ative seu Loop Corretivo (Fix it yourself) e conserte o código.
+### Passo 4: Refatoração (Opcional)
+1. Com todos os testes passando, analise o código para oportunidades de melhoria.
+2. Refatore se necessário (DRY, SOLID, nomes claros).
+3. Execute os testes novamente após cada refatoração para garantir que nada quebrou.
 
-### Passo 4: Fechamento (Orchestrator)
+### Passo 5: Garantia da Qualidade (Test Agent)
+1. Valide que TODOS os critérios de aceitação têm cobertura de teste.
+2. Execute a suíte completa de testes do projeto.
+3. Se houver falhas relacionadas ao código gerado no Passo 3, **não avise o humano ainda**. Ative seu Loop Corretivo (Fix it yourself) e conserte o código.
+
+### Passo 6: Fechamento (Orchestrator)
 
 > [!CAUTION]
 > **LEI INVIOLÁVEL**: NUNCA marque uma story como DONE/CONCLUÍDO sem que um `run_command` tenha retornado exit code 0 para o comando de teste/build do projeto. Se não for possível rodar testes, marque como `REVIEW` e explique o motivo ao usuário. Inventar desculpas como "limitação técnica na captura de saída" é PROIBIDO.
 
-1. Após a validação irrestrita do Passo 3, altere `status: "PENDENTE"` para `status: "CONCLUÍDO"` no frontmatter da Story.
+1. Após a validação irrestrita do Passo 5, altere `status: "PENDENTE"` para `status: "CONCLUÍDO"` no frontmatter da Story.
 2. Opcionalmente, marque `[x]` nos checkboxes internos do Markdown da Story.
 3. **ATUALIZE A MEMÓRIA**: Leia `stories/MEMORY.md`, mova esta story de "Pendentes" para "Concluídas", atualize os contadores.
 
@@ -74,3 +96,11 @@ Mantenha-se comunicacionalmente enxuto. Comunique-se ao estilo:
 - Cache local das convenções do projeto (não releia a cada arquivo)
 
 Se sentir que o contexto está crescendo muito, invoque a skill `asdlc_context_compactor` antes de continuar.
+
+### Smart Zone: Monitoramento de Contexto
+Durante a implementação, monitore o tamanho do contexto:
+- **< 80k tokens**: Smart Zone — continue normalmente
+- **80k-100k tokens**: Warning — considere compactar antes da próxima fase
+- **> 100k tokens**: Dumb Zone — **PARE e compacte IMEDIATAMENTE**
+
+Para estimar: 1 token ≈ 4 caracteres. Some persona + PROJECT_CONTEXT + arquivos + histórico.

@@ -120,6 +120,18 @@ Aprova este plano?
 
 ## Regras de Decisão
 
+### Tracer Bullets (Fatias Verticais)
+Ao quebrar em múltiplas stories, prefira **fatias verticais** a **camadas horizontais**:
+- **CORRETO**: Cada story atravessa DB → API → UI e é funcional independentemente
+- **EVITAR**: Story 1 = todos os modelos, Story 2 = todos os endpoints, Story 3 = toda a UI
+
+Exemplo de Tracer Bullet:
+```
+Story 1: Login (modelo User + endpoint POST /login + tela de login + teste)
+Story 2: Registro (modelo User extendido + endpoint POST /register + tela de registro + teste)
+Story 3: Recuperação (endpoint POST /recover + email service + tela de recuperação + teste)
+```
+
 ### Quebrar em subtarefas quando:
 - Tempo estimado > 4h total
 - Múltiplas tecnologias diferentes (DB + UI + API)

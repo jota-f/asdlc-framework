@@ -55,8 +55,10 @@ class TestBugASDLC:
         # Verificar se o frontmatter contém o tipo correto
         assert 'type: "bug_fix"' in content
         
-    def test_bug_hunter_agent_exists_in_new_projects(self):
+    @patch("asdlc.plan_generator.call_llm")
+    def test_bug_hunter_agent_exists_in_new_projects(self, mock_llm):
         """Verifica se o novo agente Bug Hunter é criado na inicialização de projetos"""
+        mock_llm.return_value = "# Plano de teste"
         initialize_project("test_agents", "Test prompt", "web_api")
         
         bug_hunter_path = self.temp_dir / "test_agents" / ".asdlc" / "agents" / "bug_hunter_agent.md"

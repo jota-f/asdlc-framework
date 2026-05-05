@@ -89,3 +89,32 @@ Identifique o sistema de teste usado: npm test, pytest, cargo test, go test, etc
 1. Escopo limitado! Se pedido englobar sistema inteiro, quebre na primeira parte fundamental.
 2. Manifesto deve ser absurdamente explícito - agente autônomo usará para decidir edição.
 3. Use `depends_on` automaticamente se detectar dependência pendente em `MEMORY.md`.
+4. **Tracer Bullets**: Organize tarefas como fatias verticais — cada tarefa deve atravessar todas as camadas (DB → API → UI) e ser funcional e testável independentemente. Evite tarefas horizontais (ex: "criar todos os modelos", "criar todos os endpoints").
+
+## Validação de Qualidade de Entrada
+
+Antes de gerar a story, verifique se a demanda tem especificidade suficiente:
+
+### Checklist Obrigatório
+A story DEVE ter uma **História do Usuário** completa no formato:
+```
+Como um [ATOR específico], eu quero [AÇÃO clara], para que [BENEFÍCIO mensurável].
+```
+
+Se a demanda fornecida for vaga (ex: "melhorar cache", "adicionar login", "corrigir bug"):
+1. **RECUSE** a geração da story
+2. **RESPONDA** ao humano:
+   ```
+   ⚠️ Demanda insuficiente para gerar uma story de qualidade.
+   Use `/asdlc-grill` para um questionamento guiado, ou forneça:
+   - Quem é o ator/usuário?
+   - O que exatamente deve acontecer?
+   - Qual o benefício esperado?
+   ```
+3. **NÃO prossiga** até ter user story completa
+
+### Sinais de Demanda Vague
+- Verbos genéricos: "melhorar", "adicionar", "corrigir", "implementar" sem objeto específico
+- Falta de ator: não menciona quem usa
+- Falta de benefício: não explica por quê
+- Ambiguidade: múltiplas interpretações possíveis

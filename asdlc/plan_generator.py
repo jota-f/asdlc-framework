@@ -13,15 +13,20 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
     """
     logger.info(f"Iniciando planejamento com IA para a story: {story_data.get('title')}")
 
-    # 1. Coletar contexto do projeto
+    # 1. Coletar contexto do projeto (com limite de segurança)
     try:
         context_file = project_root / "PROJECT_CONTEXT.md"
-        project_context = (
-            context_file.read_text(encoding="utf-8") if context_file.exists() else "Nenhum PROJECT_CONTEXT.md fornecido."
-        )
+        if context_file.exists():
+            # Limitar contexto a 3000 caracteres para evitar estouro de tokens
+            project_context = context_file.read_text(encoding="utf-8")
+            if len(project_context) > 3000:
+                project_context = project_context[:3000] + "\n... (contexto truncado para economizar tokens)"
+        else:
+            project_context = "Nenhum PROJECT_CONTEXT.md fornecido."
     except Exception as e:
         project_context = f"Erro ao ler PROJECT_CONTEXT.md: {e}"
 
+    # 2. Obter estrutura de arquivos (já otimizada no utils.py)
     project_structure = get_project_structure(project_root)
 
     # 2. Determinar se é uma Bug Story para ajustar o prompt
@@ -47,6 +52,14 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
        - `mobile`: Use React Native/Flutter (ex: `App.js`, `package.json`)
        - `desktop`: Use Electron/Python GUI (ex: `main.js`, `index.html`)
        - `cli`: Use Python/Node.js CLI (ex: `main.py`, `requirements.txt`)
+    6.  **TRACER BULLETS (FATIAS VERTICAIS)**: Organize as tarefas como fatias verticais que atravessam todas as camadas. Cada tarefa deve ser funcional e testável independentemente.
+       - **CORRETO**: "Tarefa 1: Modelo User + endpoint POST /users + teste de integração"
+       - **EVITAR**: "Tarefa 1: Criar todos os modelos. Tarefa 2: Criar todos os endpoints. Tarefa 3: Criar todos os testes"
+       - O objetivo é obter feedback imediato sobre se a integração funciona.
+    7.  **MÓDULOS PROFUNDOS**: Prefira módulos com interfaces simples que escondem complexidade interna. Evite módulos "rasos" onde cada função expõe detalhes internos.
+       - **PROFUNDO**: Uma função `cache.get(key)` que esconde conexão, TTL, fallback, retry
+       - **RASO**: `cache.connect()`, `cache.prepare()`, `cache.execute()`, `cache.close()`
+       - Módulos profundos são mais fáceis para agentes de IA navegarem e manterem.
 
     **EXEMPLOS DE BONS RESULTADOS POR TIPO:**
     ---
@@ -249,7 +262,7 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
       - **Instrução para o Cursor:** "Modifique o frontmatter deste arquivo, alterando o `status` para 'CONCLUÍDO'."
     """
 
-    # 3. Chamar a LLM
-    plano_gerado = call_llm(prompt, max_tokens=3072)  # Aumentar tokens para planos complexos
+    # 3. Chamar a LLM com roteamento para Arquiteto
+    plano_gerado = call_llm(prompt, agent_type="architecture")
 
     return plano_gerado
