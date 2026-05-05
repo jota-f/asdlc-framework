@@ -15,6 +15,24 @@ Use esta skill quando:
 - A utilização do contexto ultrapassar **60%**
 - Você notar repetição de informações nas últimas mensagens
 - O agente começar a "esquecer" contexto importante
+- **O contexto estimado ultrapassar 80.000 tokens** (Smart Zone → Dumb Zone)
+
+## Smart Zone vs Dumb Zone (Matt Pocock)
+
+LLMs possuem uma "zona de inteligência" onde operam melhor. Conforme o contexto (tokens) aumenta, a IA entra na "zona burra", cometendo erros bobos.
+
+| Zona | Tokens Estimados | Comportamento |
+|------|-----------------|---------------|
+| **Smart Zone** | < 80k | IA opera com precisão |
+| **Warning** | 80k - 100k | Qualidade começa a degradar |
+| **Dumb Zone** | > 100k | IA comete erros bobos, perde contexto |
+
+**Regra**: Se o contexto estimado ultrapassar 80k tokens, compacte IMEDIATAMENTE.
+
+### Como Estimar Tokens
+- Aproximação: 1 token ≈ 4 caracteres
+- Some os caracteres de: persona + PROJECT_CONTEXT + arquivos relevantes + histórico
+- Divida por 4 para obter estimativa de tokens
 
 ## Algoritmo de Compaction
 

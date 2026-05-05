@@ -17,11 +17,12 @@ def initialize_project(project_name: str, initial_prompt: str, project_type: str
     """
     logger.info(f"Inicializando novo projeto A-SDLC: {project_name}")
     
+    original_dir = Path.cwd()
+    
     if project_path:
         project_dir = Path(project_path)
     else:
-        project_root = Path.cwd()
-        project_dir = project_root / project_name
+        project_dir = original_dir / project_name
 
     if project_dir.exists():
         logger.warning(f"O diretório '{project_name}' já existe. Usando o diretório existente.")
@@ -193,7 +194,7 @@ src/
     story_manager.create_story(story_title=f"Implementação Inicial do Projeto: {project_name}", description=initial_prompt)
 
     # Voltar para o diretório original para não afetar o resto da execução
-    os.chdir(project_root)
+    os.chdir(original_dir)
 
 
 def _create_agent_templates(project_dir: Path):

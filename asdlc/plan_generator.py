@@ -52,6 +52,14 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
        - `mobile`: Use React Native/Flutter (ex: `App.js`, `package.json`)
        - `desktop`: Use Electron/Python GUI (ex: `main.js`, `index.html`)
        - `cli`: Use Python/Node.js CLI (ex: `main.py`, `requirements.txt`)
+    6.  **TRACER BULLETS (FATIAS VERTICAIS)**: Organize as tarefas como fatias verticais que atravessam todas as camadas. Cada tarefa deve ser funcional e testável independentemente.
+       - **CORRETO**: "Tarefa 1: Modelo User + endpoint POST /users + teste de integração"
+       - **EVITAR**: "Tarefa 1: Criar todos os modelos. Tarefa 2: Criar todos os endpoints. Tarefa 3: Criar todos os testes"
+       - O objetivo é obter feedback imediato sobre se a integração funciona.
+    7.  **MÓDULOS PROFUNDOS**: Prefira módulos com interfaces simples que escondem complexidade interna. Evite módulos "rasos" onde cada função expõe detalhes internos.
+       - **PROFUNDO**: Uma função `cache.get(key)` que esconde conexão, TTL, fallback, retry
+       - **RASO**: `cache.connect()`, `cache.prepare()`, `cache.execute()`, `cache.close()`
+       - Módulos profundos são mais fáceis para agentes de IA navegarem e manterem.
 
     **EXEMPLOS DE BONS RESULTADOS POR TIPO:**
     ---
