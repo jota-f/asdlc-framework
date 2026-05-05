@@ -36,6 +36,11 @@ def initialize_project(
     (project_dir / ".asdlc").mkdir(exist_ok=True)
     (project_dir / ".asdlc/agents").mkdir(exist_ok=True)
     (project_dir / "stories").mkdir(exist_ok=True)
+    (project_dir / "docs/adr").mkdir(parents=True, exist_ok=True)
+
+    # 1.1 Criar GLOSSARY.md inicial
+    glossary_content = f"# 📖 GLOSSARY.md - {project_name}\n\n## 1. Glossário de Domínio (Linguagem Ubíqua)\n\n| Termo | Definição | Contexto |\n|-------|-----------|----------|\n| Exemplo | Definição do termo | Contexto de uso |\n"
+    (project_dir / "GLOSSARY.md").write_text(glossary_content, encoding="utf-8")
 
     # 2. Criar um PROJECT_CONTEXT.md inicial
     context_content = f"""# 📜 PROJECT_CONTEXT.md - {project_name}

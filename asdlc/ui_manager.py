@@ -6,7 +6,7 @@ Responsável pela interface interativa e CLI
 import logging
 from typing import Optional
 from .project_manager import initialize_project
-from .story_manager import create_story, list_stories
+from .story_manager import create_story, list_stories, grill_story_idea, apply_grill_decisions
 
 logger = logging.getLogger(__name__)
 
@@ -119,7 +119,24 @@ class UIManager:
                 logger.error("❌ Descrição da funcionalidade é obrigatória.")
                 return
 
-            # Criar story com título e descrição
+            # FASE DE GRILL (Opcional no CLI)
+            want_grill = input("\n🔥 Deseja 'grelhar' (grill) esta ideia para validar domínio e arquitetura? (s/n): ").lower()
+            if want_grill == 's':
+                print("\n🔍 Iniciando Grill...")
+                questions = grill_story_idea(story_title, story_description)
+                print(f"\n{questions}")
+                print("\n💡 Responda às perguntas e forneça detalhes adicionais abaixo (ou 'pular'):")
+                answers = input("📝 Respostas: ")
+                
+                if answers.lower() != 'pular':
+                    discussion = f"Título: {story_title}\nDescrição Original: {story_description}\nPerguntas: {questions}\nRespostas: {answers}"
+                    apply_grill_decisions(discussion)
+                    print("✅ Glossário e ADRs atualizados com base na discussão.")
+                    
+                    # Atualizar descrição com as respostas para a criação da story
+                    story_description = f"{story_description}\n\nDetalhamento do Grill:\n{answers}"
+
+            # Criar story com título e descrição (final)
             create_story(story_title=story_title, story_description=story_description)
         elif choice == "4":
             # Listar Stories

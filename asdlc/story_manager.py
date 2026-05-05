@@ -15,8 +15,9 @@ from rich import print as rprint
 
 # Importar gerador de planos e utilitários
 from .plan_generator import gerar_plano_de_execucao
-from .utils import find_project_root, safe_write_file, console
+from .utils import find_project_root, safe_write_file, console, get_project_structure
 from .agent_executor import spawn_agent, validate_and_fix
+from .llm_client import call_llm
 
 # Configurar logging
 logger = logging.getLogger(__name__)
@@ -769,3 +770,97 @@ def _atualizar_backlog_com_sugestoes(review_result: str) -> None:
             logger.info(f"Backlog atualizado com {len(suggestions)} novas sugestões.")
     except Exception as e:
         logger.warning(f"Erro ao atualizar o backlog: {e}")
+
+def grill_story_idea(title: str, description: str) -> str:
+    """
+    Analisa a ideia da story contra o contexto do projeto e glossário.
+    Retorna perguntas de clarificação ou sugestões.
+    """
+    project_root = find_project_root()
+    if not project_root:
+        return "Erro: Projeto não encontrado."
+
+    # 1. Carregar contexto e glossário
+    context_file = project_root / "PROJECT_CONTEXT.md"
+    glossary_file = project_root / "GLOSSARY.md"
+    
+    context = context_file.read_text(encoding="utf-8") if context_file.exists() else ""
+    glossary = glossary_file.read_text(encoding="utf-8") if glossary_file.exists() else ""
+    
+    prompt = f"""
+    Você é um Requirements Agent especialista em A-SDLC. Sua tarefa é fazer o "GRILL" desta ideia de story.
+    
+    ESTADO ATUAL DO PROJETO:
+    - Contexto: {context[:2000]}
+    - Glossário: {glossary[:2000]}
+    
+    IDÉIA DA STORY:
+    - Título: {title}
+    - Descrição: {description}
+    
+    Sua missão é:
+    1. Identificar se há colisão de termos (o usuário usou um nome diferente do que está no glossário?).
+    2. Identificar ambiguidades técnicas (cardinalidade 1:N, regras de deleção, semântica de estados).
+    3. Gerar um bloco de 3 a 5 perguntas críticas para o usuário.
+    
+    FORMATO DE RESPOSTA:
+    Apresente as perguntas de forma clara no terminal.
+    """
+    
+    return call_llm(prompt, agent_type="requirements")
+
+
+def apply_grill_decisions(summary_of_discussion: str):
+    """
+    Pega o resumo da discussão do Grill e atualiza o GLOSSARY.md e cria ADRs se necessário.
+    """
+    project_root = find_project_root()
+    if not project_root:
+        return
+
+    prompt = f"""
+    Com base na discussão abaixo, extraia:
+    1. Novos termos para o GLOSSARY.md (no formato de tabela markdown).
+    2. Decisões arquiteturais importantes para um ADR (Contexto, Decisão, Consequências).
+    
+    DISCUSSÃO:
+    {summary_of_discussion}
+    
+    Sua resposta deve ser um JSON com:
+    {{
+        "glossary_updates": "conteúdo para adicionar na tabela",
+        "adr": {{
+            "title": "título do adr",
+            "content": "conteúdo completo do adr"
+        }}
+    }}
+    Se não houver ADR, deixe o campo adr como null.
+    """
+    
+    import json
+    response = call_llm(prompt + "\nRESPONDA APENAS O JSON.", agent_type="architecture")
+    
+    try:
+        data = json.loads(response.strip("`json\n").strip("`"))
+        
+        # Atualizar Glossário
+        if data.get("glossary_updates"):
+            glossary_file = project_root / "GLOSSARY.md"
+            with open(glossary_file, "a", encoding="utf-8") as f:
+                f.write(f"\n{data['glossary_updates']}\n")
+            logger.info("Glossário atualizado.")
+
+        # Criar ADR
+        if data.get("adr"):
+            adr_dir = project_root / "docs/adr"
+            adr_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Contar arquivos existentes para o prefixo
+            count = len(list(adr_dir.glob("*.md"))) + 1
+            filename = f"{count:04d}_{_sanitize_filename(data['adr']['title'])}.md"
+            (adr_dir / filename).write_text(data['adr']['content'], encoding="utf-8")
+            logger.info(f"ADR criado: {filename}")
+            
+    except Exception as e:
+        logger.error(f"Erro ao processar decisões do grill: {e}")
+        logger.error(f"Resposta da LLM: {response}")

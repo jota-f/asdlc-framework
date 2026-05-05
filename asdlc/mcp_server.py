@@ -5,7 +5,7 @@ Expondo as ferramentas do framework A-SDLC via Model Context Protocol.
 FERRAMENTAS DE GESTÃO (funcionam sempre):
   - asdlc_create_project, asdlc_create_story, asdlc_validate_project
   - asdlc_get_story_details, asdlc_update_story_status
-  - asdlc_get_project_metrics, asdlc_list_stories
+  - asdlc_get_project_metrics, asdlc_list_stories, asdlc_grill_story, asdlc_apply_grill_decisions
 
 FERRAMENTAS DE EXECUÇÃO (requerem ASDLC_ENGINE=external no .env):
   - asdlc_implement_story, asdlc_spawn_specialist
@@ -154,6 +154,30 @@ def asdlc_list_stories() -> str:
         return "Stories encontradas:\n" + "\n".join(stories)
     except Exception as e:
         return f"Erro ao listar stories: {str(e)}"
+    
+@mcp.tool()
+def asdlc_grill_story(title: str, description: str) -> str:
+    """
+    [REQUER ASDLC_ENGINE=external] Inicia o processo de 'Grill' para validar domínio e arquitetura.
+    Retorna perguntas de clarificação da IA.
+    """
+    try:
+        return story_manager.grill_story_idea(title, description)
+    except Exception as e:
+        return f"Erro ao executar grill: {str(e)}"
+
+
+@mcp.tool()
+def asdlc_apply_grill_decisions(summary: str) -> str:
+    """
+    [REQUER ASDLC_ENGINE=external] Aplica as decisões do Grill (atualiza GLOSSARY.md e cria ADRs).
+    O summary deve conter o título, descrição original, perguntas e respostas.
+    """
+    try:
+        story_manager.apply_grill_decisions(summary)
+        return "Decisões do Grill aplicadas com sucesso (Glossário/ADR)."
+    except Exception as e:
+        return f"Erro ao aplicar decisões: {str(e)}"
 
 
 # ============================================

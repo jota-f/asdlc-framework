@@ -1,162 +1,106 @@
 ---
-description: Workflow de questionamento proativo. O agente "grelha" o humano sobre requisitos antes de criar uma story, garantindo entendimento compartilhado.
+description: Workflow de questionamento proativo (Grill with Docs). O agente "grelha" o humano sobre requisitos e consistência de domínio antes de criar uma story, gerando ADRs e atualizando o glossário.
 ---
 
 # 🔥 GRILL REQUIREMENTS (`/asdlc-grill`)
 
-Use este comando quando a demanda é vaga, ambígua ou carece de especificidade. O agente atuará como um interrogador incansável até que os requisitos estejam sólidos.
+Use este comando quando a demanda é vaga, ambígua ou carece de especificidade. O agente atuará como um interrogador incansável e um Arquiteto de Domínio até que os requisitos e a linguagem estejam sólidos.
 
 ## Quando Usar (OBRIGATÓRIO quando)
 
-- A demanda não tem user story completa (ator + ação + benefício)
-- Não há critérios de aceitação claros
-- O escopo é ambíguo ("melhorar", "adicionar", "corrigir" sem detalhes)
-- Há múltiplas interpretações possíveis
+- A demanda introduz novos conceitos ou entidades no sistema.
+- Não há critérios de aceitação claros ou definições de edge cases.
+- O escopo é ambíguo ("melhorar", "adicionar", "corrigir" sem detalhes).
+- Há risco de colisão de terminologia com o domínio existente.
 
-## Quando NÃO Usar
+## Passo 0: Injeção de Contexto Obrigatória
 
-- A demanda já tem story completa e critérios de aceitação
-- É uma correção menor com escopo óbvio
-- O humano já forneceu documentação detalhada
+Antes de responder ao usuário, o agente **DEVE** utilizar suas ferramentas de leitura para consultar:
+1. `PROJECT_CONTEXT.md` (Para entender a arquitetura base).
+2. `GLOSSARY.md` (Se não existir, o agente informará que irá criá-lo). Este arquivo guarda a linguagem ubíqua do projeto (Domain-Driven Design).
+3. `stories/MEMORY.md` (Para contexto de decisões anteriores).
 
-## Passos da Workflow
-
-### Passo 1: Diagnóstico de Completude
+## Passo 1: Diagnóstico de Completude e Colisão
 
 O agente avalia a demanda inicial contra este checklist:
 
 ```
+# Completude do Produto:
 - [ ] ATOR definido? (Quem usa? Qual perfil?)
 - [ ] AÇÃO clara? (O que exatamente deve acontecer?)
 - [ ] BENEFÍCIO mensurável? (Qual valor entregue?)
 - [ ] CONTEXTO fornecido? (Onde no sistema? Qual fluxo?)
-- [ ] EDGE CASES mencionados? (E se falhar? E se vazio?)
-- [ ] RESTRIÇÕES explícitas? (Performance? Segurança? Compatibilidade?)
 - [ ] DEPENDÊNCIAS mapeadas? (Depende de outro componente/serviço?)
+
+# Consistência de Domínio e Arquitetura:
+- [ ] COLISÃO DE TERMOS? (Os termos usados pelo usuário contradizem o GLOSSARY.md?)
+- [ ] CARDINALIDADE ESTRUTURAL? (É 1:1, 1:N, ou N:N?)
+- [ ] SEMÂNTICA DE ESTADOS? (Se há status, a transição é livre ou restrita?)
+- [ ] DELETION RULES? (O que acontece ao deletar a entidade? CASCADE, RESTRICT, SET NULL?)
 ```
 
-Se TODOS os itens estiverem preenchidos, sugira `/asdlc-create-story` diretamente.
-Se QUALQUER item faltar, prossiga para o Passo 2.
+Se TODOS os itens estiverem preenchidos e não houver ambiguidades de domínio, sugira `/asdlc-create-story`.
+Se houver lacunas, prossiga para o Passo 2.
 
-### Passo 2: Ciclo de Questionamento
+## Passo 2: Ciclo de Questionamento
 
-O agente faz perguntas em blocos de 3-5 questões por vez. Exemplo:
+O agente faz perguntas em blocos lógicos. Exemplo:
 
 ```
-🔥 [GRILL MODE] Preciso entender melhor antes de criar a story:
+🔥 [GRILL MODE] Detectei ambiguidades estruturais e de produto. Precisamos afiar isso:
 
-1. **ATOR**: Quem são os usuários que vão interagir com essa funcionalidade?
-   - É um usuário final? Admin? Sistema externo?
-   - Tem autenticação envolvida?
+1. **COLISÃO DE TERMOS**: Você mencionou "Vídeo solto", mas nosso glossário usa "Standalone Video".
+   - Devemos unificar o termo para "Standalone Video" ou "Vídeo solto" é um conceito novo?
 
-2. **CONTEXTO**: Onde no sistema isso se encaixa?
-   - Qual módulo/página é afetado?
-   - Existe um fluxo existente que será modificado?
+2. **CARDINALIDADE**: Qual a relação entre um "Pitch" e os "Vídeos"?
+   - (a) 1:N (Um pitch tem vários vídeos)
+   - (b) 1:1 (Cada pitch é um vídeo)
 
-3. **COMPORTAMENTO**: O que deve acontecer exatamente?
-   - Qual é o resultado esperado em cada cenário?
-   - E quando o input for inválido?
-
-4. **RESTRIÇÕES**: Há limitações técnicas ou de negócio?
-   - Performance máxima aceitável?
-   - Compatibilidade com versões anteriores?
-
-5. **DEPENDÊNCIAS**: Isso depende de algo que não existe ainda?
-   - APIs externas? Serviços? Bibliotecas?
+3. **DELEÇÃO**: Se um Pitch for deletado, o que acontece com seus vídeos?
+   - (a) RESTRICT: Impede a exclusão do Pitch se houver vídeos associados.
+   - (b) CASCADE: Deleta todos os vídeos junto.
+   - (c) SET NULL: Os vídeos viram "Standalone Videos" sem Pitch.
 ```
 
-### Passo 3: Validação do Entendimento
+## Passo 3: Validação & Acordos de Arquitetura
 
-Após 2-3 rodadas de perguntas, o agente apresenta um resumo:
+Após iterar e resolver as ambiguidades, o agente apresenta um resumo:
 
 ```
 🔥 [GRILL MODE] Entendimento Consolidado:
 
 **FUNCIONALIDADE:** [nome]
-**ATOR:** [quem]
-**AÇÃO:** [o que]
-**BENEFÍCIO:** [por quê]
-**CONTEXTO:** [onde no sistema]
-**EDGE CASES:** [lista]
-**RESTRIÇÕES:** [lista]
-**DEPENDÊNCIAS:** [lista]
+**ATOR:** [quem] | **AÇÃO:** [o que] | **BENEFÍCIO:** [por quê]
+
+**💡 DECISÕES DE DOMÍNIO (Atualizações para o GLOSSARY.md):**
+- **Pitch:** Recipiente que agrupa vídeos (1:N).
+- **Pitched Video:** Um vídeo com pitch_id definido.
+
+**🏗️ DECISÕES ARQUITETURAIS (Novos ADRs):**
+- **ADR:** Exclusão de Pitches será RESTRICT (Trade-off: UX mais manual, porém evita exclusão acidental de conteúdo de alto valor).
 
 Isso está correto? Responda:
-[S] Sim, criar a story
+[S] Sim, aplicar documentação e criar a story
 [N] Não, preciso ajustar: [o quê]
 ```
 
-### Passo 4: Geração da Story (se aprovado)
+## Passo 4: Escrita Ativa e Geração da Story (se aprovado)
 
-Se o humano confirmar, invoque `/asdlc-create-story` com o contexto consolidado.
+Se o humano confirmar, o agente **NÃO APENAS** invoca a criação da story. Ele DEVE proativamente:
+
+1. **Atualizar o Glossário:**
+   - Use a ferramenta `write_to_file` ou `multi_replace_file_content` para atualizar ou criar o arquivo `GLOSSARY.md` na raiz do projeto com os novos termos.
+   - ⚠️ **REGRA DE SEGURANÇA CRÍTICA:** NUNCA altere a arquitetura central, o tech stack ou os objetivos no `PROJECT_CONTEXT.md`. Toda a evolução da linguagem de negócio deve ir para o `GLOSSARY.md`.
+
+2. **Criar ADRs:**
+   - Se houver decisões estruturais não óbvias (ex: regra de deleção, escolha de tecnologia de cache), use `write_to_file` para criar um arquivo `docs/adr/XXXX-titulo-da-decisao.md` (onde XXXX é um número sequencial, ex: `0001`). O ADR deve ter seções: Contexto, Decisão e Consequências.
+
+3. **Gerar a Story:**
+   - Invoque `/asdlc-create-story` com o contexto final consolidado.
 
 ## Regras do Agente
 
-1. **Seja incansável**: Não aceite respostas vagas. Se o humano disser "melhorar a performance", pergunte "qual endpoint? qual métrica? qual baseline?"
-2. **Seja específico**: Cada pergunta deve ter 2-3 opções de exemplo para guiar a resposta
-3. **Seja organizado**: Apresente perguntas em blocos lógicos, não todas de uma vez
-4. **Documente tudo**: Cada resposta deve ser capturada no resumo final
-5. **Não implemente**: Este agente NUNCA escreve código. Apenas questiona e documenta
-
-## Exemplo de Conversa Completa
-
-```
-Você: "/asdlc-grill Quero adicionar cache no sistema"
-
-Agente:
-🔥 [GRILL MODE] Detectei demanda vaga. Checklist de completude:
-- [ ] ATOR: ❌ Não definido
-- [ ] AÇÃO: ⚠️ "Adicionar cache" - qual endpoint? qual dado?
-- [ ] BENEFÍCIO: ❌ Não mensurável
-- [ ] CONTEXTO: ❌ Não especificado
-
-Perguntas iniciais:
-
-1. **O QUE cachear?** Qual endpoint ou recurso precisa de cache?
-   - Ex: API de produtos, consulta de preços, listagem de pedidos
-
-2. **POR QUÊ?** Qual problema está enfrentando?
-   - Ex: Latência alta (>2s), carga no banco, custo de API externa
-
-3. **ONDE?** Qual camada do sistema?
-   - Ex: Cache no backend (Redis), cache no frontend (localStorage), CDN
-
-Você: "O endpoint de produtos do backend fica lento, quero Redis"
-
-Agente:
-🔥 [GRILL MODE] Rodada 2 - Aprofundando:
-
-4. **TTL**: Quanto tempo o cache deve durar?
-   - Ex: 5 minutos, 1 hora, até invalidação manual
-
-5. **INVALIDAÇÃO**: Como o cache deve ser atualizado?
-   - Ex: TTL automático, invalidação por evento, manual
-
-6. **FALLBACK**: E se o Redis estiver fora?
-   - Ex: Ir direto ao banco, retornar erro, usar cache local
-
-7. **MÉTRICA**: Como medir sucesso?
-   - Ex: Reduzir latência de 2s para <200ms
-
-Você: "TTL 5min, fallback pro banco, meta <200ms"
-
-Agente:
-🔥 [GRILL MODE] Entendimento Consolidado:
-
-**FUNCIONALIDADE:** Cache Redis para endpoint de produtos
-**ATOR:** Sistema backend (transparente ao usuário)
-**AÇÃO:** Armazenar respostas em Redis com TTL de 5min
-**BENEFÍCIO:** Reduzir latência de ~2s para <200ms
-**CONTEXTO:** API de produtos, camada de serviço
-**EDGE CASES:** Redis indisponível → fallback ao banco
-**RESTRIÇÕES:** TTL 5min, não afistar consistência de dados
-**DEPENDÊNCIAS:** Redis server configurado
-
-Isso está correto?
-[S] Sim, criar a story
-[N] Não, preciso ajustar
-
-Você: "S"
-
-Agente: Story criada com sucesso: stories/20260504_cache_produtos_redis.md
-```
+1. **Proteja a Arquitetura:** Nunca altere as premissas do `PROJECT_CONTEXT.md`.
+2. **Defenda a Linguagem Ubíqua:** Não permita que o usuário crie sinônimos (ex: User e Account) para a mesma coisa sem um debate conceitual profundo.
+3. **Seja incansável**: Não aceite respostas vagas.
+4. **Documente tudo ativamente**: Execute a atualização dos arquivos (`GLOSSARY.md` e `docs/adr/`) de fato, não apenas prometa que fará.
