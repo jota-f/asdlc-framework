@@ -12,7 +12,7 @@ O A-SDLC é um framework que transforma assistentes de IA em agentes autônomos 
 - [Instalação](#instalação)
 - [Modo Antigravity (Gratuito)](#modo-antigravity-gratuito)
 - [Modo API Externa (Autônomo)](#modo-api-externa-autônomo)
-- [Modo Agentic (Sem Python)](#modo-agentic-sem-python)
+- [Modo Agentic (Sem Python) - RECOMENDADO](agentic_templates/README.md)
 - [Workflow Completo](#workflow-completo)
 - [Comandos CLI](#comandos-cli)
 - [Variáveis de Ambiente](#variáveis-de-ambiente)
@@ -41,7 +41,7 @@ Diferente de assistentes de chat, o A-SDLC trata a IA como um **Sistema Multi-Ag
 
 ## Três Formas de Usar
 
-| | 🧠 Antigravity (IDE) | ⚡ API Externa (CLI) | 📋 Agentic (Templates) |
+| | 🧠 Antigravity (IDE) | ⚡ API Externa (CLI) | 📋 [Agentic (Templates)](agentic_templates/README.md) |
 |---|---|---|---|
 | **Quem pensa?** | A IDE (Cursor/Windsurf) | API OpenAI/OpenRouter | A IDE (chat) |
 | **Custo** | Gratuito | Pago (tokens) | Gratuito |
@@ -138,31 +138,27 @@ python main.py implement --id 20260425_204837
 
 ## Modo Agentic (Sem Python)
 
-Copia a metodologia A-SDLC diretamente para o seu projeto. Sem dependências Python.
+> [!TIP]
+> **MODO RECOMENDADO PARA CURSOR/WINDSURF:** Este modo não requer instalação de Python ou CLI. Ele injeta a "inteligência" do A-SDLC diretamente no chat da sua IDE através de templates.
 
-### Instalação
+### 📥 Instalação Rápida
+Copie a pasta de templates para o seu projeto:
 ```bash
 cp -r agentic_templates/ seu-projeto/
 ```
+*(Opcional: Renomeie `agentic_templates/` para `.agents/` para compatibilidade nativa com algumas IDEs).*
 
-### Comandos disponíveis no chat da IDE
-| Comando | Quando Usar |
-|---------|-------------|
-| `/asdlc-grill` | Questionamento guiado para demandas vagas |
-| `/asdlc-architecture` | Perguntas de arquitetura |
-| `/asdlc-plan` | Quebrar features grandes em stories |
-| `/asdlc-create-story` | Criar story formal |
-| `/asdlc-execute` | Implementar uma story |
-| `/asdlc-bug` | Diagnosticar e corrigir bugs |
+### 🚀 Comandos Disponíveis no Chat
+| Comando | O que faz |
+|---------|-----------|
+| `/asdlc-grill` | "Grelha" você sobre requisitos para evitar demandas vagas. |
+| `/asdlc-architecture` | Inicia discussão técnica e modelagem de domínio. |
+| `/asdlc-create-story` | Cria a story formal seguindo os padrões do framework. |
+| `/asdlc-execute` | Implementa a story usando o ciclo **TDD Obrigatório**. |
 
-### Fluxo típico
-```
-1. /asdlc-grill              → Validar requisitos (se demanda vaga)
-2. /asdlc-architecture       → Definir abordagem
-3. /asdlc-plan               → Quebrar em stories
-4. /asdlc-create-story       → Criar story
-5. /asdlc-execute            → Implementar (TDD automático)
-```
+### 📖 Guia Detalhado
+Para um guia completo de como configurar skills e workflows na IDE, consulte o:
+👉 **[Guia do Modo Agentic (README em agentic_templates)](agentic_templates/README.md)**
 
 ---
 

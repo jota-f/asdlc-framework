@@ -12,7 +12,7 @@ A-SDLC is a framework that turns AI assistants into autonomous agents capable of
 - [Installation](#installation)
 - [Antigravity Mode (Free)](#antigravity-mode-free)
 - [External API Mode (Autonomous)](#external-api-mode-autonomous)
-- [Agentic Mode (No Python)](#agentic-mode-no-python)
+- [Agentic Mode (No Python) - RECOMMENDED](agentic_templates/README_EN.md)
 - [Complete Workflow](#complete-workflow)
 - [CLI Commands](#cli-commands)
 - [Environment Variables](#environment-variables)
@@ -41,7 +41,7 @@ Unlike chat assistants, A-SDLC treats AI as a **Multi-Agent System (MAS)**. Each
 
 ## Three Ways to Use
 
-| | 🧠 Antigravity (IDE) | ⚡ External API (CLI) | 📋 Agentic (Templates) |
+| | 🧠 Antigravity (IDE) | ⚡ External API (CLI) | 📋 [Agentic (Templates)](agentic_templates/README_EN.md) |
 |---|---|---|---|
 | **Who thinks?** | The IDE (Cursor/Windsurf) | OpenAI/OpenRouter API | The IDE (chat) |
 | **Cost** | Free | Paid (tokens) | Free |
@@ -138,31 +138,27 @@ python main.py implement --id 20260425_204837
 
 ## Agentic Mode (No Python)
 
-Copies the A-SDLC methodology directly into your project. No Python dependencies.
+> [!TIP]
+> **RECOMMENDED MODE FOR CURSOR/WINDSURF:** This mode does not require Python or CLI installation. It injects A-SDLC "intelligence" directly into your IDE chat via templates.
 
-### Installation
+### 📥 Quick Installation
+Copy the templates folder to your project:
 ```bash
 cp -r agentic_templates/ your-project/
 ```
+*(Optional: Rename `agentic_templates/` to `.agents/` for native compatibility with some IDEs).*
 
-### Available commands in IDE chat
-| Command | When to Use |
-|---------|-------------|
-| `/asdlc-grill` | Guided questioning for vague requirements |
-| `/asdlc-architecture` | Architecture questions |
-| `/asdlc-plan` | Break large features into stories |
-| `/asdlc-create-story` | Create formal story |
-| `/asdlc-execute` | Implement a story |
-| `/asdlc-bug` | Diagnose and fix bugs |
+### 🚀 Available Chat Commands
+| Command | What it does |
+|---------|--------------|
+| `/asdlc-grill` | "Grills" you on requirements to avoid vague demands. |
+| `/asdlc-architecture` | Starts technical discussion and domain modeling. |
+| `/asdlc-create-story` | Creates a formal story following framework standards. |
+| `/asdlc-execute` | Implements the story using the **Mandatory TDD** cycle. |
 
-### Typical flow
-```
-1. /asdlc-grill              → Validate requirements (if vague)
-2. /asdlc-architecture       → Define approach
-3. /asdlc-plan               → Break into stories
-4. /asdlc-create-story       → Create story
-5. /asdlc-execute            → Implement (automatic TDD)
-```
+### 📖 Detailed Guide
+For a complete guide on how to configure skills and workflows in your IDE, see:
+👉 **[Agentic Mode Guide (README in agentic_templates)](agentic_templates/README_EN.md)**
 
 ---
 
