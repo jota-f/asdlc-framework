@@ -7,6 +7,11 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.
 
 ---
 
+## [2.4.0] - Unreleased
+
+### Modificado
+- **🔥 Evolução do `/asdlc-grill` (Grill with Docs)**: Workflow atualizado para atuar como Arquiteto de Domínio (DDD). O agente agora realiza injeção de contexto obrigatória lendo `PROJECT_CONTEXT.md` e `GLOSSARY.md`. Adicionado verificações profundas de arquitetura (Colisão de Termos, Cardinalidade, Semântica de Estados, Regras de Deleção). O agente agora atualiza ativamente o `GLOSSARY.md` com novos termos e gera automaticamente Arquitetural Decision Records (ADRs) em `docs/adr/` antes de invocar a criação da story.
+
 ## [2.3.0] - 2026-05-05
 
 ### Adicionado
