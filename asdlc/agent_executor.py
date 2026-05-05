@@ -58,7 +58,7 @@ class AgentHarness:
         self.project_root = project_root
         self.harness_dir = project_root / ".asdlc" / "harness" / f"{story_id}_{agent_type}"
         self.harness_dir.mkdir(parents=True, exist_ok=True)
-        
+
         # Realiza limpeza automática de logs antigos (mantém os últimos 30)
         cleanup_old_harnesses(project_root / ".asdlc" / "harness", max_folders=30)
 
