@@ -424,13 +424,12 @@ def implement_story(story_id: str) -> bool:
 
 def _executar_etapas_implementacao(story_info: Dict[str, Any]) -> bool:
     """
-    Executa etapas de implementação da story
-
-    Args:
-        story_info: Informações da story
-
-    Returns:
-        bool: True se implementação foi bem-sucedida
+    Executa etapas de implementação da story com TDD obrigatório.
+    
+    Fluxo TDD: Architecture → Test (Red) → Code (Green) → Review
+    
+    Se testes já existirem para o cenário (ex: bug com teste de regressão),
+    pula a fase Red e vai direto para Code.
     """
     try:
         title = story_info.get("title", "Story")
@@ -438,41 +437,110 @@ def _executar_etapas_implementacao(story_info: Dict[str, Any]) -> bool:
         
         from .utils import is_headless
         
-        console.print(Panel(f"[bold blue]A-SDLC Pipeline[/bold blue]: [cyan]{title}[/cyan]\n[dim]Story ID: {story_id}[/dim]", border_style="blue"))
+        console.print(Panel(f"[bold blue]A-SDLC Pipeline (TDD)[/bold blue]: [cyan]{title}[/cyan]\n[dim]Story ID: {story_id}[/dim]", border_style="blue"))
 
-        # Logica unificada: Funciona no Chat e no Terminal Real
+        relevant_files = [f.strip() for f in story_info.get("files_to_create", "").split(",") + story_info.get("files_to_modify", "").split(",") if f.strip()]
+
         # 1. Design
-        console.print(f"[bold cyan]Etapa 1/4:[/bold cyan] Design da Arquitetura...")
+        console.print(f"[bold cyan]Etapa 1/5:[/bold cyan] Design da Arquitetura...")
         design_task = f"Analise a story '{title}' e defina a melhor abordagem arquitetural."
         spawn_agent("architecture", story_id, design_task, [])
         console.print(f"[bold green]OK[/bold green] Etapa 1 Concluída!")
 
-        # 2. Desenvolvimento
-        console.print(f"[bold yellow]Etapa 2/4:[/bold yellow] Desenvolvimento de Código...")
-        relevant_files = [f.strip() for f in story_info.get("files_to_create", "").split(",") + story_info.get("files_to_modify", "").split(",") if f.strip()]
-        code_task = f"Implemente a story '{title}'."
-        code_result = validate_and_fix("code", story_id, code_task, relevant_files)
-        console.print(f"[bold green]OK[/bold green] Etapa 2 Concluída!")
+        # 2. Verificar se testes já existem (ex: bug com teste de regressão)
+        tests_already_exist = _verificar_testes_existentes(story_info)
 
-        # 3. Testes
-        console.print(f"[bold magenta]Etapa 3/4:[/bold magenta] Validação de Testes...")
-        spawn_agent("test", story_id, "Crie testes.", relevant_files)
+        if not tests_already_exist:
+            # 2.1 TDD Red Phase - Criar testes que FALHAM
+            console.print(f"[bold magenta]Etapa 2/5:[/bold magenta] TDD Red Phase - Criando testes que falham...")
+            tdd_red_task = (
+                f"Crie testes para a story '{title}' que descrevam o comportamento esperado. "
+                f"Os testes DEVEM falhar neste ponto pois o código ainda não foi implementado. "
+                f"Foque nos Critérios de Aceitação da story."
+            )
+            spawn_agent("test", story_id, tdd_red_task, relevant_files)
+            console.print(f"[bold green]OK[/bold green] Etapa 2 Concluída (testes criados, devem falhar)")
+        else:
+            console.print(f"[bold yellow]Etapa 2/5:[/bold yellow] TDD Red Phase - Testes já existem, pulando...")
+
+        # 3. Code Green Phase - Implementar até testes passarem
+        console.print(f"[bold yellow]Etapa 3/5:[/bold yellow] TDD Green Phase - Implementando código...")
+        code_task = (
+            f"Implemente a story '{title}'. "
+            f"O código DEVE fazer os testes existentes passarem. "
+            f"Execute os testes após cada mudança significativa."
+        )
+        code_result = validate_and_fix("code", story_id, code_task, relevant_files)
         console.print(f"[bold green]OK[/bold green] Etapa 3 Concluída!")
 
-        # 4. Revisão
-        console.print(f"[bold blue]Etapa 4/4:[/bold blue] Code Review...")
-        review_result = spawn_agent("review", story_id, "Revise a implementação.", relevant_files)
+        # 4. Validação final de testes
+        console.print(f"[bold magenta]Etapa 4/5:[/bold magenta] Validação Final de Testes...")
+        validation_task = (
+            f"Execute TODOS os testes do projeto e valide que os Critérios de Aceitação "
+            f"da story '{title}' estão cobertos. Reporte cobertura."
+        )
+        spawn_agent("test", story_id, validation_task, relevant_files)
         console.print(f"[bold green]OK[/bold green] Etapa 4 Concluída!")
 
-        console.print(Panel("[bold green]Finalizado: Pipeline A-SDLC Concluido com Sucesso![/bold green]", border_style="green"))
+        # 5. Revisão
+        console.print(f"[bold blue]Etapa 5/5:[/bold blue] Code Review...")
+        review_result = spawn_agent("review", story_id, "Revise a implementação.", relevant_files)
+        console.print(f"[bold green]OK[/bold green] Etapa 5 Concluída!")
+
+        console.print(Panel("[bold green]Finalizado: Pipeline A-SDLC (TDD) Concluido com Sucesso![/bold green]", border_style="green"))
         
-        # 5. Persistência
+        # 6. Persistência
         _registrar_na_memoria_global(story_id, title, code_result)
         _atualizar_backlog_com_sugestoes(review_result)
         return True
 
     except Exception as e:
         logger.error(f"Erro durante implementação: {e}")
+        return False
+
+
+def _verificar_testes_existentes(story_info: Dict[str, Any]) -> bool:
+    """
+    Verifica se já existem testes para o cenário da story.
+    Útil para bug fixes onde testes de regressão já podem existir.
+    
+    Returns:
+        bool: True se testes relevantes já existem
+    """
+    try:
+        project_root = find_project_root()
+        if not project_root:
+            return False
+
+        # Padrões de arquivos de teste
+        test_patterns = ["test_*.py", "*.test.ts", "*.test.js", "*_test.go", "*.spec.ts", "*.spec.js"]
+        test_files = []
+        for pattern in test_patterns:
+            test_files.extend(project_root.rglob(pattern))
+
+        if not test_files:
+            return False
+
+        # Verificar se algum arquivo de teste menciona o título ou ID da story
+        title = story_info.get("title", "").lower()
+        story_id = story_info.get("story_id", "").lower()
+
+        for test_file in test_files:
+            try:
+                content = test_file.read_text(encoding="utf-8").lower()
+                if title and title[:30] in content:
+                    logger.info(f"Teste existente encontrado: {test_file}")
+                    return True
+                if story_id and story_id in content:
+                    logger.info(f"Teste existente encontrado para story_id: {test_file}")
+                    return True
+            except Exception:
+                continue
+
+        return False
+
+    except Exception as e:
+        logger.warning(f"Erro ao verificar testes existentes: {e}")
         return False
 
 

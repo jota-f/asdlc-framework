@@ -1,98 +1,88 @@
-# 🤖 A-SDLC Agentic Mode Guide (v2.0.0)
+# 🤖 A-SDLC Agentic Mode Guide (v2.3.0)
 
-## O que é esse diretório?
-O A-SDLC Native Agentic Mode é uma alternativa de uso do framework A-SDLC projetada especificamente para desenvolvedores que já utilizam Assistentes de IA autônomos locais (como extensões MCP, Cline, Cursor, Windsurf, RooCode). 
+## O que é este diretório?
 
-Em vez de você (humano) rodar um CLI em Python para gerar markdowns estáticos para depois jogá-los numa IA, **esta arquitetura injeta a metodologia A-SDLC diretamente dentro da mente do seu Agente de IA**. Sem intermediários.
+O A-SDLC Agentic Mode é uma forma de usar o framework diretamente dentro da sua IDE (Cursor, Windsurf, Cline, RooCode) **sem precisar de Python**. A metodologia é injetada diretamente no agente de IA.
 
-## 📥 Como Instalar em Qualquer Projeto
+Em vez de rodar um CLI para gerar markdowns e depois alimentar uma IA, **você copia os templates para o seu projeto e usa comandos no chat da IDE**.
 
-Não é necessário adicionar o pacote Python do A-SDLC. Basta instalar o "comportamento" no seu repositório:
+---
 
-1. Acesse o seu projeto onde deseja programar ativamente.
-2. Certifique-se de que a estrutura base para diretrizes do seu agente está lá (ex: a pasta `.agents/` suportada por ferramentas de AI Software Engineering).
-3. **Copie a pasta `agentic_templates/` deste repositório para a raiz do seu projeto.**
-4. Renomeie para `.agents/` se sua ferramenta suportar (opcional).
+## 📥 Como Instalar
 
-**O resultado deve se parecer com isso:**
+1. Acesse o seu projeto
+2. Copie a pasta `agentic_templates/` para a raiz do projeto
+3. (Opcional) Renomeie para `.agents/` se sua IDE suportar
+
 ```bash
+cp -r agentic_templates/ seu-projeto/
+```
+
+**Resultado:**
+```
 seu-projeto/
-├── .agents/              # (opcional - renomeie agentic_templates/)
-│   ├── skills/
-│   ├── workflows/
-│   └── stories/
-├── src/
-└── stories/              # Suas stories geradas
+├── skills/                  # Skills do A-SDLC
+├── workflows/               # Workflows de comandos
+├── stories/                 # Suas stories
+├── TOOL_GUIDE.md            # Guia de otimização
+├── validate_stories.py      # Validador de stories
+└── src/                     # Seu código
 ```
 
 ---
 
 ## 🚀 Quick Start
 
-### Passo 1: Copie a pasta
-```bash
-cp -r agentic_templates/ seu-projeto/
-```
-
-### Passo 2: Pronto! Use os comandos no chat da IDE
+### Comandos disponíveis
 
 | Comando | Quando Usar |
 |---------|-------------|
-| `/asdlc-architecture` | Perguntas de arquitetura e modelagem (antes de criar story) |
-| `/asdlc-plan` | Analisar escopo grande e quebrar em múltiplas stories |
-| `/asdlc-create-story` | Criar uma story formal após ter contexto definido |
-| `/asdlc-bug` | Iniciar diagnóstico e resolução de uma falha ou regressão |
-| `/asdlc-execute` | Executar/implementar uma story pendente |
+| `/asdlc-grill` | Questionamento guiado para demandas vagas |
+| `/asdlc-architecture` | Perguntas de arquitetura e modelagem |
+| `/asdlc-plan` | Analisar escopo grande e quebrar em stories |
+| `/asdlc-create-story` | Criar uma story formal |
+| `/asdlc-execute` | Implementar uma story (TDD obrigatório) |
+| `/asdlc-bug` | Diagnosticar e corrigir bugs |
 
 ---
 
 ## 📋 Workflow Completo
 
-### Fase 1: Descoberta (Opcional)
-> **Você:** `/asdlc-architecture Quero adicionar WebSocket para notificações. WebSocket ou Server-Sent Events?`
+### Fase 1: Validação de Requisitos (se demanda vaga)
+> **Você:** `/asdlc-grill Quero adicionar cache no sistema`
 
-O agente atua como Architecture Agent, discute opções e recomenda a melhor abordagem. Não cria arquivos ainda.
+O agente questiona: quem usa? qual endpoint? qual métrica? etc.
 
-### Fase 2: Planejamento (Opcional)
-> **Você:** `/asdlc-plan Preciso de auth completo: login, registro, recuperação de senha, OAuthGoogle`
+### Fase 2: Descoberta Arquitetural (opcional)
+> **Você:** `/asdlc-architecture WebSocket ou Server-Sent Events para notificações?`
 
-O agente analisa o escopo e cria múltiplas stories sequenciais se necessário:
-- Auth v1: Core + Database
-- Auth v2: UI (Login/Registro)
-- Auth v3: API Endpoints
-- Auth v4: OAuth
+O agente discute opções e recomenda a melhor abordagem.
 
-### Fase 3: Criação da Story ou Bug Report
+### Fase 3: Planejamento (para features grandes)
+> **Você:** `/asdlc-plan Preciso de auth completo: login, registro, recuperação, OAuth`
+
+O agente quebra em múltiplas stories sequenciais.
+
+### Fase 4: Criação da Story
 > **Você:** `/asdlc-create-story Sistema de notificações via WebSocket`
-> Ou:
-> **Você:** `/asdlc-bug Erro 500 ao salvar usuário`
 
-O agente cria a story (ou bug report) em `stories/` seguindo o template correspondente.
+O agente cria a story em `stories/` seguindo o template A-SDLC.
 
-### Fase 4: Implementação e Validação
+### Fase 5: Implementação (TDD)
 > **Você:** `/asdlc-execute`
 
-O agente executa a story: cria arquivos, roda testes, marca como CONCLUÍDO e atualiza o índice.
-
----
-
-## 🆕 What's New (v2.0.0)
-
-| Feature | Descrição |
-|---------|-----------|
-| `/asdlc-architecture` | Workflow de descoberta arquitetural |
-| `/asdlc-plan` | Análise de escopo com quebra automática em sub-stories |
-| `depends_on` | Sistema de dependências entre stories |
-| `/asdlc-bug` | Workflow especializado para resolução de Bugs e Regressões |
-| `MEMORY.md` | Memória consolidada do projeto (otimiza tokens) |
-| `Context Compactor` | Skill para reduzir tokens em sessões longas |
-| `TOOL_GUIDE.md` | Guia de otimização de tools |
+O agente executa o ciclo completo:
+1. Verifica dependências
+2. Cria testes que FALHAM (Red Phase)
+3. Implementa código até testes passarem (Green Phase)
+4. Valida critérios de aceitação
+5. Marca story como CONCLUÍDO
 
 ---
 
 ## 🔗 Sistema de Dependências
 
-Stories podem ter dependências. Use o campo `depends_on`:
+Stories podem ter dependências via campo `depends_on`:
 
 ```yaml
 ---
@@ -105,45 +95,21 @@ depends_on: ["20260407_NOTIFY"]
 
 **Regras:**
 - Story só executa se todas dependências = `CONCLUÍDO`
-- Agente verifica automaticamente
-- Referencie pelo ticket
+- Agente verifica automaticamente antes de implementar
 
 ---
 
-## 📊 Versionamento de Stories
+## 🆕 Novidades (v2.3.0)
 
-Para features grandes, divida em partes:
-
-```
-YYYYMMDD_feature_v1.md  # Core
-YYYYMMDD_feature_v2.md  # UI  
-YYYYMMDD_feature_v3.md  # Integração
-```
-
-Quebra recomendada: Core → UI → Integração → Tests
-
----
-
-## ⚡ Otimização de Tokens
-
-O Agentic Mode minimiza tokens automaticamente:
-
-### Estrutura de Contexto
-
-| Elemento | % do Contexto |
-|----------|---------------|
-| System prompt | 1-2.5% |
-| Tool definitions | 1.5-5% |
-| Few-shot | 1-4% |
-| Story atual | 25% |
-| Histórico | 50% |
-
-### Dicas
-
-1. **MEMORY.md primeiro** - visão geral da memória sem iterar stories
-2. **PROJECT_CONTEXT** - inclua apenas seção relevante
-3. **Context Compactor** - invoque após 30+ mensagens
-4. **Cache local** - guarde convenções do projeto
+| Feature | Descrição |
+|---------|-----------|
+| `/asdlc-grill` | Questionamento proativo para demandas vagas |
+| TDD Obrigatório | Pipeline: Red → Green → Refactor |
+| Tracer Bullets | Fatias verticais (DB → API → UI) |
+| Smart Zone | Monitoramento de contexto (80k/100k tokens) |
+| Deep Modules | Orientação de arquitetura (interfaces simples) |
+| `/asdlc-bug` | Workflow de resolução de bugs com RCA |
+| `asdlc_bug_hunter` | Skill de diagnóstico e causa raiz |
 
 ---
 
@@ -151,55 +117,56 @@ O Agentic Mode minimiza tokens automaticamente:
 
 ```
 agentic_templates/
-├── README.md                    # Este arquivo
+├── README.md                    # Este arquivo (PT)
 ├── README_EN.md                 # Versão em inglês
-├── TOOL_GUIDE.md               # Guia de otimização
-├── validate_stories.py         # Validador de stories
+├── TOOL_GUIDE.md               # Guia de otimização de tokens
+├── validate_stories.py         # Validador de estrutura de stories
 ├── skills/
-│   ├── asdlc_story_generator/  # Criar stories
-│   ├── asdlc_implementation/  # Executar stories
-│   └── asdlc_context_compactor/ # Compactar contexto
+│   ├── asdlc_story_generator/  # Requirements Agent - criar stories
+│   ├── asdlc_implementation/   # Code Agent - implementar (TDD)
+│   ├── asdlc_context_compactor/# Compactar contexto longo
+│   └── asdlc_bug_hunter/       # Bug Hunter - diagnóstico e RCA
 ├── workflows/
-│   ├── architecture_discovery.md
-│   ├── scope_analysis.md
-│   ├── create_asdlc_story.md
-│   └── implement_asdlc_story.md
+│   ├── grill_requirements.md   # Questionamento guiado
+│   ├── architecture_discovery.md # Descoberta arquitetural
+│   ├── scope_analysis.md       # Análise de escopo
+│   ├── create_asdlc_story.md   # Criação de story
+│   ├── implement_asdlc_story.md # Implementação TDD
+│   └── bug_resolution.md       # Resolução de bugs
 └── stories/
-    ├── MEMORY.md                # Memória do projeto
-    └── exemplo/                # Exemplos
+    ├── MEMORY.md               # Memória do projeto
+    └── exemplo/                # Exemplos de stories
 ```
 
 ---
 
-## 💡 Dicas de Uso
+## ⚡ Otimização de Tokens
 
-### Sempre leia primeiro:
-```bash
-stories/MEMORY.md  # ~200 tokens vs 5000+ de todas stories
-```
+### Dicas
+1. **MEMORY.md primeiro** - visão geral sem iterar todas stories
+2. **PROJECT_CONTEXT** - inclua apenas seção relevante
+3. **Context Compactor** - invoque após 30+ mensagens
+4. **Smart Zone** - mantenha contexto < 80k tokens
 
-### Para perguntas de arquitetura:
-```
-/asdlc-architecture Qual a melhor abordagem para auth em React + Node?
-```
-
-### Para escopos grandes:
-```
-/asdlc-plan Preciso de um sistema completo de e-commerce
-```
+### Smart Zone vs Dumb Zone
+| Zona | Tokens | Comportamento |
+|------|--------|---------------|
+| Smart | < 80k | IA precisa |
+| Warning | 80k-100k | Qualidade degrada |
+| Dumb | > 100k | IA comete erros |
 
 ---
 
 ## ⚙️ Requisitos
 
 - IDE com suporte a agentes AI (Cursor, Windsurf, Cline, RooCode)
-- Pasta `.agents/` ou equivalente suportada pela IDE
-- Não requer Python ou dependências
+- Pasta `.agents/` ou equivalente (opcional)
+- **Não requer Python ou dependências**
 
 ---
 
 ## 📖 Mais Informações
 
-- **[stories/exemplo/README.md](stories/exemplo/README.md)** - Guia completo de versionamento
 - **[TOOL_GUIDE.md](TOOL_GUIDE.md)** - Otimização de tools e tokens
-- **[stories/MEMORY.md](stories/MEMORY.md)** - Memória do projeto (gerado automaticamente)
+- **[stories/MEMORY.md](stories/MEMORY.md)** - Memória do projeto
+- **[stories/exemplo/README.md](stories/exemplo/README.md)** - Guia de versionamento

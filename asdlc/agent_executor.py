@@ -2,11 +2,47 @@ import logging
 import os
 import subprocess
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Tuple
 from .llm_client import call_llm
 from .utils import find_project_root, detect_test_framework, console
 
 logger = logging.getLogger(__name__)
+
+# Limites de contexto (Smart Zone vs Dumb Zone)
+CONTEXT_WARNING_THRESHOLD = 80000   # tokens estimados - warning
+CONTEXT_DUMB_ZONE_THRESHOLD = 100000  # tokens estimados - dumb zone (LLM fica "burra")
+CHARS_PER_TOKEN_ESTIMATE = 4  # Aproximação: 1 token ≈ 4 caracteres
+
+
+def estimate_token_count(text: str) -> int:
+    """Estima contagem de tokens baseado no tamanho do texto."""
+    return len(text) // CHARS_PER_TOKEN_ESTIMATE
+
+
+def log_context_density(agent_type: str, total_chars: int) -> int:
+    """
+    Loga a densidade de contexto do agente e avisa se approaching a dumb zone.
+    
+    Returns:
+        int: Estimativa de tokens
+    """
+    estimated_tokens = estimate_token_count(" " * total_chars)  # aproximação
+    
+    if estimated_tokens >= CONTEXT_DUMB_ZONE_THRESHOLD:
+        logger.error(
+            f"[DUMB ZONE] Agente {agent_type}: ~{estimated_tokens} tokens estimados "
+            f"(>{CONTEXT_DUMB_ZONE_THRESHOLD}). A LLM pode ficar imprecisa. "
+            f"Considere compactar o contexto com asdlc_context_compactor."
+        )
+    elif estimated_tokens >= CONTEXT_WARNING_THRESHOLD:
+        logger.warning(
+            f"[CONTEXT WARNING] Agente {agent_type}: ~{estimated_tokens} tokens estimados. "
+            f"Próximo da dumb zone ({CONTEXT_DUMB_ZONE_THRESHOLD})."
+        )
+    else:
+        logger.info(f"[CONTEXT OK] Agente {agent_type}: ~{estimated_tokens} tokens estimados.")
+    
+    return estimated_tokens
 
 class AgentHarness:
     """
@@ -71,6 +107,9 @@ Tipos disponíveis: code, test, architecture, requirements, review, bug_hunter.
 - Mantenha a simplicidade (KISS/YAGNI).
 - Não adicione explicações desnecessárias a menos que solicitado.
 """
+        # Monitorar densidade de contexto (Smart Zone vs Dumb Zone)
+        log_context_density(self.agent_type, len(prompt))
+        
         return prompt
 
 def spawn_agent(agent_type: str, story_id: str, task_description: str, relevant_files: List[str]) -> str:

@@ -1,49 +1,80 @@
-# 🌌 A-SDLC Framework (v2.2.0)
+# 🌌 A-SDLC Framework (v2.3.0)
 **AI-Driven Software Development Lifecycle**
 
-A-SDLC is a software engineering framework designed to transform AIs into autonomous agents capable of managing the full project lifecycle. It utilizes **Harness Engineering**, **Recursive Handoffs**, and **Feedback Loops** to ensure high-fidelity code.
+A-SDLC is a framework that turns AI assistants into autonomous agents capable of managing the full software development lifecycle. It uses **Harness Engineering**, **Mandatory TDD**, **Tracer Bullets**, and **Feedback Loops** to ensure high-fidelity code.
 
 ---
 
-## 📍 Table of Contents
-- [🚀 What is A-SDLC?](#-what-is-a-sdlc)
-- [⚙️ Installation and Setup](#️-installation-and-setup)
-- [🧠 MCP Mode (Antigravity Power)](#-mcp-mode-antigravity-power)
-- [🛠️ Agentic Mode (IDE Templates)](#️-agentic-mode-ide-templates)
-- [🏃 How to Get Started (Workflow)](#-how-to-get-started-workflow)
-- [📂 Recommended Workspace Structure](#-recommended-workspace-structure)
-- [📖 Examples and Use Cases](#-examples-and-use-cases)
-- [📄 Terms of Use](#-terms-of-use)
+## Table of Contents
+
+- [What is A-SDLC?](#what-is-a-sdlc)
+- [Three Ways to Use](#three-ways-to-use)
+- [Installation](#installation)
+- [Antigravity Mode (Free)](#antigravity-mode-free)
+- [External API Mode (Autonomous)](#external-api-mode-autonomous)
+- [Agentic Mode (No Python)](#agentic-mode-no-python)
+- [Complete Workflow](#complete-workflow)
+- [CLI Commands](#cli-commands)
+- [Environment Variables](#environment-variables)
+- [Project Structure](#project-structure)
+- [Key Concepts](#key-concepts)
+- [Examples](#examples)
+- [Terms of Use](#terms-of-use)
 
 ---
 
-## 🚀 What is A-SDLC?
-Unlike simple chat assistants, A-SDLC treats AI as a **Multi-Agent System (MAS)**. Every task passes through specialists (Requirements, Architecture, Code, Testing) who validate each other's work through a "Harness" that monitors errors in real-time.
+## What is A-SDLC?
+
+Unlike chat assistants, A-SDLC treats AI as a **Multi-Agent System (MAS)**. Each task is executed by specialist agents (Requirements, Architecture, Code, Testing, Review) who validate each other's work.
+
+### Framework Pillars
+
+| Pillar | Description |
+|--------|-------------|
+| **Harness Engineering** | Each agent operates in an isolated environment with lean context and validation sensors |
+| **Mandatory TDD** | Tests are created BEFORE code (Red → Green → Refactor) |
+| **Tracer Bullets** | Tasks cross all layers (DB → API → UI) for immediate feedback |
+| **Smart Zone** | Context monitoring to keep LLM in the precision zone (<80k tokens) |
+| **Recursive Handoffs** | Agents delegate subtasks via `[DELEGATE: type | task]` |
 
 ---
 
-## ⚙️ Installation and Setup
+## Three Ways to Use
 
-### 1. Requirements
+| | 🧠 Antigravity (IDE) | ⚡ External API (CLI) | 📋 Agentic (Templates) |
+|---|---|---|---|
+| **Who thinks?** | The IDE (Cursor/Windsurf) | OpenAI/OpenRouter API | The IDE (chat) |
+| **Cost** | Free | Paid (tokens) | Free |
+| **Complexity** | Medium (MCP server) | Low (CLI) | Minimal (copy/paste) |
+| **Autonomy** | Semi-autonomous | 100% autonomous | Semi-autonomous |
+| **Best for** | Large projects | Full automation | Quick prototyping |
+
+---
+
+## Installation
+
+### Requirements
 - Python 3.10+
 - Git
 
-### 2. Cloning and Dependencies
+### Step 1: Clone and install dependencies
 ```bash
 git clone https://github.com/jota-f/A-SDLC.git
 cd A-SDLC
 pip install -r requirements.txt
-cp .env.example .env
 ```
 
----
+### Step 2: Configure environment variables
+```bash
+cp .env.example .env
+```
+Edit `.env` according to the mode you want to use (see below).
 
-## 🧠 MCP Mode (Antigravity Power)
-This is the most advanced mode. It connects the framework directly to your IDE (Cursor/Windsurf) via the **Model Context Protocol**, allowing the framework to use the IDE's intelligence without needing external API keys.
-
-### How to install the MCP server:
-1. **Install libraries**: `pip install fastmcp mcp`
-2. **Configure your IDE**: Add the server to your `mcp_config.json` file:
+### Step 3 (Optional): Configure MCP for IDE
+```bash
+pip install fastmcp mcp
+```
+Add to your IDE's `mcp_config.json`:
 ```json
 "asdlc": {
   "command": "python",
@@ -51,60 +82,234 @@ This is the most advanced mode. It connects the framework directly to your IDE (
   "env": { "PYTHONPATH": "C:/Path/To/A-SDLC" }
 }
 ```
-3. **Restart the IDE**. Now I (Antigravity) will have native A-SDLC "tools" to create projects and stories for you!
 
 ---
 
-## 🛠️ Agentic Mode (IDE Templates)
-If you don't want to use the Python Engine and prefer to work only in the IDE chat:
-1. Copy the `agentic_templates/` folder to your project root.
-2. Use `@asdlc-plan.md` to plan and `@asdlc-coder.md` to code.
-3. [See Detailed Guide here](agentic_templates/README_EN.md).
+## Antigravity Mode (Free)
+
+In this mode, the IDE is the "brain." MCP serves as a management tool.
+
+### Configuration
+```env
+ASDLC_ENGINE=antigravity
+```
+
+### Available MCP Tools
+| Tool | Function |
+|------|----------|
+| `asdlc_create_project` | Initialize a project |
+| `asdlc_create_story` | Create a story |
+| `asdlc_get_story_details` | Read story content |
+| `asdlc_update_story_status` | Update status |
+| `asdlc_list_stories` | List stories |
+| `asdlc_get_project_metrics` | Progress metrics |
+| `asdlc_validate_project` | Validate compliance |
+
+### How to implement
+In the IDE chat:
+> *"Use the @asdlc_implementation skill to implement story @stories/ID"*
 
 ---
 
-## 🏃 How to Get Started (Workflow)
+## External API Mode (Autonomous)
+
+The Python script takes full control, using OpenAI/OpenRouter API to spawn autonomous agents.
+
+### Configuration
+```env
+ASDLC_ENGINE=external
+OPENROUTER_API_KEY=your_key_here
+# or
+OPENAI_API_KEY=your_key_here
+```
+
+### Additional MCP Tools
+| Tool | Function |
+|------|----------|
+| `asdlc_implement_story` | Autonomous execution via agents |
+| `asdlc_spawn_specialist` | Invoke ad-hoc agent |
+
+### How to implement
+```bash
+python main.py implement --id 20260425_204837
+```
+
+---
+
+## Agentic Mode (No Python)
+
+Copies the A-SDLC methodology directly into your project. No Python dependencies.
+
+### Installation
+```bash
+cp -r agentic_templates/ your-project/
+```
+
+### Available commands in IDE chat
+| Command | When to Use |
+|---------|-------------|
+| `/asdlc-grill` | Guided questioning for vague requirements |
+| `/asdlc-architecture` | Architecture questions |
+| `/asdlc-plan` | Break large features into stories |
+| `/asdlc-create-story` | Create formal story |
+| `/asdlc-execute` | Implement a story |
+| `/asdlc-bug` | Diagnose and fix bugs |
+
+### Typical flow
+```
+1. /asdlc-grill              → Validate requirements (if vague)
+2. /asdlc-architecture       → Define approach
+3. /asdlc-plan               → Break into stories
+4. /asdlc-create-story       → Create story
+5. /asdlc-execute            → Implement (automatic TDD)
+```
+
+---
+
+## Complete Workflow
 
 ### Scenario A: New Project
 ```bash
-python main.py create-project --name "my_new_app" --prompt "App description"
+python main.py create-project --name "my_app" --prompt "App description"
 ```
 
-### Scenario B: Existing Project (Integration)
+### Scenario B: Existing Project
 ```bash
 python main.py create-project --name "my_project" --path "C:/path/to/project" --prompt "Analysis"
 ```
 
----
+### Scenario C: Create Story
+```bash
+python main.py create-story --title "Implement Login"
+```
 
-## 📂 Recommended Workspace Structure
-To avoid confusion between framework files and your project code, we recommend:
-```text
-C:/Dev/
-  ├── A-SDLC/             <-- Central Framework
-  ├── Project_Alpha/      <-- Your project (with .asdlc and stories installed)
-  └── Project_Beta/       <-- Another project
+### Scenario D: Implement Story (TDD)
+```bash
+python main.py implement --id 20260504_120000_implement_login
+```
+
+### Scenario E: List Stories
+```bash
+python main.py list-stories
+```
+
+### Scenario F: Validate Project
+```bash
+python main.py validate --format markdown
 ```
 
 ---
 
-## 📖 Examples and Use Cases
+## CLI Commands
+
+| Command | Description | Arguments |
+|---------|-------------|-----------|
+| `create-project` | Initialize new project | `--name`, `--prompt`, `--type`, `--path` |
+| `create-story` | Create a story | `--title` |
+| `implement` | Run TDD implementation | `--id` |
+| `list-stories` | List all stories | — |
+| `validate` | Validate compliance | `--project`, `--format`, `--output` |
+
+### Interactive mode (no arguments)
+```bash
+python main.py
+```
+Displays an interactive menu with all options.
+
+---
+
+## Environment Variables
+
+### Required
+| Variable | Description |
+|----------|-------------|
+| `ASDLC_ENGINE` | `antigravity` (default) or `external` |
+| `OPENROUTER_API_KEY` | OpenRouter key (when `external`) |
+| `OPENAI_API_KEY` | OpenAI key (when `external`, fallback) |
+
+### Optional (external mode)
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `OPENAI_MODEL` | `gpt-4.1-mini` | Default model |
+| `OPENAI_MAX_TOKENS` | `4096` | Token limit |
+| `OPENAI_TEMPERATURE` | `0.3` | Temperature |
+| `MODEL_CODE` | — | Model for Code Agent |
+| `MODEL_ARCH` | — | Model for Architecture Agent |
+| `MODEL_TEST` | — | Model for Test Agent |
+| `MODEL_REQ` | — | Model for Requirements Agent |
+| `MODEL_REVIEW` | — | Model for Review Agent |
+
+---
+
+## Project Structure
+
+```
+my-project/
+├── .asdlc/
+│   ├── agents/              # 6 agent personas
+│   │   ├── code_agent.md
+│   │   ├── test_agent.md
+│   │   ├── architecture_agent.md
+│   │   ├── requirements_agent.md
+│   │   ├── review_agent.md
+│   │   └── bug_hunter_agent.md
+│   └── harness/             # Agent output (runtime)
+├── stories/                 # Stories + MEMORY.md
+│   └── MEMORY.md
+├── prompts/                 # LLM prompt templates
+├── PROJECT_CONTEXT.md       # Project blueprint
+├── BACKLOG.md               # Technical debt (auto-generated)
+└── src/                     # Project code
+```
+
+---
+
+## Key Concepts
+
+### TDD Pipeline (Mandatory)
+```
+Architecture → Test Red → Code Green → Validation → Review
+```
+- **Red**: Tests are created and FAIL (executable specification)
+- **Green**: Code is implemented until tests pass
+- **Refactor**: Code improvement with tests as safety net
+
+### Smart Zone vs Dumb Zone
+| Zone | Tokens | Behavior |
+|------|--------|----------|
+| Smart Zone | < 80k | LLM is precise |
+| Warning | 80k-100k | Quality degrades |
+| Dumb Zone | > 100k | LLM makes silly errors |
+
+### Tracer Bullets (Vertical Slices)
+```
+CORRECT: Model + Endpoint + Test (one story)
+WRONG: All models → All endpoints → All tests
+```
+
+### Inviolable Law
+**NEVER** mark a story as DONE without a `run_command` returning exit code 0.
+
+---
+
+## Examples
 
 ### 🚗 Drowsiness Sensor (Arduino/ESP32)
-A real example of how A-SDLC can be used in embedded systems.
 - **Location**: `test_projects/drowsinessSensor`
-- **Highlight**: Use of feedback sensors to validate firmware compilation.
+- Feedback sensors to validate firmware compilation
 
 ### 📝 Fullstack TodoList
-Classic example to understand the flow from requirements to E2E testing.
 - **Location**: `examples/web_fullstack`
+- Complete flow from requirements to E2E testing
 
 ---
 
-## 📄 Terms of Use
-This framework is under MIT license with a restriction: **Commercial use is prohibited without authorization**.
-- **Free**: Personal, academic, and open-source use.
-- **Attribution**: Mandatory to cite "Developed with A-SDLC Framework".
+## Terms of Use
+
+MIT license with restriction: **Commercial use prohibited without authorization**.
+- **Free**: Personal, academic, and open-source use
+- **Attribution**: Mandatory to cite "Developed with A-SDLC Framework"
 
 ---
-**💡 A-SDLC: Where code isn't just written, it's engineered by machines and validated by rules.**
+
+**A-SDLC: Where code isn't just written, it's engineered by machines and validated by rules.**
