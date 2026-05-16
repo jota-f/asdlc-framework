@@ -9,8 +9,21 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.
 
 ## [2.4.0] - Unreleased
 
+### Adicionado
+- **Otimização e Organização Estrutural (Modo Agentic)**:
+  - Criado o diretório `templates/` sob `agentic_templates/` para separar os templates e exemplos das stories ativas e do `MEMORY.md`.
+  - Criado o template de story padrão `story_template.md` extraído da especificação técnica da Skill `asdlc_story_generator`.
+  - Movido `bug_template.md` para a pasta de templates (`templates/bug_template.md`).
+  - Movida a pasta de exemplos `exemplo/` para a nova pasta de templates (`templates/exemplo/`).
+
 ### Modificado
 - **🔥 Evolução do `/asdlc-grill` (Grill with Docs)**: Workflow atualizado para atuar como Arquiteto de Domínio (DDD). O agente agora realiza injeção de contexto obrigatória lendo `PROJECT_CONTEXT.md` e `GLOSSARY.md`. Adicionado verificações profundas de arquitetura (Colisão de Termos, Cardinalidade, Semântica de Estados, Regras de Deleção). O agente agora atualiza ativamente o `GLOSSARY.md` com novos termos e gera automaticamente Arquitetural Decision Records (ADRs) em `docs/adr/` antes de invocar a criação da story.
+- **Validador de Stories (`validate_stories.py`)**:
+  - Modificado para buscar stories recursivamente usando `rglob("*.md")`, permitindo a organização em subpastas.
+  - Adicionada exclusão explícita para o arquivo `MEMORY.md`, pastas com nome `templates` e arquivos que terminem com `template.md` na busca de arquivos markdown de stories.
+- **Workflows e Documentação**:
+  - Atualizadas as referências ao `bug_template.md` no workflow `bug_resolution.md` para apontar para `templates/bug_template.md`.
+  - Atualizados os diagramas e links nos arquivos `agentic_templates/README.md`, `agentic_templates/README_EN.md` e no blueprint principal `PROJECT_CONTEXT.md`.
 
 ## [2.3.0] - 2026-05-05
 
