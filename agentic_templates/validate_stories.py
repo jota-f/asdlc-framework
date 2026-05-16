@@ -101,12 +101,7 @@ def main():
             files = []
 
     # Exclusao explicita para o arquivo MEMORY.md, pastas de templates e arquivos de template
-    files = [
-        f for f in files
-        if f.name != "MEMORY.md"
-        and "templates" not in f.parts
-        and not f.name.endswith("template.md")
-    ]
+    files = [f for f in files if f.name != "MEMORY.md" and "templates" not in f.parts and not f.name.endswith("template.md")]
 
     all_valid = True
     for f in files:
