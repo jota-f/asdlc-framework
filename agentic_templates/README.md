@@ -133,9 +133,12 @@ agentic_templates/
 │   ├── create_asdlc_story.md   # Criação de story
 │   ├── implement_asdlc_story.md # Implementação TDD
 │   └── bug_resolution.md       # Resolução de bugs
+├── templates/
+│   ├── story_template.md       # Template padrão de story
+│   ├── bug_template.md         # Template padrão de bug
+│   └── exemplo/                # Exemplos de stories
 └── stories/
-    ├── MEMORY.md               # Memória do projeto
-    └── exemplo/                # Exemplos de stories
+    └── MEMORY.md               # Memória do projeto
 ```
 
 ---
@@ -169,4 +172,4 @@ agentic_templates/
 
 - **[TOOL_GUIDE.md](TOOL_GUIDE.md)** - Otimização de tools e tokens
 - **[stories/MEMORY.md](stories/MEMORY.md)** - Memória do projeto
-- **[stories/exemplo/README.md](stories/exemplo/README.md)** - Guia de versionamento
+- **[templates/exemplo/README.md](templates/exemplo/README.md)** - Guia de versionamento

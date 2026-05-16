@@ -137,6 +137,11 @@ A-SDLC/
 │   └── utils.py              # Utilitários e detecção de sensores
 ├── .asdlc/                   # Configuração A-SDLC
 │   └── agents/               # Agentes (Code, Test, Review, Bug Hunter, etc.)
+├── agentic_templates/        # Templates para o Modo Agentic (Sem Python)
+│   ├── skills/               # Personas/skills injetadas na IDE
+│   ├── workflows/            # Passos e fluxos operacionais de comandos
+│   ├── templates/            # Templates (stories/bugs) e exemplos
+│   └── stories/              # Stories ativas e MEMORY.md do projeto do usuário
 ├── prompts/                  # Templates de prompts
 ├── examples/                 # Projetos de exemplo
 ├── tests/                    # Testes automatizados

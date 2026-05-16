@@ -26,7 +26,7 @@ Este workflow deve ser seguido rigorosamente quando o comando `/asdlc-bug` for i
 
 ### Fase 4: Planejamento e Fix (Correção)
 **Ação:** Criar a Bug Story e aplicar o fix.
-1.  Use o `bug_template.md` para criar uma story em `stories/`.
+1.  Use o `templates/bug_template.md` para criar uma story em `stories/`.
 2.  Referencie o teste de reprodução como critério de aceitação #1.
 3.  Execute o fix conforme planejado.
 

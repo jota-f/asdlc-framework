@@ -95,7 +95,18 @@ def main():
     if len(sys.argv) > 1:
         files = [Path(sys.argv[1])]
     else:
-        files = sorted(stories_dir.glob("*.md"))
+        if stories_dir.exists():
+            files = sorted(stories_dir.rglob("*.md"))
+        else:
+            files = []
+
+    # Exclusao explicita para o arquivo MEMORY.md, pastas de templates e arquivos de template
+    files = [
+        f for f in files
+        if f.name != "MEMORY.md"
+        and "templates" not in f.parts
+        and not f.name.endswith("template.md")
+    ]
 
     all_valid = True
     for f in files:
