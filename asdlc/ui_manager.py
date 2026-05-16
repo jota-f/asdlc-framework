@@ -5,6 +5,7 @@ Responsável pela interface interativa e CLI
 
 import logging
 from typing import Optional
+from . import utils
 from .project_manager import initialize_project
 from .story_manager import create_story, list_stories, grill_story_idea, apply_grill_decisions
 
