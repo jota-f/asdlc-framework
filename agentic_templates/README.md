@@ -10,23 +10,33 @@ Em vez de rodar um CLI para gerar markdowns e depois alimentar uma IA, **você c
 
 ## 📥 Como Instalar
 
-1. Acesse o seu projeto
-2. Copie a pasta `agentic_templates/` para a raiz do projeto
-3. (Opcional) Renomeie para `.agents/` se sua IDE suportar
+> [!IMPORTANT]
+> **A maioria dos comandos (`/asdlc-grill`, `/asdlc-create-story`, `/asdlc-execute`, etc.) não requer Python.** São puramente baseados em templates de texto que o agente interpreta.
+>
+> **Exceção: `/asdlc-dashboard`** — este comando gera um HTML interativo e requer o `main.py` (framework Python completo).
 
+### Instalação sem Python (recomendada para a maioria)
+
+Copie apenas a pasta de templates para o seu projeto:
 ```bash
 cp -r agentic_templates/ seu-projeto/
 ```
+*(Opcional) Renomeie para `.agents/` se sua IDE suportar.*
 
-**Resultado:**
+### Instalação com Python (necessária apenas para `/asdlc-dashboard`)
+
+Clone o repositório completo:
+```bash
+git clone https://github.com/jota-f/asdlc-framework.git
+cd asdlc-framework
+pip install -r requirements.txt
+```
+Ou copie os templates e também os arquivos do núcleo:
 ```
 seu-projeto/
-├── skills/                  # Skills do A-SDLC
-├── workflows/               # Workflows de comandos
-├── stories/                 # Suas stories
-├── TOOL_GUIDE.md            # Guia de otimização
-├── validate_stories.py      # Validador de stories
-└── src/                     # Seu código
+├── agentic_templates/   ← templates (sem Python)
+├── asdlc/               ← núcleo Python (apenas para dashboard)
+└── main.py              ← ponto de entrada CLI
 ```
 
 ---
@@ -82,13 +92,21 @@ O agente executa o ciclo completo:
 ### Fase 6: Dashboard Visual (opcional)
 > **Você:** `/asdlc-dashboard`
 
-O agente executa `python main.py dashboard --no-open` e retorna no chat:
-- **KPIs**: Total de stories, progresso %, conformidade A-SDLC
-- **Alertas**: Stories bloqueadas e sem critérios de aceitação
-- **Link**: Caminho do `.html` para abrir no browser
+> [!WARNING]
+> Este comando requer o framework Python completo (`main.py` + pasta `asdlc/`).
+> Se só tiver os templates copiados, o agente irá gerar um **resumo em texto** das métricas no próprio chat em vez do HTML interativo.
+
+**Com Python instalado** — o agente executa `python main.py dashboard --no-open` e gera:
+- Arquivo `.asdlc/dashboard/dashboard.html` com KPIs, Kanban, Burndown e Velocity
+- Abre automaticamente no browser
+
+**Sem Python (só templates)** — o agente lê as stories e reporta no chat:
+- KPIs: total de stories, concluídas, pendentes
+- Stories bloqueadas por dependências
+- Stories sem critérios de aceitação
 
 > [!TIP]
-> O dashboard é um único arquivo HTML auto-contido. Abra em qualquer browser sem instalar nada. Pode ser compartilhado por e-mail ou Slack.
+> O HTML gerado é auto-contido. Abra em qualquer browser sem instalar nada. Pode ser compartilhado por e-mail ou Slack.
 
 ---
 
