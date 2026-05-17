@@ -43,6 +43,7 @@ seu-projeto/
 | `/asdlc-create-story` | Criar uma story formal |
 | `/asdlc-execute` | Implementar uma story (TDD obrigatório) |
 | `/asdlc-bug` | Diagnosticar e corrigir bugs |
+| `/asdlc-dashboard` | Gerar dashboard visual do projeto (KPIs, Kanban, Burndown) |
 
 ---
 
@@ -77,6 +78,17 @@ O agente executa o ciclo completo:
 3. Implementa código até testes passarem (Green Phase)
 4. Valida critérios de aceitação
 5. Marca story como CONCLUÍDO
+
+### Fase 6: Dashboard Visual (opcional)
+> **Você:** `/asdlc-dashboard`
+
+O agente executa `python main.py dashboard --no-open` e retorna no chat:
+- **KPIs**: Total de stories, progresso %, conformidade A-SDLC
+- **Alertas**: Stories bloqueadas e sem critérios de aceitação
+- **Link**: Caminho do `.html` para abrir no browser
+
+> [!TIP]
+> O dashboard é um único arquivo HTML auto-contido. Abra em qualquer browser sem instalar nada. Pode ser compartilhado por e-mail ou Slack.
 
 ---
 

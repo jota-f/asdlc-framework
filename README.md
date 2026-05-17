@@ -155,6 +155,7 @@ cp -r agentic_templates/ seu-projeto/
 | `/asdlc-architecture` | Inicia discussão técnica e modelagem de domínio. |
 | `/asdlc-create-story` | Cria a story formal seguindo os padrões do framework. |
 | `/asdlc-execute` | Implementa a story usando o ciclo **TDD Obrigatório**. |
+| `/asdlc-dashboard` | Gera o dashboard visual HTML do projeto e resume métricas. |
 
 ### 📖 Guia Detalhado
 Para um guia completo de como configurar skills e workflows na IDE, consulte o:
@@ -194,6 +195,19 @@ python main.py list-stories
 python main.py validate --format markdown
 ```
 
+### Cenário G: Dashboard Visual
+```bash
+# Gera e abre no browser automaticamente
+python main.py dashboard
+
+# Apenas gera o arquivo (modo agentic / CI)
+python main.py dashboard --no-open
+
+# Salvar em caminho customizado
+python main.py dashboard --output relatorio.html
+```
+O dashboard é gerado em `.asdlc/dashboard/dashboard.html` e inclui KPIs animados, Kanban board, Burndown chart e métricas de conformidade — **sem instalar nenhuma dependência extra**.
+
 ---
 
 ## Comandos CLI
@@ -205,6 +219,7 @@ python main.py validate --format markdown
 | `implement` | Executa implementação TDD | `--id` |
 | `list-stories` | Lista todas as stories | — |
 | `validate` | Valida conformidade | `--project`, `--format`, `--output` |
+| `dashboard` | Gera dashboard HTML interativo | `--output`, `--no-open` |
 
 ### Modo interativo (sem argumentos)
 ```bash
