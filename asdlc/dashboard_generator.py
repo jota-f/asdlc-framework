@@ -168,6 +168,43 @@ class DashboardParser:
         ideal = [round(total * (1 - i / max(n - 1, 1))) for i in range(n)]
         return {"labels": labels, "remaining": remaining, "ideal": ideal}
 
+    def calc_velocity(self, stories: List[StoryData], weeks: int = 8) -> Dict[str, Any]:
+        """Fase 2: stories concluídas por semana (últimas N semanas)."""
+        from datetime import timedelta
+
+        today = datetime.today().date()
+        labels, counts = [], []
+        for i in range(weeks - 1, -1, -1):
+            week_start = today - timedelta(days=today.weekday() + 7 * i)
+            week_end = week_start + timedelta(days=6)
+            label = week_start.strftime("%d/%m")
+            count = sum(
+                1
+                for s in stories
+                if s.status == "CONCLUÍDO"
+                and s.date
+                and week_start.strftime("%Y-%m-%d") <= s.date <= week_end.strftime("%Y-%m-%d")
+            )
+            labels.append(label)
+            counts.append(count)
+        return {"labels": labels, "counts": counts}
+
+    def calc_blocked(self, stories: List[StoryData]) -> List[Dict[str, str]]:
+        """Fase 3: stories bloqueadas por dependências não concluídas."""
+        done_tickets = {s.ticket for s in stories if s.status == "CONCLUÍDO"}
+        blocked = []
+        for s in stories:
+            if s.status == "CONCLUÍDO":
+                continue
+            missing = [d for d in s.depends_on if d not in done_tickets]
+            if missing:
+                blocked.append({"title": s.title, "ticket": s.ticket, "missing": ", ".join(missing)})
+        return blocked
+
+    def calc_no_criteria(self, stories: List[StoryData]) -> List[str]:
+        """Fase 3: stories sem critérios de aceitação."""
+        return [s.title for s in stories if not s.has_tests and s.status != "CONCLUÍDO"]
+
 
 # ---------------------------------------------------------------------------
 # HTML Renderer
@@ -183,11 +220,27 @@ class DashboardRenderer:
         metrics: Dict[str, Any],
         stories: List[StoryData],
         burndown: Dict[str, Any],
+        velocity: Optional[Dict[str, Any]] = None,
+        blocked: Optional[List[Dict[str, str]]] = None,
+        no_criteria: Optional[List[str]] = None,
     ) -> str:
+        velocity = velocity or {"labels": [], "counts": []}
+        blocked = blocked or []
+        no_criteria = no_criteria or []
         generated_at = datetime.now().strftime("%d/%m/%Y %H:%M")
         stories_json = json.dumps([asdict(s) for s in stories], default=str, ensure_ascii=False)
         metrics_json = json.dumps(metrics, ensure_ascii=False)
         burndown_json = json.dumps(burndown, ensure_ascii=False)
+        velocity_json = json.dumps(velocity, ensure_ascii=False)
+        # Build alerts HTML server-side
+        alerts_html = ""
+        for b in blocked:
+            alerts_html += f'<div class="alert-item alert-red">🔒 <strong>{b["title"]}</strong> — bloqueada por: <code>{b["missing"]}</code></div>\n'
+        for nc in no_criteria:
+            alerts_html += f'<div class="alert-item alert-yellow">⚠️ <strong>{nc}</strong> — sem critérios de aceitação</div>\n'
+        if not alerts_html:
+            alerts_html = '<div class="alert-item alert-green">✅ Nenhum problema detectado</div>'
+        alerts_count = len(blocked) + len(no_criteria)
 
         return f"""<!DOCTYPE html>
 <html lang="pt-BR">
@@ -333,6 +386,16 @@ class DashboardRenderer:
     transition: width 1s ease;
   }}
 
+  /* ── Alerts ──────────────────────────────── */
+  .alerts-panel {{ display: flex; flex-direction: column; gap: 8px; }}
+  .alert-item {{
+    padding: 10px 16px; border-radius: 8px; font-size: 0.85rem; line-height: 1.5;
+  }}
+  .alert-red    {{ background: rgba(248,81,73,0.1); border: 1px solid rgba(248,81,73,0.25); color: #ffa198; }}
+  .alert-yellow {{ background: rgba(210,153,34,0.1); border: 1px solid rgba(210,153,34,0.25); color: #e3b341; }}
+  .alert-green  {{ background: rgba(63,185,80,0.1); border: 1px solid rgba(63,185,80,0.25); color: #56d364; }}
+  .alert-item code {{ background: rgba(255,255,255,0.1); padding: 1px 5px; border-radius: 4px; font-size: 0.8rem; }}
+
   /* ── Footer ──────────────────────────────── */
   footer {{
     text-align: center; color: var(--muted); font-size: 0.78rem;
@@ -376,7 +439,7 @@ class DashboardRenderer:
     </div>
   </div>
 
-  <!-- Charts row -->
+  <!-- Charts row 1: Burndown + Status -->
   <div class="two-col">
     <div class="chart-card">
       <div class="section-title">📉 Burndown Chart</div>
@@ -386,6 +449,18 @@ class DashboardRenderer:
       <div class="section-title">🍩 Status das Stories</div>
       <canvas id="statusChart" height="200"></canvas>
     </div>
+  </div>
+
+  <!-- Charts row 2: Velocity -->
+  <div class="chart-card" style="margin-bottom:32px">
+    <div class="section-title">⚡ Velocity — Stories Concluídas por Semana</div>
+    <canvas id="velocityChart" height="100"></canvas>
+  </div>
+
+  <!-- Alerts panel -->
+  <div class="section-title" style="margin-bottom:16px">🚨 Alertas ({alerts_count})</div>
+  <div class="alerts-panel" style="margin-bottom:32px">
+    {alerts_html}
   </div>
 
   <!-- Kanban Board -->
@@ -402,6 +477,7 @@ class DashboardRenderer:
 const STORIES  = {stories_json};
 const METRICS  = {metrics_json};
 const BURNDOWN = {burndown_json};
+const VELOCITY = {velocity_json};
 
 // ── Animated counters ────────────────────────────────────────────────────────
 document.querySelectorAll('.kpi-value[data-target]').forEach(el => {{
@@ -471,6 +547,30 @@ new Chart(document.getElementById('statusChart'), {{
     responsive: true, cutout: '65%',
     plugins: {{
       legend: {{ position: 'bottom', labels: {{ color: '#e6edf3', padding: 16, font: {{ size: 12 }} }} }},
+    }},
+  }},
+}});
+
+// ── Velocity Chart ───────────────────────────────────────────────────────────
+new Chart(document.getElementById('velocityChart'), {{
+  type: 'bar',
+  data: {{
+    labels: VELOCITY.labels,
+    datasets: [{{
+      label: 'Stories concluídas',
+      data: VELOCITY.counts,
+      backgroundColor: 'rgba(88,166,255,0.5)',
+      borderColor: '#58a6ff',
+      borderWidth: 1,
+      borderRadius: 6,
+    }}],
+  }},
+  options: {{
+    responsive: true,
+    plugins: {{ legend: {{ display: false }} }},
+    scales: {{
+      x: {{ ticks: {{ color: '#7d8590' }}, grid: {{ color: 'rgba(255,255,255,0.04)' }} }},
+      y: {{ ticks: {{ color: '#7d8590', stepSize: 1 }}, grid: {{ color: 'rgba(255,255,255,0.04)' }}, beginAtZero: true }},
     }},
   }},
 }});
@@ -561,9 +661,20 @@ def generate_dashboard(
     stories = parser.parse_stories()
     metrics = parser.calc_metrics(stories)
     burndown = parser.calc_burndown(stories)
+    velocity = parser.calc_velocity(stories)
+    blocked = parser.calc_blocked(stories)
+    no_criteria = parser.calc_no_criteria(stories)
 
     project_name = project_root.name
 
     renderer = DashboardRenderer()
-    html = renderer.render_html(project_name, metrics, stories, burndown)
+    html = renderer.render_html(
+        project_name,
+        metrics,
+        stories,
+        burndown,
+        velocity=velocity,
+        blocked=blocked,
+        no_criteria=no_criteria,
+    )
     return renderer.write_and_open(html, output_path, auto_open)
