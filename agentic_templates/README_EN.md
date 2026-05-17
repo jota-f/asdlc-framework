@@ -36,8 +36,10 @@ Or copy the templates and the core Python files:
 your-project/
 ├── agentic_templates/   ← templates (no Python needed)
 ├── asdlc/               ← Python core (only for dashboard)
-└── main.py              ← CLI entry point
+├── main.py              ← CLI entry point
+└── requirements.txt     ← framework dependencies
 ```
+*If you copy manually, don't forget to run `pip install -r requirements.txt` to install the CLI dependencies.*
 
 ---
 

@@ -36,8 +36,10 @@ Ou copie os templates e também os arquivos do núcleo:
 seu-projeto/
 ├── agentic_templates/   ← templates (sem Python)
 ├── asdlc/               ← núcleo Python (apenas para dashboard)
-└── main.py              ← ponto de entrada CLI
+├── main.py              ← ponto de entrada CLI
+└── requirements.txt     ← dependências do framework
 ```
+*Se optar por copiar manualmente, lembre-se de rodar `pip install -r requirements.txt` na pasta para instalar as dependências do CLI.*
 
 ---
 
