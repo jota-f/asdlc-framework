@@ -11,27 +11,36 @@ Esta skill capacita o agente a gerar e interpretar o dashboard visual interativo
 
 ## 🛠️ Procedimento Interno (Mental Model)
 
-### 1. Verificar Pré-requisitos
+### 1. Detectar Modo de Execução (OBRIGATÓRIO)
 
-Antes de executar, o agente DEVE confirmar:
-- O projeto tem um diretório `stories/` com arquivos `.md`?
-- O `python main.py dashboard --help` responde sem erro?
+Antes de qualquer ação, o agente DEVE verificar se o `main.py` existe na raiz do projeto:
 
-Se o projeto não tiver stories, informe o usuário:
 ```
-⚠️ Nenhuma story encontrada em stories/. 
-Crie stories com /asdlc-create-story antes de visualizar o dashboard.
+SE main.py existir na raiz E pasta asdlc/ existir:
+    → Usar MODO PYTHON (HTML interativo)
+SENÃO:
+    → Usar MODO TEXTO (resumo no chat)
 ```
 
-### 2. Executar o Gerador
+### 2a. MODO PYTHON — HTML Interativo
 
-Execute o seguinte comando a partir da raiz do projeto:
-
+Execute:
 ```bash
 python main.py dashboard --no-open
 ```
 
-A flag `--no-open` evita abrir o browser automaticamente (o agente não tem UI). O arquivo é gerado em `.asdlc/dashboard/dashboard.html`.
+O arquivo é gerado em `.asdlc/dashboard/dashboard.html`.
+
+Após a geração, reporte ao usuário conforme o **Formato de Resposta** abaixo.
+
+### 2b. MODO TEXTO — Resumo no Chat (sem Python)
+
+Quando `main.py` não estiver disponível, o agente DEVE:
+
+1. Usar ferramentas de leitura de arquivos para listar `stories/` recursivamente (excluindo `MEMORY.md` e arquivos de template).
+2. Para cada story, ler o frontmatter YAML e extrair: `title`, `status`, `depends_on`.
+3. Contar tasks `- [x]` e `- [ ]` no conteúdo.
+4. Calcular as métricas manualmente e reportar no formato abaixo.
 
 ### 3. Reportar ao Usuário
 
