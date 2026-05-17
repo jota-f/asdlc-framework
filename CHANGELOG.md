@@ -7,9 +7,18 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.
 
 ---
 
-## [2.4.0] - Unreleased
+## [2.4.0] - 2026-05-17
 
 ### Adicionado
+- **📊 Visual Project Dashboard (Fases 1, 2, 3 e 4)**:
+  - **Zero Dependências de Produção**: Gerador de dashboard HTML estático, autocontido e ultra-veloz, ideal para visibilidade em tempo real.
+  - **Gráficos Dinâmicos (Chart.js via CDN)**: Gráfico de Burndown de stories e gráfico Donut de distribuição de status das stories.
+  - **Kanban Interativo de 3 Colunas**: Colunas Concluído, Pendente e Em Progresso alimentadas diretamente pelo parser de stories markdown.
+  - **Métricas e KPIs Animados**: Contadores animados para Total de Stories, Progresso Geral, Tasks Concluídas e Conformidade A-SDLC.
+  - **Velocity Histórica (Fase 2)**: Gráfico de barras comparando stories concluídas por semana nas últimas 8 semanas.
+  - **Painel de Alertas Inteligente (Fase 3)**: Notificação e identificação em tempo real de stories bloqueadas por dependências não resolvidas (`depends_on`) e de stories sem critérios de aceitação.
+  - **Workflow Agentic (/asdlc-dashboard) (Fase 4)**: Nova Skill `asdlc_dashboard` com execução em modo duplo (gera o HTML se Python estiver disponível ou reporta um resumo inteligente em texto no próprio chat da IDE).
+  - **Integração CLI**: Novo subcomando CLI `python main.py dashboard` com flags `--output` e `--no-open`.
 - **Otimização e Organização Estrutural (Modo Agentic)**:
   - Criado o diretório `templates/` sob `agentic_templates/` para separar os templates e exemplos das stories ativas e do `MEMORY.md`.
   - Criado o template de story padrão `story_template.md` extraído da especificação técnica da Skill `asdlc_story_generator`.
@@ -24,6 +33,7 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.
 - **Workflows e Documentação**:
   - Atualizadas as referências ao `bug_template.md` no workflow `bug_resolution.md` para apontar para `templates/bug_template.md`.
   - Atualizados os diagramas e links nos arquivos `agentic_templates/README.md`, `agentic_templates/README_EN.md` e no blueprint principal `PROJECT_CONTEXT.md`.
+  - Atualizadas as seções \"Como Instalar\" dos READMEs com as distinções da instalação sem Python (templates puros) e com Python (CLI + Dashboard), incluindo indicação do arquivo `requirements.txt`.
 
 ## [2.3.0] - 2026-05-05
 
