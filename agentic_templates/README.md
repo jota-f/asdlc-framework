@@ -99,10 +99,13 @@ depends_on: ["20260407_NOTIFY"]
 
 ---
 
-## 🆕 Novidades (v2.3.0)
+## 🆕 Novidades (v2.4.0)
 
 | Feature | Descrição |
 |---------|-----------|
+| `/asdlc-dashboard` | Dashboard visual interativo do projeto (KPIs, Kanban, Burndown) |
+| `asdlc_dashboard` | Skill para gerar e interpretar o dashboard no modo agentic |
+| `templates/` | Pasta dedicada para templates e exemplos (separado das stories ativas) |
 | `/asdlc-grill` | Questionamento proativo para demandas vagas |
 | TDD Obrigatório | Pipeline: Red → Green → Refactor |
 | Tracer Bullets | Fatias verticais (DB → API → UI) |
@@ -125,14 +128,16 @@ agentic_templates/
 │   ├── asdlc_story_generator/  # Requirements Agent - criar stories
 │   ├── asdlc_implementation/   # Code Agent - implementar (TDD)
 │   ├── asdlc_context_compactor/# Compactar contexto longo
-│   └── asdlc_bug_hunter/       # Bug Hunter - diagnóstico e RCA
+│   ├── asdlc_bug_hunter/       # Bug Hunter - diagnóstico e RCA
+│   └── asdlc_dashboard/        # Dashboard visual do projeto
 ├── workflows/
 │   ├── grill_requirements.md   # Questionamento guiado
 │   ├── architecture_discovery.md # Descoberta arquitetural
 │   ├── scope_analysis.md       # Análise de escopo
 │   ├── create_asdlc_story.md   # Criação de story
 │   ├── implement_asdlc_story.md # Implementação TDD
-│   └── bug_resolution.md       # Resolução de bugs
+│   ├── bug_resolution.md       # Resolução de bugs
+│   └── dashboard.md            # Dashboard visual do projeto
 ├── templates/
 │   ├── story_template.md       # Template padrão de story
 │   ├── bug_template.md         # Template padrão de bug
