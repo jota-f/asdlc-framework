@@ -55,7 +55,8 @@ def setup_cli_parser():
     # Comando: dashboard
     p_dash = subparsers.add_parser("dashboard", help="Gera o dashboard visual HTML do projeto.")
     p_dash.add_argument(
-        "--output", "-o",
+        "--output",
+        "-o",
         default=None,
         help="Caminho de saída do HTML (padrão: .asdlc/dashboard/dashboard.html).",
     )
