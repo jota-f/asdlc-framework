@@ -52,6 +52,19 @@ def setup_cli_parser():
     # Comando: list-stories
     subparsers.add_parser("list-stories", help="Lista todas as stories do projeto atual.")
 
+    # Comando: dashboard
+    p_dash = subparsers.add_parser("dashboard", help="Gera o dashboard visual HTML do projeto.")
+    p_dash.add_argument(
+        "--output", "-o",
+        default=None,
+        help="Caminho de saída do HTML (padrão: .asdlc/dashboard/dashboard.html).",
+    )
+    p_dash.add_argument(
+        "--no-open",
+        action="store_true",
+        help="Não abrir automaticamente no browser.",
+    )
+
     # Comando: validate
     v_validate = subparsers.add_parser("validate", help="Valida conformidade A-SDLC do projeto.")
     v_validate.add_argument("--project", "-p", default=".", help="Caminho do projeto (padrão: atual)")
@@ -74,6 +87,17 @@ def execute_cli_command(args):
         story_manager.implement_story(story_id=args.id)
     elif args.command == "list-stories":
         story_manager.list_stories()
+    elif args.command == "dashboard":
+        from asdlc.dashboard_generator import generate_dashboard
+        from pathlib import Path
+
+        output = Path(args.output) if args.output else None
+        result = generate_dashboard(
+            project_root=find_project_root() or Path("."),
+            output_path=output,
+            auto_open=not args.no_open,
+        )
+        print(f"Dashboard gerado: {result}")
     elif args.command == "validate":
         from asdlc.validation_checker import ASDLCValidator
         from pathlib import Path

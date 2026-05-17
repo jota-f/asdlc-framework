@@ -49,4 +49,5 @@ BACKLOG.md
 .agents/
 .kilo/
 .asdlc/harness/
-.claude/
+.claude/
+.asdlc/dashboard/
