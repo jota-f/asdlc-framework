@@ -1,3 +1,8 @@
+---
+name: asdlc_implementation
+description: Skill para atuar como o Agente de Execução Autônomo do framework A-SDLC, implementando stories via TDD.
+---
+
 # A-SDLC Implementation Skill (Antigravity-Native)
 
 ## Modo de Execução

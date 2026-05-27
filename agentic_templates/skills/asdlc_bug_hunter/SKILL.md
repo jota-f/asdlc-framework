@@ -1,3 +1,8 @@
+---
+name: asdlc_bug_hunter
+description: Skill para realizar diagnósticos profundos e resoluções seguras de bugs seguindo a metodologia A-SDLC.
+---
+
 # 🕵️‍♂️ Skill: A-SDLC Bug Hunter
 
 Esta skill capacita o agente a realizar diagnósticos profundos e resoluções seguras de bugs seguindo a metodologia A-SDLC.
