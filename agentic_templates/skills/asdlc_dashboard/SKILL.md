@@ -1,3 +1,8 @@
+---
+name: asdlc_dashboard
+description: Skill para gerar e interpretar o dashboard visual interativo do projeto A-SDLC diretamente do modo agentic.
+---
+
 # 📊 Skill: A-SDLC Dashboard
 
 Esta skill capacita o agente a gerar e interpretar o dashboard visual interativo do projeto A-SDLC diretamente do modo agentic — sem qualquer instalação ou servidor.
