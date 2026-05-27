@@ -1,3 +1,7 @@
+---
+description: Workflow para triagem, reprodução, causa raiz, correção e validação de bugs usando a metodologia A-SDLC.
+---
+
 # 🐛 Workflow de Resolução de Bugs (A-SDLC)
 
 Este workflow deve ser seguido rigorosamente quando o comando `/asdlc-bug` for invocado ou um erro for identificado.
