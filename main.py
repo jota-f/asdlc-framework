@@ -75,9 +75,13 @@ def setup_cli_parser():
     v_validate.add_argument("--output", "-o", help="Arquivo de saída (padrão: stdout)")
 
     # Comando: install-agentic
-    p_inst = subparsers.add_parser("install-agentic", help="Instala ou atualiza os templates do Modo Agentic de forma segura no projeto.")
+    p_inst = subparsers.add_parser(
+        "install-agentic", help="Instala ou atualiza os templates do Modo Agentic de forma segura no projeto."
+    )
     p_inst.add_argument("--path", "-p", default=".", help="Caminho do projeto destino (padrão: atual)")
-    p_inst.add_argument("--force", action="store_true", help="Força a sobrescrita de arquivos de dados do usuário (ex: MEMORY.md).")
+    p_inst.add_argument(
+        "--force", action="store_true", help="Força a sobrescrita de arquivos de dados do usuário (ex: MEMORY.md)."
+    )
 
     return parser
 

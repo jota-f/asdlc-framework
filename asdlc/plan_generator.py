@@ -145,4 +145,3 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
     plano_gerado = call_llm(prompt, agent_type="architecture")
 
     return plano_gerado
-

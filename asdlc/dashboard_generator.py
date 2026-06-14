@@ -110,9 +110,10 @@ class DashboardParser:
         parts = content.split("---", 2)
         if len(parts) < 3:
             return None
-        
+
         try:
             import yaml
+
             data = yaml.safe_load(parts[1])
             if isinstance(data, dict):
                 normalized = {}

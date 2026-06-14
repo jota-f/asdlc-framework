@@ -19,6 +19,7 @@ def estimate_token_count(text: str) -> int:
     """Estima contagem de tokens usando tiktoken se disponível, ou fallback baseado no tamanho do texto."""
     try:
         import tiktoken
+
         encoding = tiktoken.get_encoding("cl100k_base")
         return len(encoding.encode(text, disallowed_special=()))
     except Exception:
