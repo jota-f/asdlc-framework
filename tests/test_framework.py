@@ -257,6 +257,7 @@ class TestAgentExecutor:
     def test_estimate_token_count_fallback(self):
         """Testa estimativa de tokens usando fallback"""
         from asdlc.agent_executor import estimate_token_count
+
         with patch.dict("sys.modules", {"tiktoken": None}):
             # Sem tiktoken
             assert estimate_token_count("1234") == 1
@@ -266,12 +267,13 @@ class TestAgentExecutor:
     def test_estimate_token_count_tiktoken(self):
         """Testa estimativa de tokens usando tiktoken mockado"""
         from asdlc.agent_executor import estimate_token_count
+
         mock_encoding = MagicMock()
         mock_encoding.encode.return_value = [1, 2, 3]  # 3 tokens
-        
+
         mock_tiktoken = MagicMock()
         mock_tiktoken.get_encoding.return_value = mock_encoding
-        
+
         with patch.dict("sys.modules", {"tiktoken": mock_tiktoken}):
             assert estimate_token_count("algum texto") == 3
             mock_tiktoken.get_encoding.assert_called_with("cl100k_base")
@@ -356,7 +358,6 @@ class TestASDLCValidator:
         assert "huge_script.js" in suggestions_str
 
 
-
 class TestInstallAgenticTemplates:
     """Testes para install_agentic_templates"""
 
@@ -413,5 +414,3 @@ class TestInstallAgenticTemplates:
 
 if __name__ == "__main__":
     pytest.main([__file__])
-
-

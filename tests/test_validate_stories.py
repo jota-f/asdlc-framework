@@ -34,7 +34,8 @@ depends_on: ["20260614_dep"]
 
     def test_validate_story_no_dependencies(self):
         story_file = self.temp_dir / "20260614_story.md"
-        story_file.write_text("""---
+        story_file.write_text(
+            """---
 title: "My Story"
 ticket: "20260614_story"
 status: "PENDENTE"
@@ -43,14 +44,17 @@ depends_on: []
 # Plano de Execução
 ## ✅ Critérios de Aceitação
 - Testar com pytest.
-""", encoding="utf-8")
+""",
+            encoding="utf-8",
+        )
 
         errors = validate_story(story_file)
         assert len(errors) == 0
 
     def test_validate_story_dependency_not_found(self):
         story_file = self.temp_dir / "20260614_story.md"
-        story_file.write_text("""---
+        story_file.write_text(
+            """---
 title: "My Story"
 ticket: "20260614_story"
 status: "PENDENTE"
@@ -59,7 +63,9 @@ depends_on: ["20260614_missing_dep"]
 # Plano de Execução
 ## ✅ Critérios de Aceitação
 - Testar com pytest.
-""", encoding="utf-8")
+""",
+            encoding="utf-8",
+        )
 
         errors = validate_story(story_file)
         assert len(errors) > 0
@@ -68,7 +74,8 @@ depends_on: ["20260614_missing_dep"]
     def test_validate_story_dependency_pending(self):
         # Criar a dependência como PENDENTE
         dep_file = self.temp_dir / "20260614_dep.md"
-        dep_file.write_text("""---
+        dep_file.write_text(
+            """---
 title: "Dependency Story"
 ticket: "20260614_dep"
 status: "PENDENTE"
@@ -77,11 +84,14 @@ depends_on: []
 # Plano de Execução
 ## ✅ Critérios de Aceitação
 - Testar.
-""", encoding="utf-8")
+""",
+            encoding="utf-8",
+        )
 
         # Criar a story que depende da anterior
         story_file = self.temp_dir / "20260614_story.md"
-        story_file.write_text("""---
+        story_file.write_text(
+            """---
 title: "My Story"
 ticket: "20260614_story"
 status: "PENDENTE"
@@ -90,7 +100,9 @@ depends_on: ["20260614_dep"]
 # Plano de Execução
 ## ✅ Critérios de Aceitação
 - Testar com pytest.
-""", encoding="utf-8")
+""",
+            encoding="utf-8",
+        )
 
         errors = validate_story(story_file)
         assert len(errors) > 0
@@ -99,7 +111,8 @@ depends_on: ["20260614_dep"]
     def test_validate_story_dependency_done(self):
         # Criar a dependência como CONCLUÍDO
         dep_file = self.temp_dir / "20260614_dep.md"
-        dep_file.write_text("""---
+        dep_file.write_text(
+            """---
 title: "Dependency Story"
 ticket: "20260614_dep"
 status: "CONCLUÍDO"
@@ -108,11 +121,14 @@ depends_on: []
 # Plano de Execução
 ## ✅ Critérios de Aceitação
 - Testar.
-""", encoding="utf-8")
+""",
+            encoding="utf-8",
+        )
 
         # Criar a story que depende da anterior
         story_file = self.temp_dir / "20260614_story.md"
-        story_file.write_text("""---
+        story_file.write_text(
+            """---
 title: "My Story"
 ticket: "20260614_story"
 status: "PENDENTE"
@@ -121,7 +137,9 @@ depends_on: ["20260614_dep"]
 # Plano de Execução
 ## ✅ Critérios de Aceitação
 - Testar com pytest.
-""", encoding="utf-8")
+""",
+            encoding="utf-8",
+        )
 
         errors = validate_story(story_file)
         assert len(errors) == 0

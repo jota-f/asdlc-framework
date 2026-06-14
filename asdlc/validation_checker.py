@@ -375,7 +375,18 @@ class ASDLCValidator:
         logger.info("🔍 Analisando inchaço de arquivos de código...")
 
         extensions = {".py", ".js", ".jsx", ".ts", ".tsx", ".kt", ".java", ".cpp", ".c", ".h", ".cs", ".go", ".rs", ".swift"}
-        exclude_dirs = {".git", ".asdlc", "stories", "prompts", "venv", ".venv", "node_modules", "build", "dist", "__pycache__"}
+        exclude_dirs = {
+            ".git",
+            ".asdlc",
+            "stories",
+            "prompts",
+            "venv",
+            ".venv",
+            "node_modules",
+            "build",
+            "dist",
+            "__pycache__",
+        }
 
         bloated_files = []
         long_files = []

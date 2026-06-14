@@ -1030,4 +1030,3 @@ def install_agentic_templates(target_path: str, force: bool = False) -> bool:
 
     logger.info(f"Instalação finalizada: {items_copied} arquivos copiados, {items_skipped} pulados.")
     return True
-
