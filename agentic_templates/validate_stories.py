@@ -30,6 +30,7 @@ def parse_frontmatter(content):
     # Tenta usar o parser real do PyYAML se disponível
     try:
         import yaml
+
         data = yaml.safe_load(yaml_block)
         if isinstance(data, dict):
             normalized = {}
@@ -46,12 +47,12 @@ def parse_frontmatter(content):
     fm = {}
     lines = yaml_block.split("\n")
     current_key = None
-    
+
     for line in lines:
         stripped = line.strip()
         if not stripped:
             continue
-        
+
         # Se for um item de lista em bloco (ex: - "value")
         if stripped.startswith("-") and current_key:
             val_item = stripped[1:].strip().strip('"').strip("'")
@@ -69,14 +70,14 @@ def parse_frontmatter(content):
             key = key.strip()
             val = val.strip().strip('"').strip("'")
             current_key = key
-            
+
             if val.startswith("[") and val.endswith("]"):
                 fm[key] = val
             elif val == "" or val is None:
                 fm[key] = "[]"
             else:
                 fm[key] = val
-                
+
     return fm
 
 
@@ -129,7 +130,9 @@ def validate_story(filepath):
                 if dep_fm:
                     dep_status = dep_fm.get("status")
                     if dep_status not in ["CONCLUÍDO", "Done"]:
-                        errors.append(f"Dependencia '{dep}' ({dep_file.name}) esta no status '{dep_status}' mas deveria estar CONCLUÍDO ou Done")
+                        errors.append(
+                            f"Dependencia '{dep}' ({dep_file.name}) esta no status '{dep_status}' mas deveria estar CONCLUÍDO ou Done"
+                        )
 
     # Valida presence of test tasks (OBRIGATORIO para todas stories)
     has_test_section = "Critérios de Aceitação" in content or "Criteria" in content or "Aceitação" in content
