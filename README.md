@@ -1,4 +1,4 @@
-# 🌌 A-SDLC Framework (v2.4.0)
+# 🌌 A-SDLC Framework (v2.5.0)
 **AI-Driven Software Development Lifecycle**
 
 O A-SDLC é um framework que transforma assistentes de IA em agentes autônomos capazes de gerenciar o ciclo de vida completo de um projeto de software. Ele utiliza **Harness Engineering**, **TDD Obrigatório**, **Tracer Bullets** e **Feedback Loops** para garantir código de alta fidelidade.
@@ -142,6 +142,16 @@ python main.py implement --id 20260425_204837
 > **MODO RECOMENDADO PARA CURSOR/WINDSURF:** Este modo não requer instalação de Python ou CLI. Ele injeta a "inteligência" do A-SDLC diretamente no chat da sua IDE através de templates.
 
 ### 📥 Instalação Rápida
+Você pode instalar os templates de duas formas:
+
+#### Opção A: Usando a CLI Python (Recomendado & Seguro)
+Se você tem o framework instalado localmente, execute:
+```bash
+python main.py install-agentic --path seu-projeto/
+```
+*Este comando copia todos os templates de forma segura, garantindo que arquivos de dados críticos criados por você (como `stories/MEMORY.md`, `docs/adr/LEARNING.md`, `PROJECT_CONTEXT.md`, `GLOSSARY.md` ou `BACKLOG.md`) **não** sejam sobrescritos.*
+
+#### Opção B: Copiar manualmente (Fallback)
 Copie a pasta de templates para o seu projeto:
 ```bash
 cp -r agentic_templates/ seu-projeto/
@@ -220,6 +230,7 @@ O dashboard é gerado em `.asdlc/dashboard/dashboard.html` e inclui KPIs animado
 | `list-stories` | Lista todas as stories | — |
 | `validate` | Valida conformidade | `--project`, `--format`, `--output` |
 | `dashboard` | Gera dashboard HTML interativo | `--output`, `--no-open` |
+| `install-agentic` | Instala/atualiza templates de forma segura | `--path`, `--force` |
 
 ### Modo interativo (sem argumentos)
 ```bash
@@ -292,11 +303,19 @@ Architecture → Test Red → Code Green → Validation → Review
 | Warning | 80k-100k | Qualidade degrada |
 | Dumb Zone | > 100k | IA comete erros bobos |
 
+*Nota: O framework calcula a densidade de contexto utilizando a biblioteca `tiktoken` para contagem exata de tokens (padrão `cl100k_base`). Se a biblioteca não estiver presente no ambiente, ele utiliza um fallback seguro baseado no número de caracteres (`caracteres // 4`).*
+
 ### Tracer Bullets (Fatias Verticais)
 ```
 CORRETO: Modelo + Endpoint + Teste (uma story)
 EVITAR: Todos os modelos → Todos os endpoints → Todos os testes
 ```
+
+### Backlog e Notas Mentais (BACKLOG.md)
+O `BACKLOG.md` serve como a central de notas cognitivas do desenvolvedor e da IA para melhorias futuras e pendências técnicas:
+- **Notas Mentais do Desenvolvedor**: Permite anotar livremente ideias de refatoração ou implementações futuras para evitar mantê-las em código "hardcoded" ou esquecê-las.
+- **Débito Técnico da IA**: É atualizado pelo Review Agent ou pelo validador com sugestões extraídas em execuções de stories passadas.
+- **Leitura Obrigatória**: Os workflows do modo agentico (`/asdlc-create-story`, `/asdlc-plan` e `/asdlc-architecture`) são programados para ler este arquivo no início do processo e incorporar as notas e débitos de forma automática nas novas stories.
 
 ### Lei Inviolável
 **NUNCA** marque uma story como DONE sem um `run_command` retornando exit code 0.

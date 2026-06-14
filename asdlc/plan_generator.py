@@ -119,6 +119,26 @@ def gerar_plano_de_execucao(story_data: dict, project_root: Path) -> str:
     - **Manifesto:** `main.py`, `requirements.txt`, `cli/commands.py`
     - **Tarefas:** Parsing de argumentos, comandos CRUD, formatação de saída
     - **Critérios:** CLI intuitiva, help detalhado, tratamento de erros
+
+    ---
+    **ENTRADAS DO ARQUITETO:**
+
+    1. DADOS DA STORY:
+       - **ID:** {story_data.get('id', 'N/A')}
+       - **Título:** {story_data.get('title', 'N/A')}
+       - **Descrição:** {story_data.get('description', 'N/A')}
+       - **Tipo:** {story_data.get('type', 'user_story')}
+       - **Critérios de Aceitação:** {story_data.get('acceptance_criteria') or 'Não especificado'}
+       - **Prioridade:** {story_data.get('priority', 'Medium')}
+       - **Estimativa:** {story_data.get('estimate') or 'Não especificado'}
+       - **Arquivos sugeridos para criar:** {story_data.get('files_to_create') or 'Nenhum'}
+       - **Arquivos sugeridos para modificar:** {story_data.get('files_to_modify') or 'Nenhum'}
+
+    2. CONTEXTO DO PROJETO:
+    {project_context}
+
+    3. ESTRUTURA ATUAL DE ARQUIVOS DO PROJETO:
+    {project_structure}
 """
 
     # 3. Chamar a LLM com roteamento para Arquiteto

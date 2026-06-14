@@ -93,7 +93,7 @@ Se o humano confirmar, o agente **NÃO APENAS** invoca a criação da story. Ele
    - ⚠️ **REGRA DE SEGURANÇA CRÍTICA:** NUNCA altere a arquitetura central, o tech stack ou os objetivos no `PROJECT_CONTEXT.md`. Toda a evolução da linguagem de negócio deve ir para o `GLOSSARY.md`.
 
 2. **Criar ADRs:**
-   - Se houver decisões estruturais não óbvias (ex: regra de deleção, escolha de tecnologia de cache), use `write_to_file` para criar um arquivo `docs/adr/XXXX-titulo-da-decisao.md` (onde XXXX é um número sequencial, ex: `0001`). O ADR deve ter seções: Contexto, Decisão e Consequências.
+   - Se houver decisões estruturais não óbvias (ex: regra de deleção, escolha de tecnologia de cache), use `write_to_file` para criar um arquivo `docs/adr/XXXX-titulo-da-decisao.md` (onde XXXX é um número sequencial, ex: `0001`) E atualize o arquivo de índice de aprendizados **`docs/adr/LEARNING.md`** descrevendo a decisão em poucas palavras. O ADR individual deve ter seções: Contexto, Decisão e Consequências.
 
 3. **Gerar a Story:**
    - Invoque `/asdlc-create-story` com o contexto final consolidado.
@@ -103,4 +103,4 @@ Se o humano confirmar, o agente **NÃO APENAS** invoca a criação da story. Ele
 1. **Proteja a Arquitetura:** Nunca altere as premissas do `PROJECT_CONTEXT.md`.
 2. **Defenda a Linguagem Ubíqua:** Não permita que o usuário crie sinônimos (ex: User e Account) para a mesma coisa sem um debate conceitual profundo.
 3. **Seja incansável**: Não aceite respostas vagas.
-4. **Documente tudo ativamente**: Execute a atualização dos arquivos (`GLOSSARY.md` e `docs/adr/`) de fato, não apenas prometa que fará.
+4. **Documente tudo ativamente**: Execute a atualização dos arquivos (`GLOSSARY.md`, `docs/adr/LEARNING.md` e novos ADRs) de fato, não apenas prometa que fará.

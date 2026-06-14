@@ -32,6 +32,8 @@ Como um [ATOR], eu quero [AÇÃO], para que [BENEFÍCIO].
 ## 📋 Regras Ocultas
 - Usar padrões do `PROJECT_CONTEXT.md`
 - Tratamentos de erro propagam status codes
+- **Filosofia Ponytail / YAGNI**: Priorizar soluções nativas e a solução mais simples/curta que funcione, evitando abstrações extras.
+- **Limites de Código**: Novos arquivos no máximo 300 linhas; sem inchaço em arquivos legados gigantes (>1500 linhas) — extrair para novos arquivos.
 
 ## 🧪 Teste
 Identifique o sistema de teste usado: npm test, pytest, cargo test, go test, etc.
@@ -39,7 +41,7 @@ Identifique o sistema de teste usado: npm test, pytest, cargo test, go test, etc
 ## 🤖 Instruções Finais
 - [ ] Fase 1: Leia PROJECT_CONTEXT (seção relevante)
 - [ ] Fase 2: Verifique depends_on (todas CONCLUÍDAS)
-- [ ] Fase 3: Siga Manifesto estritamente
+- [ ] Fase 3: Siga Manifesto estritamente (Priorizando simplicidade e menor diff)
 - [ ] Fase 4: Execute testes + lint/typecheck
 - [ ] Fase 5: Mude status → CONCLUÍDO
 

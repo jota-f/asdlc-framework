@@ -1,4 +1,4 @@
-# 🤖 A-SDLC Agentic Mode Guide (v2.4.0)
+# 🤖 A-SDLC Agentic Mode Guide (v2.5.0)
 
 ## What is this directory?
 
@@ -56,6 +56,7 @@ your-project/
 | `/asdlc-execute` | Implement a story (mandatory TDD) |
 | `/asdlc-bug` | Diagnose and fix bugs |
 | `/asdlc-dashboard` | Generate visual project dashboard (KPIs, Kanban, Burndown) |
+| `/asdlc-update` | Safely updates A-SDLC skills and workflows |
 
 ---
 
@@ -126,12 +127,17 @@ depends_on: ["20260407_NOTIFY"]
 ```
 
 **Rules:**
-- Story only executes if all dependencies = `COMPLETED`
-- Agent verifies automatically before implementing
+- A story will only pass validation and execute if all of its listed dependencies in the `depends_on` field are marked as **`CONCLUÍDO`** or **`Done`**. If any dependency is still `PENDENTE`, `In Progress` or any other intermediate status, the validator will return an error.
+- The frontmatter parser is robust and supports both inline flow lists (e.g. `["DEP1"]`) and block lists (block sequences):
+  ```yaml
+  depends_on:
+    - "20260407_NOTIFY"
+  ```
+- The story validator automatically checks these dependencies and statuses before starting any implementation.
 
 ---
 
-## 🆕 What's New (v2.4.0)
+## 🆕 What's New (v2.5.0)
 
 | Feature | Description |
 |---------|-------------|
@@ -145,6 +151,7 @@ depends_on: ["20260407_NOTIFY"]
 | Deep Modules | Architecture guidance (simple interfaces) |
 | `/asdlc-bug` | Bug resolution workflow with RCA |
 | `asdlc_bug_hunter` | Diagnosis and root cause skill |
+| Centralized Backlog | Use of `BACKLOG.md` for developer mental notes and AI technical debt |
 
 ---
 
@@ -173,6 +180,8 @@ agentic_templates/
 ├── templates/
 │   ├── story_template.md       # Standard story template
 │   ├── bug_template.md         # Standard bug template
+│   ├── learning_template.md    # ADRs Index (Learnings) template
+│   ├── backlog_template.md     # Backlog (mental notes/ideas) template
 │   └── exemplo/                # Story examples
 └── stories/
     └── MEMORY.md               # Project memory
@@ -183,7 +192,7 @@ agentic_templates/
 ## ⚡ Token Optimization
 
 ### Tips
-1. **Read MEMORY.md first** - overview without iterating all stories
+1. **Read MEMORY.md, LEARNING.md, and BACKLOG.md first** - lean overview of progress, architectural decisions, and pending ideas without scanning all stories or ADRs.
 2. **PROJECT_CONTEXT** - include only relevant section
 3. **Context Compactor** - invoke after 30+ messages
 4. **Smart Zone** - keep context < 80k tokens

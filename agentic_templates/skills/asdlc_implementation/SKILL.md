@@ -23,14 +23,25 @@ Você deve atuar no modo híbrido trocando de persona (Arquiteto -> Coder -> QA)
 Para processar esta instrução de forma autônoma, você DEVE ter o caminho ou nome de um arquivo referenciando uma Story.
 Se o humano invocou esse passo sem te dar uma Story alvo, pergunte de volta: *"Qual a Story na pasta /stories/ devo implementar hoje?"* ou mande listar os arquivos do diretório.
 
-### Verificação de Dependências (OBRIGATÓRIA)
-Antes de iniciar a implementação, você DEVE verificar as dependências:
-1. Leia o frontmatter YAML da Story alvo
-2. Verifique o campo `depends_on: []`
-3. Para cada ticket em `depends_on`:
-   - Busque o arquivo correspondente em `stories/` (padrão: `YYYYMMDD_*`)
-   - Verifique se `status: "CONCLUÍDO"`
-4. Se alguma dependência não estiver concluída, ABORTE e informe.
+### Verificação de Dependências e Conformidade (Híbrida e Obrigatória)
+Antes de iniciar qualquer codificação, você DEVE validar a Story e suas dependências:
+
+1. **Detecção de Ambiente**: Verifique se o interpretador Python e o script `agentic_templates/validate_stories.py` estão disponíveis no workspace.
+2. **SE o Python estiver disponível**:
+   - Execute o script validador passando o arquivo da Story (utilizando prioritariamente o interpretador da pasta `venv` ou `.venv` caso existam):
+     ```bash
+     # No Windows:
+     venv\Scripts\python agentic_templates/validate_stories.py stories/[NOME_DA_STORY].md
+     # No Linux/macOS:
+     venv/bin/python agentic_templates/validate_stories.py stories/[NOME_DA_STORY].md
+     # Fallback geral (sem venv):
+     python agentic_templates/validate_stories.py stories/[NOME_DA_STORY].md
+     ```
+   - O script validará o formato do frontmatter, a nomenclatura do ticket e garantirá de forma automatizada que todas as dependências em `depends_on` existem e estão marcadas como `"CONCLUÍDO"` ou `"Done"`.
+   - Se o script retornar erros no terminal, **ABORTAR imediatamente** e listar os erros retornados.
+3. **SE o Python NÃO estiver disponível**:
+   - Faça a validação manual em memória: use `view_file` para ler o arquivo da story, extraia as dependências do campo `depends_on` e verifique cada uma delas em `stories/` para confirmar se todas possuem `status: "CONCLUÍDO"` ou `status: "Done"`.
+   - Se alguma dependência estiver em status `PENDENTE`, `In Progress` ou ausente, **ABORTAR imediatamente** e avisar o usuário.
 
 ## O Ciclo A-SDLC de Implementação (TDD Obrigatório)
 
@@ -58,9 +69,16 @@ Antes de criar novos testes, verifique se já existem testes para o cenário:
 
 ### Passo 3: Code Green Phase (Code Agent)
 1. Crie os arquivos definidos em `- **CRIAR:**`.
+   - **MANDATÓRIO**: Novos arquivos de código devem ter no máximo **300 linhas**. Se o escopo for grande, divida as responsabilidades em arquivos menores e modulares.
 2. Modifique os arquivos referenciados em `- **MODIFICAR:**`.
+   - **MANDATÓRIO**: Evite adicionar blocos complexos de código a arquivos legados gigantescos (> 1500 linhas). Em vez disso, isole e extraia novos componentes, telas ou lógicas para arquivos/funções novos e separados.
 3. Siga o bloco passo-a-passo (Tarefa 1, Tarefa 2) escrito na Story. Foco extremo na qualidade. Evite apagar lógicas de negócio adjacentes não mencionadas na Story.
-4. Documente as funções públicas criadas.
+   - **FILOSOFIA PONYTAIL / YAGNI (Prevenção de Inchaço e Super-Engenharia)**:
+     - *Simplicidade Reflexiva*: Escolha sempre a solução mais simples, direta e com o menor número de linhas de código que resolva o problema de forma correta.
+     - *Nativo em Primeiro Lugar*: Dê preferência à biblioteca padrão e recursos nativos da plataforma antes de importar novas dependências ou criar código customizado complexo.
+     - *Sem Abstrações Prematuras*: Não crie interfaces com uma única implementação, fábricas com um único produto ou configurações complexas para valores fixos.
+     - *Diferença Mínima*: Menos arquivos é melhor. O diff mais limpo e curto que passa nos testes é o ideal.
+4. Documente as funções públicas criadas de forma concisa.
 5. **OBRIGATÓRIO**: Execute os testes com `run_command` após cada mudança significativa.
 6. Continue até TODOS os testes passarem (Green Phase).
 
