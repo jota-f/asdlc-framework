@@ -110,6 +110,23 @@ class DashboardParser:
         parts = content.split("---", 2)
         if len(parts) < 3:
             return None
+
+        try:
+            import yaml
+
+            data = yaml.safe_load(parts[1])
+            if isinstance(data, dict):
+                normalized = {}
+                for k, v in data.items():
+                    if isinstance(v, list):
+                        normalized[k] = str(v).replace("'", '"')
+                    else:
+                        normalized[k] = str(v)
+                return normalized
+        except Exception as e:
+            logger.warning(f"Falha ao usar PyYAML no frontmatter: {e}. Usando fallback manual.")
+
+        # Fallback manual
         fm: Dict[str, str] = {}
         for line in parts[1].strip().split("\n"):
             if ":" in line:

@@ -17,7 +17,7 @@ from pathlib import Path
 
 
 def parse_frontmatter(content):
-    """Extrai frontmatter YAML do arquivo."""
+    """Extrai frontmatter YAML do arquivo de forma segura."""
     if not content.startswith("---"):
         return None
 
@@ -25,14 +25,59 @@ def parse_frontmatter(content):
     if len(parts) < 3:
         return None
 
+    yaml_block = parts[1].strip()
+
+    # Tenta usar o parser real do PyYAML se disponível
+    try:
+        import yaml
+
+        data = yaml.safe_load(yaml_block)
+        if isinstance(data, dict):
+            normalized = {}
+            for k, v in data.items():
+                if isinstance(v, list):
+                    normalized[k] = str(v).replace("'", '"')
+                else:
+                    normalized[k] = str(v)
+            return normalized
+    except Exception:
+        pass
+
+    # Parser manual resiliente (suporta block lists simples e flow lists)
     fm = {}
-    for line in parts[1].strip().split("\n"):
+    lines = yaml_block.split("\n")
+    current_key = None
+
+    for line in lines:
+        stripped = line.strip()
+        if not stripped:
+            continue
+
+        # Se for um item de lista em bloco (ex: - "value")
+        if stripped.startswith("-") and current_key:
+            val_item = stripped[1:].strip().strip('"').strip("'")
+            if val_item:
+                existing = fm.get(current_key, "[]")
+                if existing == "[]":
+                    fm[current_key] = f'["{val_item}"]'
+                else:
+                    inner = existing.strip("[]")
+                    fm[current_key] = f'[{inner}, "{val_item}"]'
+            continue
+
         if ":" in line:
             key, val = line.split(":", 1)
             key = key.strip()
             val = val.strip().strip('"').strip("'")
-            if val:
+            current_key = key
+
+            if val.startswith("[") and val.endswith("]"):
                 fm[key] = val
+            elif val == "" or val is None:
+                fm[key] = "[]"
+            else:
+                fm[key] = val
+
     return fm
 
 
@@ -54,8 +99,9 @@ def validate_story(filepath):
             errors.append(f"Campo obrigatorio ausente: {field}")
 
     # Valida status
-    if fm.get("status") not in ["PENDENTE", "CONCLUÍDO"]:
-        errors.append(f"Status invalido: {fm.get('status')}")
+    allowed_statuses = ["PENDENTE", "CONCLUÍDO", "In Progress", "Done", "Failed", "Todo", "planned"]
+    if fm.get("status") not in allowed_statuses:
+        errors.append(f"Status invalido: {fm.get('status')}. Status permitidos: {allowed_statuses}")
 
     # Valida ticket pattern
     ticket = fm.get("ticket", "")
@@ -70,12 +116,23 @@ def validate_story(filepath):
         for dep in deps:
             # Busca story com esse ticket
             found = False
+            dep_file = None
             for f in stories_dir.glob("*.md"):
-                if dep in f.read_text(encoding="utf-8"):
+                if f.resolve() != filepath.resolve() and dep in f.read_text(encoding="utf-8"):
                     found = True
+                    dep_file = f
                     break
             if not found:
                 errors.append(f"Dependencia referenciada nao encontrada: {dep}")
+            else:
+                dep_content = dep_file.read_text(encoding="utf-8")
+                dep_fm = parse_frontmatter(dep_content)
+                if dep_fm:
+                    dep_status = dep_fm.get("status")
+                    if dep_status not in ["CONCLUÍDO", "Done"]:
+                        errors.append(
+                            f"Dependencia '{dep}' ({dep_file.name}) esta no status '{dep_status}' mas deveria estar CONCLUÍDO ou Done"
+                        )
 
     # Valida presence of test tasks (OBRIGATORIO para todas stories)
     has_test_section = "Critérios de Aceitação" in content or "Criteria" in content or "Aceitação" in content

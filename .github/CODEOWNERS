@@ -1,0 +1,20 @@
+# 📜 CODEOWNERS - A-SDLC Framework
+# Este arquivo define os proprietários padrão para revisões de Pull Requests.
+# O GitHub irá sugerir ou exigir revisões dessas pessoas de forma automática
+# quando uma PR alterar esses arquivos (se as Branch Protection Rules exigirem).
+
+# Proprietário padrão para TODO o repositório
+*                                         @jota-f
+
+# Donos específicos para áreas críticas do projeto:
+# Workflows de CI/CD e automação do GitHub
+.github/workflows/                        @jota-f
+.github/pull_request_template.md          @jota-f
+.github/CODEOWNERS                        @jota-f
+
+# Modificações no core do framework A-SDLC
+/asdlc/                                   @jota-f
+/main.py                                  @jota-f
+
+# Modificações em templates e diretrizes de agentes
+/agentic_templates/                       @jota-f

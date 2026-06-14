@@ -21,9 +21,10 @@ Você: "/asdlc-architecture Quero adicionar um sistema de notificações. Qual a
 
 ## Passos da Workflow
 
-0. **INJEÇÃO DE CONTEXTO (OBRIGATÓRIO)**: O agente DEVE tentar ler o `PROJECT_CONTEXT.md`, `GLOSSARY.md` e os arquivos em `docs/adr/`.
+0. **INJEÇÃO DE CONTEXTO (OBRIGATÓRIO)**: O agente DEVE tentar ler o `PROJECT_CONTEXT.md`, `GLOSSARY.md`, o índice de decisões **`docs/adr/LEARNING.md`** (se não existir este índice, consulte `docs/adr/`) e o **`BACKLOG.md`**.
    - Se o `GLOSSARY.md` **não existir** ou estiver vazio, o agente DEVE alertar o usuário: *"⚠️ Nenhum glossário detectado. Recomendo rodar o `/asdlc-grill` antes para definir a linguagem ubíqua e evitar decisões arquiteturais desalinhadas."*
-   - Garanta que a discussão respeite a arquitetura base, a linguagem do domínio e as decisões arquiteturais prévias.
+   - Garanta que a discussão respeite a arquitetura base, a linguagem do domínio e as decisões e aprendizados arquiteturais prévios (indexados).
+   - **MANDATÓRIO**: O agente DEVE revisar o `BACKLOG.md` para guiar a modelagem técnica e escolhas de design, endereçando os débitos técnicos e notas do desenvolvedor relevantes para a discussão.
 1. O agente atua como **Architecture Agent** do A-SDLC
 2. Considera a stack tecnológica atual definida no contexto.
 4. Apresenta opções de design com prós e contras
