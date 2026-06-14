@@ -1,4 +1,4 @@
-# 🤖 A-SDLC Agentic Mode Guide (v2.4.0)
+# 🤖 A-SDLC Agentic Mode Guide (v2.5.0)
 
 ## O que é este diretório?
 
@@ -56,6 +56,7 @@ seu-projeto/
 | `/asdlc-execute` | Implementar uma story (TDD obrigatório) |
 | `/asdlc-bug` | Diagnosticar e corrigir bugs |
 | `/asdlc-dashboard` | Gerar dashboard visual do projeto (KPIs, Kanban, Burndown) |
+| `/asdlc-update` | Atualiza as skills e workflows do A-SDLC de forma segura |
 
 ---
 
@@ -126,12 +127,17 @@ depends_on: ["20260407_NOTIFY"]
 ```
 
 **Regras:**
-- Story só executa se todas dependências = `CONCLUÍDO`
-- Agente verifica automaticamente antes de implementar
+- A story só passa na validação e executa se todas as dependências listadas no campo `depends_on` estiverem marcadas como **`CONCLUÍDO`** ou **`Done`**. Caso estejam em `PENDENTE`, `In Progress` ou qualquer outro status intermediário, o validador acusará erro.
+- O parser de frontmatter é robusto e aceita tanto listas inline (ex: `["DEP1"]`) quanto listas em bloco (block sequences):
+  ```yaml
+  depends_on:
+    - "20260407_NOTIFY"
+  ```
+- O validador de stories verifica automaticamente estas dependências e status antes do início de qualquer implementação.
 
 ---
 
-## 🆕 Novidades (v2.4.0)
+## 🆕 Novidades (v2.5.0)
 
 | Feature | Descrição |
 |---------|-----------|
@@ -145,6 +151,7 @@ depends_on: ["20260407_NOTIFY"]
 | Deep Modules | Orientação de arquitetura (interfaces simples) |
 | `/asdlc-bug` | Workflow de resolução de bugs com RCA |
 | `asdlc_bug_hunter` | Skill de diagnóstico e causa raiz |
+| Backlog Centralizado | Uso do `BACKLOG.md` para notas mentais do desenvolvedor e débitos técnicos |
 
 ---
 
@@ -173,6 +180,8 @@ agentic_templates/
 ├── templates/
 │   ├── story_template.md       # Template padrão de story
 │   ├── bug_template.md         # Template padrão de bug
+│   ├── learning_template.md    # Template de índice de ADRs (Aprendizados)
+│   ├── backlog_template.md     # Template padrão de backlog (notas mentais/ideias)
 │   └── exemplo/                # Exemplos de stories
 └── stories/
     └── MEMORY.md               # Memória do projeto
@@ -183,10 +192,10 @@ agentic_templates/
 ## ⚡ Otimização de Tokens
 
 ### Dicas
-1. **MEMORY.md primeiro** - visão geral sem iterar todas stories
-2. **PROJECT_CONTEXT** - inclua apenas seção relevante
-3. **Context Compactor** - invoque após 30+ mensagens
-4. **Smart Zone** - mantenha contexto < 80k tokens
+1. **MEMORY.md, LEARNING.md e BACKLOG.md primeiro** - use-os para obter visão geral do progresso, decisões arquiteturais e ideias pendentes de forma enxuta, sem varrer todas as stories, ADRs ou notas soltas.
+2. **PROJECT_CONTEXT** - inclua apenas a seção relevante.
+3. **Context Compactor** - invoque após 30+ mensagens.
+4. **Smart Zone** - mantenha contexto < 80k tokens.
 
 ### Smart Zone vs Dumb Zone
 | Zona | Tokens | Comportamento |

@@ -18,19 +18,24 @@ Esta skill capacita o agente a gerar e interpretar o dashboard visual interativo
 
 ### 1. Detectar Modo de Execução (OBRIGATÓRIO)
 
-Antes de qualquer ação, o agente DEVE verificar se o `main.py` existe na raiz do projeto:
+O agente DEVE verificar se o interpretador Python está disponível no PATH e se o arquivo `main.py` existe na raiz do projeto:
 
 ```
-SE main.py existir na raiz E pasta asdlc/ existir:
+SE Python estiver no PATH E main.py existir na raiz E pasta asdlc/ existir:
     → Usar MODO PYTHON (HTML interativo)
 SENÃO:
-    → Usar MODO TEXTO (resumo no chat)
+    → Usar MODO TEXTO (resumo no chat de forma autônoma)
 ```
 
 ### 2a. MODO PYTHON — HTML Interativo
 
-Execute:
+Execute o comando utilizando o executável do venv se disponível:
 ```bash
+# No Windows:
+venv\Scripts\python main.py dashboard --no-open
+# No Linux/macOS:
+venv/bin/python main.py dashboard --no-open
+# Fallback geral (sem venv):
 python main.py dashboard --no-open
 ```
 

@@ -74,6 +74,11 @@ def setup_cli_parser():
     )
     v_validate.add_argument("--output", "-o", help="Arquivo de saída (padrão: stdout)")
 
+    # Comando: install-agentic
+    p_inst = subparsers.add_parser("install-agentic", help="Instala ou atualiza os templates do Modo Agentic de forma segura no projeto.")
+    p_inst.add_argument("--path", "-p", default=".", help="Caminho do projeto destino (padrão: atual)")
+    p_inst.add_argument("--force", action="store_true", help="Força a sobrescrita de arquivos de dados do usuário (ex: MEMORY.md).")
+
     return parser
 
 
@@ -82,6 +87,8 @@ def execute_cli_command(args):
         project_manager.initialize_project(
             project_name=args.name, initial_prompt=args.prompt, project_type=args.type, project_path=args.path
         )
+    elif args.command == "install-agentic":
+        project_manager.install_agentic_templates(target_path=args.path, force=args.force)
     elif args.command == "create-story":
         story_manager.create_story(story_title=args.title)
     elif args.command == "implement":
