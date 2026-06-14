@@ -58,6 +58,9 @@ class ASDLCValidator:
         # 5. Validar prompts
         prompts_score = self._validate_prompts()
 
+        # 6. Analisar inchaço de código (informativo)
+        self._validate_code_bloat()
+
         # Calcular score geral
         self.validation_report["overall_score"] = (
             structure_score + agents_score + stories_score + context_score + prompts_score
@@ -119,8 +122,11 @@ class ASDLCValidator:
                 self.validation_report["suggestions"].append(f"📁 Criar diretório obrigatório: {dir_path}")
                 self.validation_report["auto_fix_commands"].append(f"mkdir -p '{dir_path}'")
 
-        self.validation_report["validations"]["file_structure"] = structure_validations
         structure_score = (score / total_checks) * 100
+        self.validation_report["validations"]["file_structure"] = {
+            "score": structure_score,
+            "details": structure_validations,
+        }
 
         logger.info(f"📁 Estrutura: {structure_score:.1f}/100 ({score}/{total_checks} itens)")
         return structure_score
@@ -181,8 +187,11 @@ class ASDLCValidator:
 
             agents_validations[agent_file] = agent_validations
 
-        self.validation_report["validations"]["agents"] = agents_validations
         agents_score = total_score / len(agents)
+        self.validation_report["validations"]["agents"] = {
+            "score": agents_score,
+            "details": agents_validations,
+        }
 
         logger.info(f"🤖 Agentes: {agents_score:.1f}/100")
         return agents_score
@@ -360,6 +369,51 @@ class ASDLCValidator:
 
         logger.info(f"📚 Prompts: {prompts_score:.1f}/100 ({prompts_found}/{len(required_prompts)} encontrados)")
         return prompts_score
+
+    def _validate_code_bloat(self):
+        """Varre os arquivos de código do projeto para alertar sobre inchaço (bloat)"""
+        logger.info("🔍 Analisando inchaço de arquivos de código...")
+
+        extensions = {".py", ".js", ".jsx", ".ts", ".tsx", ".kt", ".java", ".cpp", ".c", ".h", ".cs", ".go", ".rs", ".swift"}
+        exclude_dirs = {".git", ".asdlc", "stories", "prompts", "venv", ".venv", "node_modules", "build", "dist", "__pycache__"}
+
+        bloated_files = []
+        long_files = []
+
+        try:
+            for path in self.project_path.rglob("*"):
+                if path.is_file():
+                    # Verificar se o arquivo está em algum diretório a ser excluído
+                    parts = path.relative_to(self.project_path).parts
+                    if any(d in exclude_dirs for d in parts[:-1]):
+                        continue
+
+                    if path.suffix in extensions:
+                        try:
+                            # Conta linhas do arquivo
+                            with open(path, "r", encoding="utf-8", errors="ignore") as f:
+                                lines = sum(1 for _ in f)
+
+                            rel_path = path.relative_to(self.project_path)
+                            if lines > 1500:
+                                bloated_files.append((rel_path, lines))
+                            elif lines > 300:
+                                long_files.append((rel_path, lines))
+                        except Exception as e:
+                            logger.warning(f"Não foi possível ler {path} para contagem de linhas: {e}")
+        except Exception as e:
+            logger.warning(f"Erro ao varrer arquivos de código: {e}")
+
+        # Adicionar avisos nas sugestões
+        for rel_path, lines in bloated_files:
+            self.validation_report["suggestions"].append(
+                f"⚠️ Arquivo gigante detectado (bloated legacy): {rel_path} ({lines} linhas). Recomenda-se extrair responsabilidades em arquivos menores."
+            )
+
+        for rel_path, lines in long_files:
+            self.validation_report["suggestions"].append(
+                f"💡 Arquivo longo detectado: {rel_path} ({lines} linhas). Mantenha novos arquivos abaixo de 300 linhas de código."
+            )
 
     def _generate_improvement_suggestions(self):
         """Gerar sugestões de melhoria baseadas na validação"""

@@ -42,6 +42,10 @@ def initialize_project(
     glossary_content = f"# 📖 GLOSSARY.md - {project_name}\n\n## 1. Glossário de Domínio (Linguagem Ubíqua)\n\n| Termo | Definição | Contexto |\n|-------|-----------|----------|\n| Exemplo | Definição do termo | Contexto de uso |\n"
     (project_dir / "GLOSSARY.md").write_text(glossary_content, encoding="utf-8")
 
+    # 1.2 Criar BACKLOG.md inicial
+    backlog_content = f"# 📋 BACKLOG.md - {project_name}\n\nEste arquivo centraliza notas mentais, ideias futuras e débitos técnicos identificados. Ele serve como insumo cognitivo para os agentes A-SDLC durante a criação e planejamento de novas Stories.\n\n---\n\n## 💡 Notas Mentais e Ideias Futuras (Desenvolvedor)\n*Use esta seção para digitar livremente ideias de refatoração, melhorias futuras ou funcionalidades a serem desenvolvidas mais tarde.*\n\n- [ ] Exemplo: adicionar um sistema de offset de tempo, já que por enquanto estou usando isso hardcoded\n\n---\n\n## 🔧 Débito Técnico e Refatoração (Gerado por IA)\n*Esta seção é atualizada automaticamente pelos agentes de Code Review ou pelo validador do framework.*\n\n"
+    (project_dir / "BACKLOG.md").write_text(backlog_content, encoding="utf-8")
+
     # 2. Criar um PROJECT_CONTEXT.md inicial
     context_content = f"""# 📜 PROJECT_CONTEXT.md - {project_name}
 
@@ -228,6 +232,9 @@ Você é um desenvolvedor sênior especializado em criar código limpo, eficient
 4. **Tratamento de Erros**: Implemente tratamento robusto de exceções
 5. **Performance**: Considere eficiência e escalabilidade
 6. **Segurança**: Siga práticas de segurança
+7. **Limite de tamanho de arquivo**: Novos arquivos devem ter no máximo **300 linhas** de código. Divida as responsabilidades em arquivos menores e modulares.
+8. **Prevenção de inchaço (legacy bloated files)**: Evite adicionar novos blocos de código complexos a arquivos legados gigantescos (ex: com > 1500 linhas). Em vez disso, isole e extraia novos componentes, telas ou lógicas para arquivos/funções novos e separados.
+
 
 ## Tecnologias Preferidas
 - **Backend**: Python (FastAPI/Flask), Node.js (Express)
@@ -373,6 +380,9 @@ Você é um revisor de código especializado em garantir qualidade, segurança e
 4. **Manutenibilidade**: Código fácil de manter
 5. **Testabilidade**: Cobertura de testes adequada
 6. **Documentação**: Comentários e docs claros
+7. **Limite de tamanho de arquivo**: Verifique se novos arquivos criados têm no máximo **300 linhas** de código. Se passarem disso, recomende a divisão.
+8. **Prevenção de inchaço (legacy bloated files)**: Rejeite a inclusão de código complexo em arquivos gigantescos existentes (> 1500 linhas). Exija a refatoração ou extração de responsabilidades para novos arquivos e componentes menores.
+
 """
 
     # 6. Bug Hunter Agent - Especialista em Diagnóstico e RCA
@@ -959,3 +969,65 @@ A LLM gerará uma descrição, story ou implementação completa seguindo o padr
     (prompts_dir / "README.md").write_text(prompts_readme, encoding="utf-8")
 
     logger.info("📋 Templates de prompts criados automaticamente")
+
+
+def install_agentic_templates(target_path: str, force: bool = False) -> bool:
+    """
+    Copia e instala os templates do Modo Agentic na pasta alvo de forma segura.
+    Não sobrescreve arquivos de dados do usuário (ex: MEMORY.md) a menos que force=True.
+    """
+    import shutil
+
+    # Encontrar a pasta agentic_templates no repositório
+    root_path = Path(__file__).resolve().parent.parent
+    src_dir = root_path / "agentic_templates"
+
+    if not src_dir.exists():
+        logger.error(f"Erro: Pasta de templates fonte não encontrada em {src_dir}")
+        return False
+
+    dest_dir = Path(target_path).resolve()
+    dest_dir.mkdir(parents=True, exist_ok=True)
+
+    logger.info(f"Instalando templates agentic em: {dest_dir}")
+
+    # Lista de itens a serem processados
+    items_copied = 0
+    items_skipped = 0
+
+    for item in src_dir.rglob("*"):
+        if item.is_dir():
+            continue
+
+        # Obter caminho relativo
+        rel_path = item.relative_to(src_dir)
+        dest_file = dest_dir / rel_path
+
+        # Verificar se é um arquivo crítico de dados do usuário
+        is_user_data = (
+            rel_path.parts[0] == "stories"
+            or rel_path.name == "MEMORY.md"
+            or rel_path.name == "LEARNING.md"
+            or rel_path.name == "PROJECT_CONTEXT.md"
+            or rel_path.name == "GLOSSARY.md"
+            or rel_path.name == "BACKLOG.md"
+        )
+
+        # Criar diretório pai
+        dest_file.parent.mkdir(parents=True, exist_ok=True)
+
+        if dest_file.exists() and is_user_data and not force:
+            logger.info(f"Ignorando arquivo de dados pré-existente: {rel_path}")
+            items_skipped += 1
+            continue
+
+        # Copiar arquivo
+        try:
+            shutil.copy2(item, dest_file)
+            items_copied += 1
+        except Exception as e:
+            logger.error(f"Falha ao copiar {rel_path} para {dest_file}: {e}")
+
+    logger.info(f"Instalação finalizada: {items_copied} arquivos copiados, {items_skipped} pulados.")
+    return True
+

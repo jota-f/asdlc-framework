@@ -1,4 +1,4 @@
-# 🌌 A-SDLC Framework (v2.4.0)
+# 🌌 A-SDLC Framework (v2.5.0)
 **AI-Driven Software Development Lifecycle**
 
 A-SDLC is a framework that turns AI assistants into autonomous agents capable of managing the full software development lifecycle. It uses **Harness Engineering**, **Mandatory TDD**, **Tracer Bullets**, and **Feedback Loops** to ensure high-fidelity code.
@@ -142,6 +142,16 @@ python main.py implement --id 20260425_204837
 > **RECOMMENDED MODE FOR CURSOR/WINDSURF:** This mode does not require Python or CLI installation. It injects A-SDLC "intelligence" directly into your IDE chat via templates.
 
 ### 📥 Quick Installation
+You can install the templates in two ways:
+
+#### Option A: Using the Python CLI (Recommended & Safe)
+If you have the framework installed locally, run:
+```bash
+python main.py install-agentic --path your-project/
+```
+*This command copies all templates safely, ensuring that critical user data files (such as `stories/MEMORY.md`, `docs/adr/LEARNING.md`, `PROJECT_CONTEXT.md`, `GLOSSARY.md`, or `BACKLOG.md`) are **not** overwritten.*
+
+#### Option B: Manual Copy (Fallback)
 Copy the templates folder to your project:
 ```bash
 cp -r agentic_templates/ your-project/
@@ -205,6 +215,7 @@ python main.py validate --format markdown
 | `implement` | Run TDD implementation | `--id` |
 | `list-stories` | List all stories | — |
 | `validate` | Validate compliance | `--project`, `--format`, `--output` |
+| `install-agentic` | Safe template install/update | `--path`, `--force` |
 
 ### Interactive mode (no arguments)
 ```bash
@@ -277,11 +288,19 @@ Architecture → Test Red → Code Green → Validation → Review
 | Warning | 80k-100k | Quality degrades |
 | Dumb Zone | > 100k | LLM makes silly errors |
 
+*Note: The framework calculates context density using the `tiktoken` library for exact token counting (default `cl100k_base` encoding). If the library is not installed in the environment, it uses a safe fallback based on character count (`characters // 4`).*
+
 ### Tracer Bullets (Vertical Slices)
 ```
 CORRECT: Model + Endpoint + Test (one story)
 WRONG: All models → All endpoints → All tests
 ```
+
+### Backlog and Mental Notes (BACKLOG.md)
+The `BACKLOG.md` file serves as a central hub for developer mental notes and AI-generated technical debt:
+- **Developer Mental Notes**: Safely store quick ideas, refactoring thoughts, or hardcoded configurations that need to be addressed later.
+- **AI Technical Debt**: Automatically populated by the Review Agent or validators with suggestions from previous runs.
+- **Mandatory Reading**: The agentic workflows (`/asdlc-create-story`, `/asdlc-plan`, and `/asdlc-architecture`) are programmed to read this file first, incorporating pending notes and ideas into your current work.
 
 ### Inviolable Law
 **NEVER** mark a story as DONE without a `run_command` returning exit code 0.

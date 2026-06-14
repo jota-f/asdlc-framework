@@ -7,6 +7,25 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.
 
 ---
 
+## [2.5.0] - 2026-06-14
+
+### Adicionado
+- **📋 Sistema de Notas Mentais e Débitos Técnicos (Backlog)**:
+  - **BACKLOG.md Estruturado**: Inicialização automática de um arquivo `BACKLOG.md` baseado no template padronizado para guiar refatorações do desenvolvedor e registrar débitos gerados por IA.
+  - **Injeção Obrigatória nos Workflows**: Agentes de IA agora consultam compulsoriamente o `BACKLOG.md` em workflows críticos (`create_story`, `scope_analysis` e `architecture_discovery`).
+  - **Proteção do Backlog**: Proteção nativa no instalador e atualizador de templates para nunca sobrescrever o `BACKLOG.md` local do usuário.
+- **🛡️ Controle de Inchaço de Código (Modulação & Harness)**:
+  - **Sensor de Inchaço de Código**: Adicionado novo sensor `_validate_code_bloat()` no validador de conformidade (`validation_checker.py`), emitindo alertas para arquivos que excedam 1500 linhas e avisos de modulosidade para manter novos arquivos abaixo de 300 linhas.
+  - **Filosofia Ponytail / YAGNI**: Inclusão de diretrizes de design minimalista baseadas no repositório `DietrichGebert/ponytail` (simplicidade reflexiva, nativo em primeiro lugar, diffs mínimos) nos templates de Code/Review Agents, Story Template e workflow de execução.
+- **📦 Instalador e Atualizador de Templates Inteligente**:
+  - **Gerenciamento de Ambientes Virtuais**: O workflow de atualização `/asdlc-update` detecta e cria virtualenvs (`venv` ou `.venv`) automaticamente, instala dependências e executa os validadores priorizando o interpretador virtual local.
+  - **Atualização Híbrida do Core**: O atualizador agora suporta a atualização dinâmica da CLI e núcleo Python (`asdlc/`, `main.py`, `requirements.txt`) através de clones temporários seguros.
+
+### Modificado
+- **Precisão na Contagem de Tokens**: A medição da densidade de contexto do `agent_executor.py` agora utiliza a biblioteca `tiktoken` (codificação `cl100k_base`) com fallback seguro para a heurística original de caracteres.
+- **Verificação Ativa de Dependências**: O validador de stories agora confere se as dependências físicas listadas no campo `depends_on` estão marcadas com o status `"CONCLUÍDO"` ou `"Done"`, gerando erros se a dependência estiver pendente ou em progresso.
+- **Parser YAML Resiliente**: O validador aceita tanto listas inline quanto listas em bloco no YAML (Block Sequences `- item`), importando PyYAML nativamente ou caindo para um parser recursivo manual resiliente.
+
 ## [2.4.0] - 2026-05-17
 
 ### Adicionado

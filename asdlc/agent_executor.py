@@ -16,8 +16,13 @@ CHARS_PER_TOKEN_ESTIMATE = 4  # Aproximação: 1 token ≈ 4 caracteres
 
 
 def estimate_token_count(text: str) -> int:
-    """Estima contagem de tokens baseado no tamanho do texto."""
-    return len(text) // CHARS_PER_TOKEN_ESTIMATE
+    """Estima contagem de tokens usando tiktoken se disponível, ou fallback baseado no tamanho do texto."""
+    try:
+        import tiktoken
+        encoding = tiktoken.get_encoding("cl100k_base")
+        return len(encoding.encode(text, disallowed_special=()))
+    except Exception:
+        return len(text) // CHARS_PER_TOKEN_ESTIMATE
 
 
 def log_context_density(agent_type: str, total_chars: int) -> int:

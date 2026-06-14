@@ -23,9 +23,10 @@ Você: "/asdlc-plan Preciso adicionar sistema de auth com login, registro, recup
 
 ## Passos da Workflow
 
-0. **INJEÇÃO DE CONTEXTO (OBRIGATÓRIO)**: O agente DEVE tentar ler o `GLOSSARY.md` e `docs/adr/`.
+0. **INJEÇÃO DE CONTEXTO (OBRIGATÓRIO)**: O agente DEVE tentar ler o `GLOSSARY.md`, o índice de decisões de arquitetura **`docs/adr/LEARNING.md`** (se não existir este índice, consulte `docs/adr/`) e o **`BACKLOG.md`**.
    - Se o `GLOSSARY.md` **não existir** ou estiver vazio, o agente DEVE alertar o usuário: *"⚠️ Nenhum glossário detectado. É altamente recomendado rodar o `/asdlc-grill` antes para garantir que a quebra de tarefas use a terminologia correta e unificada."*
-   - Garanta que a quebra não viole decisões de arquitetura anteriores.
+   - Garanta que a quebra não viole decisões de arquitetura anteriores (aprendizados indexados).
+   - **MANDATÓRIO**: O agente DEVE analisar as pendências e ideias em `BACKLOG.md` para ver se alguma refatoração ou funcionalidade futura ali anotada deve ser incluída no planejamento do escopo atual.
 
 ### Passo 1: Análise de Escopo
 1. O agente identifica os componentes necessários

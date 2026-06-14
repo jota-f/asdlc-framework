@@ -14,6 +14,7 @@ from asdlc.project_manager import initialize_project
 from asdlc.story_manager import create_story, list_stories
 from asdlc.plan_generator import gerar_plano_de_execucao
 from asdlc.ui_manager import UIManager
+from asdlc.validation_checker import ASDLCValidator
 
 
 class TestInitializeProject:
@@ -37,6 +38,7 @@ class TestInitializeProject:
 
         assert project_dir.exists()
         assert (project_dir / "PROJECT_CONTEXT.md").exists()
+        assert (project_dir / "BACKLOG.md").exists()
         assert (project_dir / ".asdlc").exists()
         assert (project_dir / ".asdlc" / "agents").exists()
         assert (project_dir / "stories").exists()
@@ -217,6 +219,25 @@ class TestGerarPlanoDeExecucao:
 
         mock_call_llm.assert_called_once()
 
+    @patch("asdlc.plan_generator.call_llm")
+    def test_gerar_plano_contains_inputs_in_prompt(self, mock_call_llm):
+        """Testa que gerar_plano_de_execucao inclui a story, contexto e estrutura no prompt"""
+        mock_call_llm.return_value = "# Plano"
+
+        story_data = {
+            "title": "Minha Story Especial",
+            "id": "20260504_teste",
+            "description": "Uma descricao longa",
+            "type": "user_story",
+        }
+
+        gerar_plano_de_execucao(story_data, self.project_dir)
+
+        called_prompt = mock_call_llm.call_args[0][0]
+        assert "Minha Story Especial" in called_prompt
+        assert "Uma descricao longa" in called_prompt
+        assert "# Contexto de teste" in called_prompt
+
 
 class TestUIManager:
     """Testes para UIManager"""
@@ -233,14 +254,28 @@ class TestUIManager:
 class TestAgentExecutor:
     """Testes para agent_executor"""
 
-    def test_estimate_token_count(self):
-        """Testa estimativa de tokens"""
+    def test_estimate_token_count_fallback(self):
+        """Testa estimativa de tokens usando fallback"""
         from asdlc.agent_executor import estimate_token_count
+        with patch.dict("sys.modules", {"tiktoken": None}):
+            # Sem tiktoken
+            assert estimate_token_count("1234") == 1
+            assert estimate_token_count("12345678") == 2
+            assert estimate_token_count("") == 0
 
-        # 4 caracteres ≈ 1 token
-        assert estimate_token_count("1234") == 1
-        assert estimate_token_count("12345678") == 2
-        assert estimate_token_count("") == 0
+    def test_estimate_token_count_tiktoken(self):
+        """Testa estimativa de tokens usando tiktoken mockado"""
+        from asdlc.agent_executor import estimate_token_count
+        mock_encoding = MagicMock()
+        mock_encoding.encode.return_value = [1, 2, 3]  # 3 tokens
+        
+        mock_tiktoken = MagicMock()
+        mock_tiktoken.get_encoding.return_value = mock_encoding
+        
+        with patch.dict("sys.modules", {"tiktoken": mock_tiktoken}):
+            assert estimate_token_count("algum texto") == 3
+            mock_tiktoken.get_encoding.assert_called_with("cl100k_base")
+            mock_encoding.encode.assert_called_with("algum texto", disallowed_special=())
 
     def test_log_context_density_ok(self):
         """Testa log de contexto na Smart Zone"""
@@ -259,5 +294,124 @@ class TestAgentExecutor:
         assert tokens == 100000
 
 
+class TestASDLCValidator:
+    """Testes para ASDLCValidator"""
+
+    def setup_method(self):
+        self.temp_dir = tempfile.mkdtemp()
+        self.project_dir = Path(self.temp_dir) / "test-validator-project"
+        with patch("asdlc.project_manager.story_manager.create_story") as mock_create_story:
+            initialize_project("test-validator-project", "Projeto de teste", "cli", project_path=str(self.project_dir))
+
+    def teardown_method(self):
+        shutil.rmtree(self.temp_dir, ignore_errors=True)
+
+    def test_validation_report_has_correct_scores(self):
+        """Testa que o validador calcula e salva os scores corretamente na estrutura aninhada"""
+        validator = ASDLCValidator(self.project_dir)
+        report = validator.validate_project()
+
+        # Verificar se as categorias têm dicionário com score e detalhes
+        assert "file_structure" in report["validations"]
+        assert isinstance(report["validations"]["file_structure"], dict)
+        assert "score" in report["validations"]["file_structure"]
+        assert "details" in report["validations"]["file_structure"]
+        assert report["validations"]["file_structure"]["score"] > 0
+
+        assert "agents" in report["validations"]
+        assert isinstance(report["validations"]["agents"], dict)
+        assert "score" in report["validations"]["agents"]
+        assert "details" in report["validations"]["agents"]
+        assert report["validations"]["agents"]["score"] > 0
+
+    def test_markdown_report_renders_scores(self):
+        """Testa que o relatório markdown renderiza os scores corretamente"""
+        validator = ASDLCValidator(self.project_dir)
+        validator.validate_project()
+        md_report = validator.generate_report("markdown")
+
+        assert "Estrutura de Arquivos" in md_report
+        assert "Agentes" in md_report
+        score_struct = validator.validation_report["validations"]["file_structure"]["score"]
+        score_agents = validator.validation_report["validations"]["agents"]["score"]
+        assert f"{score_struct:.1f}/100" in md_report
+        assert f"{score_agents:.1f}/100" in md_report
+
+    def test_validate_code_bloat_adds_suggestions(self):
+        """Testa que o validador detecta arquivos gigantes e longos e adiciona sugestões correspondentes"""
+        # Criar um arquivo longo (305 linhas)
+        long_file = self.project_dir / "long_script.py"
+        long_file.write_text("\n" * 305, encoding="utf-8")
+
+        # Criar um arquivo gigante (1505 linhas)
+        huge_file = self.project_dir / "huge_script.js"
+        huge_file.write_text("\n" * 1505, encoding="utf-8")
+
+        validator = ASDLCValidator(self.project_dir)
+        report = validator.validate_project()
+
+        # Verificar se as sugestões contêm alertas sobre o arquivo longo e o arquivo gigante
+        suggestions_str = " ".join(report["suggestions"])
+        assert "long_script.py" in suggestions_str
+        assert "huge_script.js" in suggestions_str
+
+
+
+class TestInstallAgenticTemplates:
+    """Testes para install_agentic_templates"""
+
+    def setup_method(self):
+        self.temp_dir = tempfile.mkdtemp()
+        self.target_dir = Path(self.temp_dir) / "target-project"
+
+    def teardown_method(self):
+        shutil.rmtree(self.temp_dir, ignore_errors=True)
+
+    def test_install_agentic_copies_files(self):
+        """Testa que install_agentic_templates copia os arquivos básicos corretamente"""
+        from asdlc.project_manager import install_agentic_templates
+
+        result = install_agentic_templates(self.target_dir)
+        assert result is True
+
+        # Verificar se os diretórios/arquivos esperados foram copiados
+        assert (self.target_dir / "skills").exists()
+        assert (self.target_dir / "workflows").exists()
+        assert (self.target_dir / "validate_stories.py").exists()
+
+    def test_install_agentic_protects_user_files(self):
+        """Testa que install_agentic_templates não sobrescreve arquivos de dados existentes por padrão"""
+        from asdlc.project_manager import install_agentic_templates
+
+        self.target_dir.mkdir()
+
+        # Criar arquivos de dados do usuário mockados
+        stories_dir = self.target_dir / "stories"
+        stories_dir.mkdir()
+        memory_file = stories_dir / "MEMORY.md"
+        memory_file.write_text("DADOS DO USUARIO", encoding="utf-8")
+
+        context_file = self.target_dir / "PROJECT_CONTEXT.md"
+        context_file.write_text("CONTEXTO DO USUARIO", encoding="utf-8")
+
+        backlog_file = self.target_dir / "BACKLOG.md"
+        backlog_file.write_text("BACKLOG DO USUARIO", encoding="utf-8")
+
+        result = install_agentic_templates(self.target_dir, force=False)
+        assert result is True
+
+        # Verificar se os dados do usuário foram protegidos e não sobrescritos
+        assert memory_file.read_text(encoding="utf-8") == "DADOS DO USUARIO"
+        assert context_file.read_text(encoding="utf-8") == "CONTEXTO DO USUARIO"
+        assert backlog_file.read_text(encoding="utf-8") == "BACKLOG DO USUARIO"
+
+        # Verificar que se rodar com force=True ele sobrescreve
+        result_force = install_agentic_templates(self.target_dir, force=True)
+        assert result_force is True
+        assert memory_file.read_text(encoding="utf-8") != "DADOS DO USUARIO"
+
+
 if __name__ == "__main__":
     pytest.main([__file__])
+
+

@@ -23,9 +23,10 @@ Use este comando para traduzir uma ideia de negócio em um artefato tangível co
    ```
    **NÃO prossiga** até a demanda ter user story completa.
 
-2. **INJEÇÃO DE CONTEXTO (OBRIGATÓRIO)**: O agente DEVE tentar ler o `PROJECT_CONTEXT.md`, `GLOSSARY.md` e `docs/adr/`.
+2. **INJEÇÃO DE CONTEXTO (OBRIGATÓRIO)**: O agente DEVE tentar ler o `PROJECT_CONTEXT.md`, `GLOSSARY.md`, o índice de decisões `docs/adr/LEARNING.md` (se este índice não existir, consulte `docs/adr/`) e o **`BACKLOG.md`**.
    - Se o `GLOSSARY.md` **não existir** ou estiver vazio, o agente DEVE alertar o usuário ANTES de criar a story: *"⚠️ Nenhum glossário detectado. É altamente recomendado rodar o `/asdlc-grill` antes para garantir consistência de domínio."*
-   - O Agente deve garantir que a Story use a **Linguagem Ubíqua** do glossário e respeite os **ADRs** existentes.
+   - O Agente deve garantir que a Story use a **Linguagem Ubíqua** do glossário e respeite as decisões e aprendizados arquiteturais existentes.
+   - **MANDATÓRIO**: O agente DEVE verificar o `BACKLOG.md` para identificar se existem Notas Mentais do Desenvolvedor ou Débitos Técnicos relacionados com a Story sendo planejada, garantindo que as ideias ou pendências sejam incorporadas e abordadas na Story atual.
 3. Invoque a Skill `asdlc_story_generator` pedindo ao Agente para atuar como Product Owner Sênior.
 4. Peça a IA para transformar sua demanda do prompt de chat (ex: "Criar endpoint de validação de email no backend") numa Story.
 5. **MANDATÓRIO para a IA**: Utilize ferramentas de Sistema de Arquivos (como `write_to_file` ou `run_command`) e salve o Markdown gerado EXATAMENTE sob as regras da skill no diretório `stories/`.
