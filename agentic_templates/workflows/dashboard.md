@@ -67,9 +67,14 @@ Após a geração, o agente DEVE:
   Progresso:      Z% das tasks marcadas como concluídas
   Conformidade:   W% das stories têm critérios de aceitação
 
+🏔️ Épicos:
+  [Epic ID]   [Objetivo]   [Status]   [X/N stories concluídas]
+  (lido diretamente da tabela "Épicos Ativos" do MEMORY.md — zero I/O extra)
+
 ⚠️  Pontos de Atenção:
   - [Listar stories bloqueadas por dependências não concluídas]
   - [Listar stories sem seção de Critérios de Aceitação]
+  - [Listar épicos com 0% de progresso há mais de N dias]
 
 💡 Para visualizar o dashboard completo, abra no browser:
    .asdlc/dashboard/dashboard.html

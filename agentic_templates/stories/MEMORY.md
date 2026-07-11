@@ -7,6 +7,13 @@ Resumo do histórico do projeto. O agente lê este arquivo de memória primeiro 
 - **Concluídas**: 1
 - **Pendente**: 1
 
+## 🏔️ Épicos Ativos
+*(Seção opcional — preencher apenas se o projeto usa épicos)*
+
+| Epic ID | Objetivo | Status | Stories |
+|---------|----------|--------|---------|
+| EPIC_20260407_AUTH | Módulo de Autenticação | EM ANDAMENTO | 1/3 concluídas |
+
 ---
 
 ## ✅ Concluídas
@@ -19,9 +26,9 @@ Resumo do histórico do projeto. O agente lê este arquivo de memória primeiro 
 
 ## ⏳ Pendentes
 
-| Ticket | Título | Depende De |
-|--------|--------|-----------|
-| 20260408_DASH | Tela de Dashboard com Gráficos | 20260407_NOTIFY |
+| Ticket | Título | Depende De | Epic ID |
+|--------|--------|------------|---------|
+| 20260408_DASH | Tela de Dashboard com Gráficos | 20260407_NOTIFY | |
 
 ---
 
@@ -31,3 +38,5 @@ Ao concluir uma story com `/asdlc-execute`, o agente DEVE:
 1. Ler `stories/MEMORY.md`
 2. Mover a entry de "Pendentes" para "Concluídas"
 3. Atualizar contadores
+4. Se a story tiver `epic_id`, atualizar a contagem na tabela "Épicos Ativos" (ex: `1/3` → `2/3`)
+5. Se todas as stories de um épico estiverem concluídas, marcar o épico como `CONCLUÍDO`

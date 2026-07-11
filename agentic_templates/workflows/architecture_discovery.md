@@ -21,7 +21,12 @@ Você: "/asdlc-architecture Quero adicionar um sistema de notificações. Qual a
 
 ## Passos da Workflow
 
-0. **INJEÇÃO DE CONTEXTO (OBRIGATÓRIO)**: O agente DEVE tentar ler o `PROJECT_CONTEXT.md`, `GLOSSARY.md`, o índice de decisões **`docs/adr/LEARNING.md`** (se não existir este índice, consulte `docs/adr/`) e o **`BACKLOG.md`**.
+0. **INJEÇÃO DE CONTEXTO & CHECKPOINT (MANDATÓRIO)**:
+   Antes de responder, verifique se o arquivo `.asdlc/context_checkpoint.md` existe na raiz do projeto.
+   - **Se existir**: Leia o arquivo, carregue seu estado na memória ativa e **exclua** ou **renomeie** o arquivo (ex: para `.asdlc/context_checkpoint.consumed`) usando as ferramentas do sistema de arquivos para evitar injeções repetidas.
+   - **Se não existir**: Prossiga normalmente.
+
+   Em seguida, leia o `PROJECT_CONTEXT.md`, `GLOSSARY.md`, o índice de decisões **`docs/adr/LEARNING.md`** (se não existir este índice, consulte `docs/adr/`) e o **`BACKLOG.md`**.
    - Se o `GLOSSARY.md` **não existir** ou estiver vazio, o agente DEVE alertar o usuário: *"⚠️ Nenhum glossário detectado. Recomendo rodar o `/asdlc-grill` antes para definir a linguagem ubíqua e evitar decisões arquiteturais desalinhadas."*
    - Garanta que a discussão respeite a arquitetura base, a linguagem do domínio e as decisões e aprendizados arquiteturais prévios (indexados).
    - **MANDATÓRIO**: O agente DEVE revisar o `BACKLOG.md` para guiar a modelagem técnica e escolhas de design, endereçando os débitos técnicos e notas do desenvolvedor relevantes para a discussão.
