@@ -100,6 +100,11 @@ Antes de criar novos testes, verifique se já existem testes para o cenário:
 1. Após a validação irrestrita do Passo 5, altere `status: "PENDENTE"` para `status: "CONCLUÍDO"` no frontmatter da Story.
 2. Opcionalmente, marque `[x]` nos checkboxes internos do Markdown da Story.
 3. **ATUALIZE A MEMÓRIA**: Leia `stories/MEMORY.md`, mova esta story de "Pendentes" para "Concluídas", atualize os contadores.
+4. **ATUALIZE O ÉPICO (se aplicável)**: Se a story tiver `epic_id` preenchido no frontmatter:
+   - Use a ferramenta MCP `asdlc_list_epics` para verificar o épico correspondente
+   - Atualize a tabela "Stories Filhas" no arquivo `stories/epics/[EPIC_ID].md` marcando esta story como `CONCLUÍDO`
+   - Atualize a contagem na linha do épico no `MEMORY.md` (ex: `1/3` → `2/3`)
+   - Se todas as stories do épico estiverem concluídas, marque o épico como `CONCLUÍDO` no frontmatter do arquivo do épico e no MEMORY.md
 
 ## Mensagens e Postura
 Mantenha-se comunicacionalmente enxuto. Comunique-se ao estilo:
@@ -120,10 +125,15 @@ Mantenha-se comunicacionalmente enxuto. Comunique-se ao estilo:
 
 Se sentir que o contexto está crescendo muito, invoque a skill `asdlc_context_compactor` antes de continuar.
 
-### Smart Zone: Monitoramento de Contexto
-Durante a implementação, monitore o tamanho do contexto:
-- **< 80k tokens**: Smart Zone — continue normalmente
-- **80k-100k tokens**: Warning — considere compactar antes da próxima fase
-- **> 100k tokens**: Dumb Zone — **PARE e compacte IMEDIATAMENTE**
+### Smart Zone: Monitoramento de Contexto & Auto-Triggering (Auto-Compaction)
+
+Durante a implementação, monitore ativamente o tamanho do contexto e a qualidade da sessão:
+- **< 80k tokens**: Smart Zone — continue normalmente.
+- **80k-100k tokens**: Warning — considere compactar.
+- **> 100k tokens ou muitas respostas erradas consecutivas / alucinações (Dumb Zone)**: 
+  - **PARE IMEDIATAMENTE** a tarefa de codificação.
+  - Invoque a skill `asdlc_context_compactor` para gerar o resumo do estado atual.
+  - Salve o checkpoint e avise o usuário explicitamente:
+    `"⚠️ O contexto atingiu a Dumb Zone (>100k tokens) ou começou a degradar. Salvei o checkpoint do estado atual em .asdlc/context_checkpoint.md. Por favor, abra uma nova janela de chat limpa e digite /asdlc-execute para continuar com Hot Start."`
 
 Para estimar: 1 token ≈ 4 caracteres. Some persona + PROJECT_CONTEXT + arquivos + histórico.

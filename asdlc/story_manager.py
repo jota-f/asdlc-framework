@@ -107,6 +107,211 @@ def create_story(
         raise
 
 
+def create_epic(
+    epic_title: str,
+    objective: str,
+    conclusion_criteria: List[str],
+    out_of_scope: Optional[List[str]] = None,
+) -> str:
+    """
+    Cria um novo épico no projeto. Épicos representam objetivos estratégicos de alto nível.
+
+    IMPORTANTE: Épico não é sinônimo de story grande. Use apenas quando o objetivo
+    tem dimensão de roadmap — múltiplos domínios com valor autônomo por semanas/sprints.
+
+    Args:
+        epic_title: Título do épico (objetivo estratégico)
+        objective: Uma frase descrevendo o valor de negócio entregue
+        conclusion_criteria: Lista de critérios macro que definem "done" para o épico
+        out_of_scope: Lista explícita do que o épico NÃO inclui
+
+    Returns:
+        str: epic_id gerado (ex: EPIC_20260411_AUTH)
+    """
+    try:
+        project_root = find_project_root()
+        if not project_root:
+            logger.error("Projeto A-SDLC não encontrado.")
+            return None
+
+        # Gerar ID do épico
+        timestamp = datetime.now().strftime("%Y%m%d")
+        slug = re.sub(r"[^a-zA-Z0-9]", "_", epic_title.upper())[:20].strip("_")
+        slug = re.sub(r"_+", "_", slug)
+        epic_id = f"EPIC_{timestamp}_{slug}"
+
+        # Garantir que pasta epics existe
+        epics_dir = project_root / "stories" / "epics"
+        epics_dir.mkdir(parents=True, exist_ok=True)
+
+        # Montar frontmatter + corpo do épico
+        criteria_md = "\n".join(f"- [ ] {c}" for c in conclusion_criteria)
+        oos_md = "\n".join(f"- {o}" for o in (out_of_scope or ["[Definir junto ao planejamento]"]))
+        today = datetime.now().strftime("%Y-%m-%d")
+
+        epic_content = f"""---
+title: "{epic_title}"
+epic_id: "{epic_id}"
+status: "EM ANDAMENTO"
+created: "{today}"
+---
+
+# 🏔️ Épico: {epic_title}
+
+## 🎯 Objetivo Estratégico
+{objective}
+
+## 📋 Critérios de Conclusão
+{criteria_md}
+
+## 🚫 Fora de Escopo
+{oos_md}
+
+## 🗺️ Stories Filhas
+| Story ID | Título | Status | Depende De |
+|----------|--------|--------|------------|
+
+## 📝 Decisões e Notas
+[Decisões arquiteturais específicas do épico — atualizado ao longo da execução]
+"""
+
+        epic_filename = f"{epic_id}.md"
+        epic_path = epics_dir / epic_filename
+        safe_write_file(epic_path, epic_content)
+
+        logger.info(f"Épico criado com sucesso: {epic_path}")
+        print(f"\n[OK] Épico criado!")
+        print(f"Epic ID: {epic_id}")
+        print(f"Arquivo: stories/epics/{epic_filename}")
+        print(f"Próximo passo: crie as stories filhas com epic_id='{epic_id}' no frontmatter")
+
+        return epic_id
+
+    except Exception as e:
+        logger.error(f"Erro ao criar épico: {e}")
+        raise
+
+
+def list_epics() -> List[Dict[str, Any]]:
+    """
+    Lista todos os épicos do projeto com progresso calculado.
+    Lê apenas o frontmatter YAML dos arquivos de épico (token-efficient).
+
+    Returns:
+        List[Dict[str, Any]]: Lista de épicos com id, title, status, progresso
+    """
+    try:
+        project_root = find_project_root()
+        if not project_root:
+            return []
+
+        epics_dir = project_root / "stories" / "epics"
+        if not epics_dir.exists():
+            logger.info("Nenhum épico encontrado (pasta stories/epics não existe).")
+            return []
+
+        epics = []
+        for epic_file in epics_dir.glob("*.md"):
+            try:
+                content = epic_file.read_text(encoding="utf-8")
+                # Extrair frontmatter apenas (até segundo ---)
+                fm_match = re.search(r"^---\n(.*?)\n---", content, re.DOTALL)
+                if not fm_match:
+                    continue
+
+                fm_text = fm_match.group(1)
+                epic_id = re.search(r'epic_id:\s*"?([^"\n]+)"?', fm_text)
+                title = re.search(r'title:\s*"?([^"\n]+)"?', fm_text)
+                status = re.search(r'status:\s*"?([^"\n]+)"?', fm_text)
+
+                if not epic_id:
+                    continue
+
+                eid = epic_id.group(1).strip()
+
+                # Calcular progresso: stories filhas com este epic_id
+                stories_dir = project_root / "stories"
+                total, done = 0, 0
+                for sf in stories_dir.glob("*.md"):
+                    sc = sf.read_text(encoding="utf-8")[:500]  # só frontmatter
+                    if eid in sc:
+                        total += 1
+                        if "CONCLUÍDO" in sc or "Done" in sc:
+                            done += 1
+
+                epics.append({
+                    "epic_id": eid,
+                    "title": title.group(1).strip() if title else eid,
+                    "status": status.group(1).strip() if status else "DESCONHECIDO",
+                    "stories_total": total,
+                    "stories_done": done,
+                    "file": str(epic_file),
+                })
+            except Exception as e:
+                logger.warning(f"Erro ao processar épico {epic_file}: {e}")
+
+        logger.info(f"Total de épicos encontrados: {len(epics)}")
+        return epics
+
+    except Exception as e:
+        logger.error(f"Erro ao listar épicos: {e}")
+        return []
+
+
+def update_epic_progress(epic_id: str) -> bool:
+    """
+    Atualiza o progresso de um épico após uma story filha ser concluída.
+    Chamada automaticamente ao marcar uma story como CONCLUÍDO.
+
+    Atualiza:
+    - A tabela "Stories Filhas" no arquivo do épico
+    - A contagem na seção "Épicos Ativos" do MEMORY.md
+
+    Args:
+        epic_id: ID do épico a atualizar (ex: EPIC_20260411_AUTH)
+
+    Returns:
+        bool: True se atualização bem-sucedida
+    """
+    try:
+        project_root = find_project_root()
+        if not project_root:
+            return False
+
+        epics = list_epics()
+        epic = next((e for e in epics if e["epic_id"] == epic_id), None)
+        if not epic:
+            logger.warning(f"Épico {epic_id} não encontrado para atualização de progresso.")
+            return False
+
+        done = epic["stories_done"]
+        total = epic["stories_total"]
+
+        # Atualizar MEMORY.md — apenas a contagem na linha do épico
+        memory_path = project_root / "stories" / "MEMORY.md"
+        if memory_path.exists():
+            memory = memory_path.read_text(encoding="utf-8")
+            # Substituição pontual: atualiza "X/Y concluídas" na linha do épico
+            updated = re.sub(
+                rf"(\|\s*{re.escape(epic_id)}\s*\|[^|]*\|[^|]*\|)\s*\d+/\d+ concluídas",
+                rf"\1 {done}/{total} concluídas",
+                memory,
+            )
+            if epic["status"] == "CONCLUÍDO" or (total > 0 and done == total):
+                updated = updated.replace(
+                    f"| {epic_id} ", f"| {epic_id} "
+                ).replace("EM ANDAMENTO", "CONCLUÍDO", 1)
+
+            safe_write_file(memory_path, updated)
+            logger.info(f"MEMORY.md atualizado: épico {epic_id} → {done}/{total}")
+
+        return True
+
+    except Exception as e:
+        logger.error(f"Erro ao atualizar progresso do épico {epic_id}: {e}")
+        return False
+
+
 def list_stories() -> List[Dict[str, Any]]:
     """
     Lista todas as stories do projeto
