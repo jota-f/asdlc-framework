@@ -46,6 +46,7 @@ status: "PENDENTE"
 priority: "P1|P2|P3"
 labels: ["", ""]
 depends_on: []
+epic_id: ""   # Opcional — preencher se esta story pertence a um épico (ex: EPIC_20260411_AUTH)
 ---
 
 # Plano de Execução: [TÍTULO]
@@ -86,14 +87,22 @@ Identifique o sistema de teste usado: npm test, pytest, cargo test, go test, etc
 ```
 
 ## Diretrizes Extras
-1. Escopo limitado! Se pedido englobar sistema inteiro, quebre na primeira parte fundamental.
-2. Manifesto deve ser absurdamente explícito - agente autônomo usará para decidir edição.
+1. **Escopo Limitado + Scope Gate Interno**: Se durante a geração você perceber que o escopo transcende uma única story (múltiplos domínios autônomos, horizonte percebido de semanas, múltiplos atores com fluxos distintos), **interrompa imediatamente** e responda:
+   ```
+   ⛔ Interrompendo geração de story — escopo detectado como ÉPICO.
+   Este pedido merece /asdlc-create-epic para decomposição adequada.
+   ```
+2. Manifesto deve ser absurdamente explícito — agente autônomo usará para decidir edição.
 3. Use `depends_on` automaticamente se detectar dependência pendente em `MEMORY.md`.
-4. **Tracer Bullets**: Organize tarefas como fatias verticais — cada tarefa deve atravessar todas as camadas (DB → API → UI) e ser funcional e testável independentemente. Evite tarefas horizontais (ex: "criar todos os modelos", "criar todos os endpoints").
+4. Se a story pertence a um épico já existente listado no `MEMORY.md`, preencha `epic_id` no frontmatter.
+5. **Tracer Bullets**: Organize tarefas como fatias verticais — cada tarefa deve atravessar todas as camadas (DB → API → UI) e ser funcional e testável independentemente. Evite tarefas horizontais (ex: "criar todos os modelos", "criar todos os endpoints").
 
 ## Validação de Qualidade de Entrada
 
-Antes de gerar a story, verifique se a demanda tem especificidade suficiente:
+Antes de gerar a story, verifique **nesta ordem**:
+
+### 0. Scope Check (pré-condição)
+Avalie em memória: se o pedido tem sinais de ÉPICO (verbos de roadmap, múltiplos domínios com valor autônomo), **não gere a story** — redirecione para `/asdlc-create-epic`.
 
 ### Checklist Obrigatório
 A story DEVE ter uma **História do Usuário** completa no formato:

@@ -7,6 +7,49 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.
 
 ---
 
+## [2.6.0] - 2026-07-11
+
+### Adicionado
+
+- **🏔️ Suporte a Épicos (Epic Support)**:
+  - **Novo workflow `/asdlc-create-epic`**: Workflow completo para criar épicos estratégicos com definição de objetivo, critérios de conclusão macro, escopo explícito, decomposição em stories e aprovação única antes da criação autônoma.
+  - **Estrutura de artefato `stories/epics/EPIC_ID.md`**: Épicos são artefatos independentes com frontmatter YAML, objetivo estratégico, critérios de conclusão, tabela de stories filhas e espaço para decisões arquiteturais.
+  - **Campo `epic_id` no frontmatter de stories**: Campo opcional para vincular uma story a um épico existente.
+  - **Seção `🏔️ Épicos Ativos` no MEMORY.md**: Rastreio flat de épicos (~10 tokens/épico) sem necessidade de abrir os arquivos de épico.
+  - **Pasta `stories/epics/`**: Diretório dedicado para separar os artefatos de épico das stories.
+  - **MCP Tool `asdlc_create_epic`**: Cria épicos via Model Context Protocol, aceitando título, objetivo, critérios separados por `;` e itens fora de escopo.
+  - **MCP Tool `asdlc_list_epics`**: Lista todos os épicos com progresso calculado (lê apenas frontmatter dos arquivos — token-efficient).
+  - **`story_manager.create_epic()`**: Função Python para criação programática de épicos com geração automática de `epic_id` e estrutura de arquivo.
+  - **`story_manager.list_epics()`**: Lista épicos com progresso inferido das stories filhas, lendo apenas os primeiros 500 chars de cada arquivo (frontmatter only).
+  - **`story_manager.update_epic_progress()`**: Atualiza contagem no MEMORY.md quando uma story filha é concluída.
+
+- **📚 Atualizador de Documentação Adaptável (Documentation Updater)**:
+  - **Nova Skill `asdlc_documentation_updater`**: Skill inteligente para analisar a estrutura do repositório, descobrir os arquivos de documentação existentes de forma dinâmica (README, CHANGELOG, BACKLOG, manuais operacionais) e atualizá-los sob demanda.
+  - **Novo workflow `/asdlc-doc-update`**: Comando unificado para auditar alterações no código-fonte recente, alinhar terminologias (Glossário), documentar decisões de setup/dependências e atualizar o status em logs.
+
+- **🔍 Scope Intelligence Gate**:
+  - **Gate embutido no `/asdlc-grill` (Passo 3.5)**: Após a validação de acordos, o agente avalia automaticamente em memória se o pedido é Story Simples, Story Grande ou Épico, e roteia para o artefato correto sem I/O extra.
+  - **Gate embutido no `/asdlc-create-story` (Passo 2)**: Tabela de sinais linguísticos avaliada antes da injeção de contexto. Redireciona para `/asdlc-create-epic` se necessário.
+  - **Scope Check na Skill `asdlc_story_generator`**: Pré-condição de escopo adicionada à validação de qualidade. A skill interrompe a geração e redireciona se detectar sinais de épico.
+  - **Distinção documentada Story vs Épico**: Stories encadeadas com `depends_on` são grafo de entrega (normal). Épico = objetivo estratégico de roadmap.
+
+- **🔄 Loop Autônomo no `/asdlc-plan`**:
+  - **Passo 5 de criação autônoma**: Após aprovação `[A]`, o agente valida o grafo de `depends_on` (detecção e correção automática de ciclos), cria todas as stories em ordem topológica, atualiza o MEMORY.md uma única vez ao final e apresenta relatório compacto.
+
+### Modificado
+
+- **`grill_requirements.md`**: Botão `[S]` atualizado para refletir que o Scope Gate roda antes da criação de qualquer artefato. Texto anterior dizia "criar a story", agora diz "avaliar escopo e criar o artefato adequado".
+- **`scope_analysis.md`**: Exemplo de quebra em stories no Passo 3 corrigido de horizontal (Core/UI/API separados) para tracer bullet vertical, eliminando inconsistência com as Regras de Decisão do mesmo arquivo.
+- **`asdlc_implementation/SKILL.md`**: Passo 6 (Fechamento) agora inclui atualização obrigatória do épico (`epic_id`) quando a story pertence a um épico — atualiza tabela "Stories Filhas" e contagem no MEMORY.md.
+- **`agentic_templates/README.md`**: Versão atualizada para v2.6.0, novo comando `/asdlc-create-epic` na tabela, `create_epic.md` e `stories/epics/` na estrutura de arquivos, seção "Novidades v2.6.0".
+- **`README.md`**: Versão atualizada para v2.6.0, `asdlc_create_epic` e `asdlc_list_epics` na tabela de ferramentas MCP, `/asdlc-create-epic` na tabela de comandos.
+
+### Corrigido
+
+- **Numeração de passos** em `create_asdlc_story.md`: Duplicidade de passo `3` corrigida após inserção do Scope Gate (passos renumerados de 3 a 8).
+- **Quebra de linha** entre Passo 3 e Passo 4 em `create_asdlc_story.md`: Linha em branco faltante causava colagem visual entre o último bullet e o próximo passo numerado.
+- **Exemplo horizontal** em `scope_analysis.md`: Substituído por exemplo tracer bullet, eliminando contradição interna no documento.
+
 ## [2.5.0] - 2026-06-14
 
 ### Adicionado

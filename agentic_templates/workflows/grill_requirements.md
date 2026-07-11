@@ -13,12 +13,16 @@ Use este comando quando a demanda é vaga, ambígua ou carece de especificidade.
 - O escopo é ambíguo ("melhorar", "adicionar", "corrigir" sem detalhes).
 - Há risco de colisão de terminologia com o domínio existente.
 
-## Passo 0: Injeção de Contexto Obrigatória
+## Passo 0: Injeção de Contexto Obrigatória & Checkpoint (MANDATÓRIO)
 
-Antes de responder ao usuário, o agente **DEVE** utilizar suas ferramentas de leitura para consultar:
-1. `PROJECT_CONTEXT.md` (Para entender a arquitetura base).
-2. `GLOSSARY.md` (Se não existir, o agente informará que irá criá-lo). Este arquivo guarda a linguagem ubíqua do projeto (Domain-Driven Design).
-3. `stories/MEMORY.md` (Para contexto de decisões anteriores).
+Antes de responder ao usuário, o agente **DEVE** verificar se existe o arquivo de checkpoint e ler o contexto regular:
+
+1. **HOT START (CHECKPOINT)**: Verifique se o arquivo `.asdlc/context_checkpoint.md` existe na raiz do projeto.
+   - **Se existir**: Leia o arquivo, aplique seu contexto na memória ativa e **exclua** ou **renomeie** o arquivo (ex: para `.asdlc/context_checkpoint.consumed`) usando as ferramentas do sistema de arquivos para evitar injeções repetidas.
+   - **Se não existir**: Continue normalmente.
+2. `PROJECT_CONTEXT.md` (Para entender a arquitetura base).
+3. `GLOSSARY.md` (Se não existir, o agente informará que irá criá-lo). Este arquivo guarda a linguagem ubíqua do projeto (Domain-Driven Design).
+4. `stories/MEMORY.md` (Para contexto de decisões anteriores).
 
 ## Passo 1: Diagnóstico de Completude e Colisão
 
@@ -80,13 +84,53 @@ Após iterar e resolver as ambiguidades, o agente apresenta um resumo:
 - **ADR:** Exclusão de Pitches será RESTRICT (Trade-off: UX mais manual, porém evita exclusão acidental de conteúdo de alto valor).
 
 Isso está correto? Responda:
-[S] Sim, aplicar documentação e criar a story
+[S] Sim — avaliar escopo e criar o artefato adequado (story ou épico)
 [N] Não, preciso ajustar: [o quê]
 ```
 
-## Passo 4: Escrita Ativa e Geração da Story (se aprovado)
+## Passo 3.5: Scope Gate (OBRIGATÓRIO antes de criar qualquer artefato)
 
-Se o humano confirmar, o agente **NÃO APENAS** invoca a criação da story. Ele DEVE proativamente:
+Antes de criar qualquer artefato, o agente avalia a dimensão real do pedido **em memória** (sem I/O adicional). Esta etapa é silenciosa — apenas apresenta o resultado ao humano caso o resultado não seja uma story simples.
+
+### Heurísticas de Classificação
+
+**🏔️ ÉPICO** — se ≥ 2 destes sinais estiverem presentes:
+- Verbo de roadmap na demanda: "lançar", "construir o sistema de", "criar a plataforma de", "implementar o módulo completo de"
+- Múltiplos domínios funcionais **distintos e autônomos** (ex: área admin + app mobile + integrações de terceiros)
+- Cada parte descrita teria valor de negócio independente se entregue sozinha
+- Horizonte percebido de semanas ou múltiplos sprints
+
+**📦 STORY GRANDE** — se ≥ 2 destes sinais estiverem presentes:
+- Atravessa 2–3 camadas técnicas simultâneas (ex: DB + API + UI)
+- Estimativa percebida de 4–8h de trabalho
+- Um único objetivo, mas com sub-tarefas claramente separáveis em tracer bullets
+
+**📝 STORY SIMPLES** — padrão, se nenhum sinal acima for detectado.
+
+### Ações por Classificação
+
+```
+🏔️ ÉPICO detectado:
+→ NÃO invocar /asdlc-create-story
+→ Avisar o humano: "Este pedido tem dimensão de Épico."
+→ Oferecer decomposição em stories e invocar /asdlc-create-epic
+
+📦 STORY GRANDE detectada:
+→ Apresentar proposta de divisão em tracer bullets (máx. 4 stories)
+→ Aguardar aprovação simples [S/N] antes de criar
+→ Após [S], invocar /asdlc-create-story para cada slice
+
+📝 STORY SIMPLES:
+→ Continuar diretamente para o Passo 4 sem interrupção
+```
+
+> **Economia de tokens**: A avaliação é feita com o contexto já em memória (o que o humano descreveu + acordos do Passo 3). Nenhum arquivo adicional é lido nesta etapa.
+
+---
+
+## Passo 4: Escrita Ativa e Geração do Artefato (se aprovado)
+
+Se o humano confirmar (ou se for STORY SIMPLES), o agente **NÃO APENAS** invoca a criação. Ele DEVE proativamente:
 
 1. **Atualizar o Glossário:**
    - Use a ferramenta `write_to_file` ou `multi_replace_file_content` para atualizar ou criar o arquivo `GLOSSARY.md` na raiz do projeto com os novos termos.

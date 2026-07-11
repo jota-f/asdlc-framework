@@ -59,9 +59,10 @@ Descarte:
 
 ### Passo 3: Criação do Resumo Compactado
 
-Gere um resumo estruturado seguindo este formato:
+Gere um resumo estruturado seguindo o formato abaixo e **salve-o no arquivo `.asdlc/context_checkpoint.md`** na raiz do projeto (crie a pasta `.asdlc` se não existir).
 
 ```markdown
+<!-- A-SDLC CONTEXT CHECKPOINT - CONSUME AND DELETE/RENAME ON START -->
 # Contexto Compactado
 
 ## 📁 Estrutura do Projeto
@@ -147,9 +148,9 @@ Implementar auth_v1 - endpoint de login
 
 ## Comando de Execução
 
-Quando invoked, siga os passos em ordem:
-1. Analise o histórico atual
-2. Extraia informações essenciais
-3. Gere resumo estruturado
-4. Informe quantos tokens foram economizados
-5. Apresente o resumo para validação humana
+Quando invocado, siga os passos em ordem:
+1. Analise o histórico atual da sessão.
+2. Extraia informações essenciais (Manifesto, Decisões, Stories, Status, Próximos Passos).
+3. Gere o resumo estruturado e use `write_to_file` para gravá-lo em `.asdlc/context_checkpoint.md`.
+4. Informe ao usuário o número estimado de tokens economizados.
+5. Instrua o usuário a abrir um chat limpo e executar o próximo comando, onde o checkpoint será consumido e excluído automaticamente pelo agente do novo chat.
