@@ -239,14 +239,16 @@ def list_epics() -> List[Dict[str, Any]]:
                         if "CONCLUÍDO" in sc or "Done" in sc:
                             done += 1
 
-                epics.append({
-                    "epic_id": eid,
-                    "title": title.group(1).strip() if title else eid,
-                    "status": status.group(1).strip() if status else "DESCONHECIDO",
-                    "stories_total": total,
-                    "stories_done": done,
-                    "file": str(epic_file),
-                })
+                epics.append(
+                    {
+                        "epic_id": eid,
+                        "title": title.group(1).strip() if title else eid,
+                        "status": status.group(1).strip() if status else "DESCONHECIDO",
+                        "stories_total": total,
+                        "stories_done": done,
+                        "file": str(epic_file),
+                    }
+                )
             except Exception as e:
                 logger.warning(f"Erro ao processar épico {epic_file}: {e}")
 
@@ -298,9 +300,7 @@ def update_epic_progress(epic_id: str) -> bool:
                 memory,
             )
             if epic["status"] == "CONCLUÍDO" or (total > 0 and done == total):
-                updated = updated.replace(
-                    f"| {epic_id} ", f"| {epic_id} "
-                ).replace("EM ANDAMENTO", "CONCLUÍDO", 1)
+                updated = updated.replace(f"| {epic_id} ", f"| {epic_id} ").replace("EM ANDAMENTO", "CONCLUÍDO", 1)
 
             safe_write_file(memory_path, updated)
             logger.info(f"MEMORY.md atualizado: épico {epic_id} → {done}/{total}")
