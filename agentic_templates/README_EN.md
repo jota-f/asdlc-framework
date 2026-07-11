@@ -1,4 +1,4 @@
-# 🤖 A-SDLC Agentic Mode Guide (v2.5.0)
+# 🤖 A-SDLC Agentic Mode Guide (v2.6.0)
 
 ## What is this directory?
 
@@ -49,13 +49,15 @@ your-project/
 
 | Command | When to Use |
 |---------|-------------|
-| `/asdlc-grill` | Guided questioning for vague requirements |
+| `/asdlc-grill` | Guided questioning for vague requirements — includes automatic Scope Gate |
 | `/asdlc-architecture` | Architecture and modeling questions |
-| `/asdlc-plan` | Analyze large scope, break into stories |
+| `/asdlc-plan` | Analyze large scope, break into stories (tracer bullets) |
+| `/asdlc-create-epic` | Create an Epic for high-level roadmap goals (multi-sprint) |
 | `/asdlc-create-story` | Create a formal story |
 | `/asdlc-execute` | Implement a story (mandatory TDD) |
 | `/asdlc-bug` | Diagnose and fix bugs |
-| `/asdlc-dashboard` | Generate visual project dashboard (KPIs, Kanban, Burndown) |
+| `/asdlc-dashboard` | Generate visual project dashboard (KPIs, Kanban, Burndown, Epics) |
+| `/asdlc-doc-update` | Audits and updates documentation in any project adaptively |
 | `/asdlc-update` | Safely updates A-SDLC skills and workflows |
 
 ---
@@ -137,6 +139,20 @@ depends_on: ["20260407_NOTIFY"]
 
 ---
 
+## 🆕 What's New (v2.6.0)
+
+| Feature | Description |
+|---------|-------------|
+| **Scope Intelligence Gate** | Automatic Story/Large Story/Epic classification built into `/asdlc-grill` and `/asdlc-create-story` |
+| **Epics (`/asdlc-create-epic`)** | Native support for Epics as independent artifacts in `stories/epics/` with strategic goals and child stories |
+| **MCP: `asdlc_create_epic`** | Create epics via the Model Context Protocol |
+| **MCP: `asdlc_list_epics`** | List epics with calculated progress (token-efficient) |
+| **Autonomous Loop in `/asdlc-plan`** | After a single approval, creates all stories sequentially, validates depends_on acyclic graphs, and updates MEMORY at once |
+| **Persistent Context Handoff** | Context Compactor saves checkpoints in `.asdlc/context_checkpoint.md`. Agents read (Hot Start) and delete it automatically upon starting workflows |
+| **Self-Healing Compaction** | Code/Architecture agents auto-trigger compaction and guide you to start a fresh session if they detect Dumb Zone or degradation |
+
+---
+
 ## 🆕 What's New (v2.5.0)
 
 | Feature | Description |
@@ -157,34 +173,38 @@ depends_on: ["20260407_NOTIFY"]
 
 ## 📁 File Structure
 
-```
 agentic_templates/
-├── README.md                    # This file (EN)
+├── README.md                    # This file (PT)
 ├── README_EN.md                 # English version
 ├── TOOL_GUIDE.md               # Token optimization guide
 ├── validate_stories.py         # Story structure validator
 ├── skills/
 │   ├── asdlc_story_generator/  # Requirements Agent - create stories
 │   ├── asdlc_implementation/   # Code Agent - implement (TDD)
-│   ├── asdlc_context_compactor/# Compact long context
+│   ├── asdlc_context_compactor/# Compact long context (Persistent Checkpoint)
 │   ├── asdlc_bug_hunter/       # Bug Hunter - diagnosis and RCA
-│   └── asdlc_dashboard/        # Visual project dashboard
+│   ├── asdlc_dashboard/        # Visual project dashboard
+│   └── asdlc_documentation_updater/ # Analyzes and updates project documentation adaptively  ← NEW
 ├── workflows/
-│   ├── grill_requirements.md   # Guided questioning
-│   ├── architecture_discovery.md # Architecture discovery
-│   ├── scope_analysis.md       # Scope analysis
-│   ├── create_asdlc_story.md   # Story creation
-│   ├── implement_asdlc_story.md # TDD implementation
+│   ├── grill_requirements.md   # Guided questioning + Scope Gate
+│   ├── architecture_discovery.md # Architecture discovery + Hot Start Checkpoint
+│   ├── scope_analysis.md       # Scope analysis + autonomous loop
+│   ├── create_epic.md          # Create strategic Epics          ← NEW
+│   ├── create_asdlc_story.md   # Story creation + Scope Gate     ← UPDATED
+│   ├── implement_asdlc_story.md # TDD implementation + Hot Start Checkpoint
+│   ├── update_documentation.md # Audit and update documentation  ← NEW
 │   ├── bug_resolution.md       # Bug resolution
 │   └── dashboard.md            # Visual project dashboard
 ├── templates/
 │   ├── story_template.md       # Standard story template
 │   ├── bug_template.md         # Standard bug template
 │   ├── learning_template.md    # ADRs Index (Learnings) template
-│   ├── backlog_template.md     # Backlog (mental notes/ideas) template
+│   ├── backlog_template.md     # Backlog template
 │   └── exemplo/                # Story examples
 └── stories/
-    └── MEMORY.md               # Project memory
+    ├── MEMORY.md               # Project memory (stories + epics)
+    └── epics/                  # Project Epics                  ← NEW
+        └── EPIC_*.md           # Strategic Epic files
 ```
 
 ---
@@ -194,7 +214,7 @@ agentic_templates/
 ### Tips
 1. **Read MEMORY.md, LEARNING.md, and BACKLOG.md first** - lean overview of progress, architectural decisions, and pending ideas without scanning all stories or ADRs.
 2. **PROJECT_CONTEXT** - include only relevant section
-3. **Context Compactor** - invoke after 30+ messages
+3. **Context Checkpointing** - use the compactor to save your state. In a new chat session, agents will automatically ingest the checkpoint and delete it (Hot Start).
 4. **Smart Zone** - keep context < 80k tokens
 
 ### Smart Zone vs Dumb Zone

@@ -1,4 +1,4 @@
-# 🌌 A-SDLC Framework (v2.5.0)
+# 🌌 A-SDLC Framework (v2.6.0)
 **AI-Driven Software Development Lifecycle**
 
 O A-SDLC é um framework que transforma assistentes de IA em agentes autônomos capazes de gerenciar o ciclo de vida completo de um projeto de software. Ele utiliza **Harness Engineering**, **TDD Obrigatório**, **Tracer Bullets** e **Feedback Loops** para garantir código de alta fidelidade.
@@ -99,6 +99,8 @@ ASDLC_ENGINE=antigravity
 |---|---|
 | `asdlc_create_project` | Inicializa um projeto |
 | `asdlc_create_story` | Cria uma story |
+| `asdlc_create_epic` | Cria um épico (objetivo estratégico macro) |
+| `asdlc_list_epics` | Lista épicos e progresso |
 | `asdlc_get_story_details` | Lê conteúdo de uma story |
 | `asdlc_update_story_status` | Atualiza status |
 | `asdlc_list_stories` | Lista stories |
@@ -161,11 +163,13 @@ cp -r agentic_templates/ seu-projeto/
 ### 🚀 Comandos Disponíveis no Chat
 | Comando | O que faz |
 |---------|-----------|
-| `/asdlc-grill` | "Grelha" você sobre requisitos para evitar demandas vagas. |
+| `/asdlc-grill` | "Grelha" você sobre requisitos para evitar demandas vagas. Inclui Scope Gate automático. |
+| `/asdlc-plan` | Analisa escopo de features grandes e divide em stories com tracer bullets. |
+| `/asdlc-create-epic` | Cria um Épico para objetivos estratégicos de roadmap (semanas/sprints). |
 | `/asdlc-architecture` | Inicia discussão técnica e modelagem de domínio. |
 | `/asdlc-create-story` | Cria a story formal seguindo os padrões do framework. |
 | `/asdlc-execute` | Implementa a story usando o ciclo **TDD Obrigatório**. |
-| `/asdlc-dashboard` | Gera o dashboard visual HTML do projeto e resume métricas. |
+| `/asdlc-dashboard` | Gera o dashboard visual HTML do projeto e resume métricas (inclui épicos). |
 
 ### 📖 Guia Detalhado
 Para um guia completo de como configurar skills e workflows na IDE, consulte o:

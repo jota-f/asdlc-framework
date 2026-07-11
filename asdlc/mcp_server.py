@@ -190,6 +190,77 @@ def asdlc_apply_grill_decisions(summary: str) -> str:
         return f"Erro ao aplicar decisões: {str(e)}"
 
 
+@mcp.tool()
+def asdlc_create_epic(title: str, objective: str, criteria: str, out_of_scope: Optional[str] = None) -> str:
+    """
+    Cria um Épico A-SDLC — um objetivo estratégico de alto nível com múltiplos domínios.
+
+    IMPORTANTE: Use apenas quando o pedido tem dimensão de roadmap (semanas/sprints).
+    Stories com depends_on encadeadas NÃO são épicos — use asdlc_create_story.
+
+    Args:
+        title: Título do épico (objetivo estratégico em poucas palavras)
+        objective: Uma frase descrevendo o valor de negócio entregue ao final
+        criteria: Critérios de conclusão macro separados por ponto-e-vírgula (ex: "Login funcional; Registro ativo; OAuth integrado")
+        out_of_scope: Itens explicitamente fora do escopo, separados por ponto-e-vírgula (opcional)
+    """
+    try:
+        project_root = utils.find_project_root()
+        if not project_root:
+            return "Erro: Não foi possível criar o épico. Verifique se você está em um projeto A-SDLC."
+
+        criteria_list = [c.strip() for c in criteria.split(";") if c.strip()]
+        oos_list = [o.strip() for o in out_of_scope.split(";")] if out_of_scope else None
+
+        epic_id = story_manager.create_epic(
+            epic_title=title,
+            objective=objective,
+            conclusion_criteria=criteria_list,
+            out_of_scope=oos_list,
+        )
+        if epic_id:
+            return (
+                f"Épico '{title}' criado com sucesso!\n"
+                f"Epic ID: {epic_id}\n"
+                f"Arquivo: stories/epics/{epic_id}.md\n\n"
+                f"Próximos passos:\n"
+                f"1. Crie as stories filhas com asdlc_create_story (use epic_id='{epic_id}' no contexto)\n"
+                f"2. Use asdlc_list_epics para acompanhar o progresso"
+            )
+        return "Erro ao criar épico."
+    except Exception as e:
+        return f"Erro ao criar épico: {str(e)}"
+
+
+@mcp.tool()
+def asdlc_list_epics() -> str:
+    """
+    Lista todos os épicos do projeto com progresso calculado.
+    Lê apenas o frontmatter dos arquivos de épico (token-efficient).
+    """
+    try:
+        project_root = utils.find_project_root()
+        if not project_root:
+            return "Erro: Nenhum projeto A-SDLC encontrado."
+
+        epics = story_manager.list_epics()
+        if not epics:
+            return "Nenhum épico encontrado (pasta stories/epics/ vazia ou inexistente).\nUse asdlc_create_epic para criar o primeiro épico."
+
+        lines = ["🏔️ Épicos do Projeto:\n"]
+        for e in epics:
+            pct = round((e["stories_done"] / e["stories_total"]) * 100) if e["stories_total"] > 0 else 0
+            lines.append(
+                f"  [{e['status']}] {e['epic_id']}\n"
+                f"    Título: {e['title']}\n"
+                f"    Progresso: {e['stories_done']}/{e['stories_total']} stories ({pct}%)\n"
+                f"    Arquivo: {e['file']}\n"
+            )
+        return "\n".join(lines)
+    except Exception as e:
+        return f"Erro ao listar épicos: {str(e)}"
+
+
 # ============================================
 # FERRAMENTAS DE EXECUÇÃO (requerem ASDLC_ENGINE=external)
 # ============================================
