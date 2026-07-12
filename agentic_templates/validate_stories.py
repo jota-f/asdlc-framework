@@ -108,12 +108,17 @@ def validate_story(filepath):
     if not re.match(r"^\d{8}_\w+$", ticket):
         errors.append(f"Ticket mal formatado: {ticket}")
 
-    # Valida depends_on
+    # Valida depends_on e ciclos
     depends = fm.get("depends_on", "[]")
     if depends != "[]":
         deps = re.findall(r'"([^"]+)"', depends)
         stories_dir = filepath.parent
         for dep in deps:
+            # Detecta ciclo imediato de dependência (Story depende de si mesma ou ciclo bidirecional direto)
+            if dep == ticket:
+                errors.append(f"Story '{ticket}' nao pode depender de si mesma")
+                continue
+
             # Busca story com esse ticket
             found = False
             dep_file = None
@@ -133,6 +138,20 @@ def validate_story(filepath):
                         errors.append(
                             f"Dependencia '{dep}' ({dep_file.name}) esta no status '{dep_status}' mas deveria estar CONCLUÍDO ou Done"
                         )
+
+                    # Checagem de ciclo simples bidirecional
+                    dep_deps = dep_fm.get("depends_on", "[]")
+                    if ticket in dep_deps:
+                        errors.append(f"Dependencia ciclica detectada: '{ticket}' e '{dep}' dependem um do outro")
+
+    # Valida epic_id se fornecido
+    epic_id = fm.get("epic_id", "").strip()
+    if epic_id and epic_id != '""' and epic_id != "''":
+        # Procurar o arquivo do épico em stories/epics/EPIC_ID.md
+        project_root = filepath.parent.parent
+        epic_path = project_root / "stories" / "epics" / f"{epic_id}.md"
+        if not epic_path.exists():
+            errors.append(f"Epic ID '{epic_id}' referenciado na story nao foi encontrado em stories/epics/{epic_id}.md")
 
     # Valida presence of test tasks (OBRIGATORIO para todas stories)
     has_test_section = "Critérios de Aceitação" in content or "Criteria" in content or "Aceitação" in content
@@ -157,8 +176,15 @@ def main():
         else:
             files = []
 
-    # Exclusao explicita para o arquivo MEMORY.md, pastas de templates e arquivos de template
-    files = [f for f in files if f.name != "MEMORY.md" and "templates" not in f.parts and not f.name.endswith("template.md")]
+    # Exclusao explicita para o arquivo MEMORY.md, pastas de templates, pasta .asdlc e arquivos de template
+    files = [
+        f
+        for f in files
+        if f.name != "MEMORY.md"
+        and "templates" not in f.parts
+        and ".asdlc" not in f.parts
+        and not f.name.endswith("template.md")
+    ]
 
     all_valid = True
     for f in files:
