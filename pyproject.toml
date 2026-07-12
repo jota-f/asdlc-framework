@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "asdlc-framework"
-version = "2.5.0"
+version = "2.6.1"
 description = "Framework revolucionário para desenvolvimento de software com agentes de IA especializados"
 readme = "README.md"
 license = {text = "MIT"}

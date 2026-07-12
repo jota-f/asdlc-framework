@@ -7,6 +7,12 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.
 
 ---
 
+## [2.6.1] - 2026-07-12
+
+### Corrigido
+
+- **asdlc_story_generator/SKILL.md**: Corrigida a omissão da seção `## 🤖 Instruções Finais` no markdown de stories geradas. A seção agora é configurada como estritamente obrigatória no final de toda story, garantindo que os agentes autônomos tenham acesso a essa máquina de estados de execução.
+
 ## [2.6.0] - 2026-07-11
 
 ### Adicionado
