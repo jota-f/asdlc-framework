@@ -1,4 +1,4 @@
-# 🤖 A-SDLC Agentic Mode Guide (v2.6.0)
+# 🤖 A-SDLC Agentic Mode Guide (v2.6.1)
 
 ## What is this directory?
 
