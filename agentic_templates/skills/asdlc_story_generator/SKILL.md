@@ -96,6 +96,7 @@ Identifique o sistema de teste usado: npm test, pytest, cargo test, go test, etc
 3. Use `depends_on` automaticamente se detectar dependência pendente em `MEMORY.md`.
 4. Se a story pertence a um épico já existente listado no `MEMORY.md`, preencha `epic_id` no frontmatter.
 5. **Tracer Bullets**: Organize tarefas como fatias verticais — cada tarefa deve atravessar todas as camadas (DB → API → UI) e ser funcional e testável independentemente. Evite tarefas horizontais (ex: "criar todos os modelos", "criar todos os endpoints").
+6. **MANDATÓRIO — Instruções Finais**: Toda story gerada DEVE conter a seção `## 🤖 Instruções Finais` no final do arquivo exatamente como mostrada no formato acima, com todas as caixas de seleção desmarcadas (`- [ ]`). Ela é usada pelos agentes de execução como máquina de estados. NUNCA a remova ou oculte.
 
 ## Validação de Qualidade de Entrada
 
