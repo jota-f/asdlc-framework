@@ -283,6 +283,7 @@ class TestAgentExecutor:
     def test_log_context_density_ok(self, mock_estimate):
         """Testa log de contexto na Smart Zone"""
         from asdlc.agent_executor import log_context_density
+
         mock_estimate.return_value = 2500
 
         # 10k chars ≈ 2.5k tokens - deve estar na Smart Zone
@@ -294,6 +295,7 @@ class TestAgentExecutor:
     def test_log_context_density_warning(self, mock_estimate):
         """Testa log de contexto na Warning Zone"""
         from asdlc.agent_executor import log_context_density
+
         mock_estimate.return_value = 100000
 
         # 400k chars ≈ 100k tokens - deve estar na Warning/Dumb Zone

@@ -254,7 +254,9 @@ class DashboardRenderer:
         for b in blocked:
             alerts_html += f'<div class="alert-item alert-red">🔒 <strong>{b["title"]}</strong> — bloqueada por: <code>{b["missing"]}</code></div>\n'
         for nc in no_criteria:
-            alerts_html += f'<div class="alert-item alert-yellow">⚠️ <strong>{nc}</strong> — sem critérios de aceitação</div>\n'
+            alerts_html += (
+                f'<div class="alert-item alert-yellow">⚠️ <strong>{nc}</strong> — sem critérios de aceitação</div>\n'
+            )
         if not alerts_html:
             alerts_html = '<div class="alert-item alert-green">✅ Nenhum problema detectado</div>'
         alerts_count = len(blocked) + len(no_criteria)
