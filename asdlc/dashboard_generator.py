@@ -252,11 +252,11 @@ class DashboardRenderer:
         # Build alerts HTML server-side
         alerts_html = ""
         for b in blocked:
-            alerts_html += f'<div class="alert-item alert-red">🔒 <strong>{b["title"]}</strong> — bloqueada por: <code>{b["missing"]}</code></div>\n'
+            b_msg = f'🔒 <strong>{b["title"]}</strong> — bloqueada por: <code>{b["missing"]}</code>'
+            alerts_html += f'<div class="alert-item alert-red">{b_msg}</div>\n'
         for nc in no_criteria:
-            alerts_html += (
-                f'<div class="alert-item alert-yellow">⚠️ <strong>{nc}</strong> — sem critérios de aceitação</div>\n'
-            )
+            nc_msg = f"⚠️ <strong>{nc}</strong> — sem critérios de aceitação"
+            alerts_html += f'<div class="alert-item alert-yellow">{nc_msg}</div>\n'
         if not alerts_html:
             alerts_html = '<div class="alert-item alert-green">✅ Nenhum problema detectado</div>'
         alerts_count = len(blocked) + len(no_criteria)
