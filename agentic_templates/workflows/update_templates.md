@@ -87,4 +87,4 @@ O agente **NUNCA** deve copiar, substituir ou alterar os seguintes arquivos loca
 3. **Resumo das Novidades**: Exibe ao usuário a confirmação de sucesso com a nova versão ativa e uma lista das principais melhorias instaladas.
 
 ---
-*A-SDLC Native Agentic Mode — Update Workflow v2.5.0 (Robust Environment & Python Core Updater)*
+*A-SDLC Native Agentic Mode — Update Workflow v2.7.0 (Robust Environment & Python Core Updater)*

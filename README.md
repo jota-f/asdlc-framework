@@ -1,4 +1,4 @@
-# 🌌 A-SDLC Framework (v2.6.1)
+# 🌌 A-SDLC Framework (v2.7.0)
 **AI-Driven Software Development Lifecycle**
 
 O A-SDLC é um framework que transforma assistentes de IA em agentes autônomos capazes de gerenciar o ciclo de vida completo de um projeto de software. Ele utiliza **Harness Engineering**, **TDD Obrigatório**, **Tracer Bullets** e **Feedback Loops** para garantir código de alta fidelidade.
@@ -163,12 +163,15 @@ cp -r agentic_templates/ seu-projeto/
 ### 🚀 Comandos Disponíveis no Chat
 | Comando | O que faz |
 |---------|-----------|
+| `/asdlc-setup` | Auto-discovery do repositório (detecta testes, linters e gera `PROJECT_CONTEXT.md`). |
 | `/asdlc-grill` | "Grelha" você sobre requisitos para evitar demandas vagas. Inclui Scope Gate automático. |
 | `/asdlc-plan` | Analisa escopo de features grandes e divide em stories com tracer bullets. |
 | `/asdlc-create-epic` | Cria um Épico para objetivos estratégicos de roadmap (semanas/sprints). |
 | `/asdlc-architecture` | Inicia discussão técnica e modelagem de domínio. |
 | `/asdlc-create-story` | Cria a story formal seguindo os padrões do framework. |
-| `/asdlc-execute` | Implementa a story usando o ciclo **TDD Obrigatório**. |
+| `/asdlc-execute` | Implementa a story usando o ciclo **TDD Obrigatório** + **Escudo Anti-Racionalização**. |
+| `/asdlc-simplify` | Refatora e simplifica o código pós-Green (remoção de código morto e abstrações desnecessárias). |
+| `/asdlc-security` | Auditoria de segurança pré-PR para detecção de segredos hardcoded e vulnerabilidades. |
 | `/asdlc-dashboard` | Gera o dashboard visual HTML do projeto e resume métricas (inclui épicos). |
 
 ### 📖 Guia Detalhado

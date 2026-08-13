@@ -279,21 +279,27 @@ class TestAgentExecutor:
             mock_tiktoken.get_encoding.assert_called_with("cl100k_base")
             mock_encoding.encode.assert_called_with("algum texto", disallowed_special=())
 
-    def test_log_context_density_ok(self):
+    @patch("asdlc.agent_executor.estimate_token_count")
+    def test_log_context_density_ok(self, mock_estimate):
         """Testa log de contexto na Smart Zone"""
         from asdlc.agent_executor import log_context_density
+        mock_estimate.return_value = 2500
 
         # 10k chars ≈ 2.5k tokens - deve estar na Smart Zone
         tokens = log_context_density("test", 10000)
         assert tokens == 2500
+        mock_estimate.assert_called_once_with(" " * 10000)
 
-    def test_log_context_density_warning(self):
+    @patch("asdlc.agent_executor.estimate_token_count")
+    def test_log_context_density_warning(self, mock_estimate):
         """Testa log de contexto na Warning Zone"""
         from asdlc.agent_executor import log_context_density
+        mock_estimate.return_value = 100000
 
         # 400k chars ≈ 100k tokens - deve estar na Warning/Dumb Zone
         tokens = log_context_density("test", 400000)
         assert tokens == 100000
+        mock_estimate.assert_called_once_with(" " * 400000)
 
 
 class TestASDLCValidator:

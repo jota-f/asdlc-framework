@@ -41,6 +41,11 @@ Use a técnica dos "5 Porquês" internamente:
     - O teste de reprodução agora PASSA?
     - A suite de testes completa continua PASSANDO?
 
+## 🛡️ Escudo Anti-Racionalização (Anti-Lazy Shield)
+- **PROIBIDO "Symptom Patching"**: Não insira `try/except` silenciosos, fallbacks nulos ou mocks artificiais apenas para fazer o erro desaparecer sem entender a causa raiz.
+- **PROIBIDO desativar testes falhando**: Nunca comente ou remova asserções quebradas para alegar que o bug foi resolvido.
+- **REQUISITO DE EVIDÊNCIA**: Só declare o bug como resolvido após o teste de reprodução e a suíte completa de testes retornarem `exit code 0` no terminal.
+
 ## 🚫 Anti-Patterns (O que NÃO fazer)
 - **"Shotgun Debugging"**: Mudar várias coisas aleatoriamente esperando que o erro suma.
 - **"Symptom Fixing"**: Colocar um `if obj is not None` para esconder um erro, em vez de descobrir por que ele é None.
