@@ -43,6 +43,21 @@ Antes de iniciar qualquer codificação, você DEVE validar a Story e suas depen
    - Faça a validação manual em memória: use `view_file` para ler o arquivo da story, extraia as dependências do campo `depends_on` e verifique cada uma delas em `stories/` para confirmar se todas possuem `status: "CONCLUÍDO"` ou `status: "Done"`.
    - Se alguma dependência estiver em status `PENDENTE`, `In Progress` ou ausente, **ABORTAR imediatamente** e avisar o usuário.
 
+
+## 🛡️ Escudo Anti-Racionalização (Anti-Lazy Shield)
+
+Como Agente A-SDLC, você está estritamente PROIBIDO de usar racionalizações ou justificativas hipotéticas para burlar a validação física de código. A tabela abaixo especifica comportamentos proibidos e as ações corretivas mandatórias:
+
+| Desculpa/Racionalização da IA | Contra-Instrução Mandatória (INVIOLÁVEL) |
+|---|---|
+| *"Não consigo rodar os testes neste ambiente / limitação do terminal."* | **ABORTAR**. Altere o status da story para `REVIEW` com a marcação `[REASON: UNABLE_TO_TEST]`. É PROIBIDO marcar como `CONCLUÍDO` sem execução de terminal. |
+| *"A alteração é muito simples, não precisa de teste de unidade."* | **PROIBIDO**. Toda alteração ou recurso novo exige pelo menos 1 teste correspondente que falhe antes (Red) e passe depois (Green). |
+| *"Já verifiquei o código logicamente em memória e sei que funciona."* | **REJEITADO**. Verificação em memória não constitui evidência. Apenas a saída do comando com `exit code 0` no terminal é aceita. |
+| *"Vou mockar o banco/API inteiro para o teste passar rapidamente."* | **PROIBIDO**. Mocks só são permitidos na camada limite externa (terceiros). Regras de negócio devem ser validadas com componentes reais ou in-memory DB. |
+| *"Os testes existentes quebraram, mas não foram causados por mim."* | **BLOQUEADO**. Você não pode marcar a story como `CONCLUÍDO` enquanto houver testes quebrados no projeto. Conserte o efeito colateral ou reverta. |
+
+---
+
 ## O Ciclo A-SDLC de Implementação (TDD Obrigatório)
 
 Ao iniciar seu trabalho com uma Story recebida, siga os tópicos abaixo passo a passo, preferencialmente emitindo mensagens curtas confirmando que você os fez.

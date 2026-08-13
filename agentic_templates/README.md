@@ -1,4 +1,4 @@
-# 🤖 A-SDLC Agentic Mode Guide (v2.6.1)
+# 🤖 A-SDLC Agentic Mode Guide (v2.7.0)
 
 ## O que é este diretório?
 
@@ -49,12 +49,15 @@ seu-projeto/
 
 | Comando | Quando Usar |
 |---------|-------------|
+| `/asdlc-setup` | Auto-discovery de repositório (detecta testes, linters e gera `PROJECT_CONTEXT.md`) |
 | `/asdlc-grill` | Questionamento guiado para demandas vagas — inclui Scope Gate automático |
 | `/asdlc-architecture` | Perguntas de arquitetura e modelagem |
 | `/asdlc-plan` | Analisar escopo grande e dividir em stories (tracer bullets) |
 | `/asdlc-create-epic` | Criar um Épico para objetivos de roadmap (múltiplos sprints) |
 | `/asdlc-create-story` | Criar uma story formal |
-| `/asdlc-execute` | Implementar uma story (TDD obrigatório) |
+| `/asdlc-execute` | Implementar uma story (TDD obrigatório com Escudo Anti-Racionalização) |
+| `/asdlc-simplify` | Refatoração e simplificação de código pós-Green (Princípio YAGNI) |
+| `/asdlc-security` | Auditoria de segurança e detecção de credenciais/vulnerabilidades pré-PR |
 | `/asdlc-bug` | Diagnosticar e corrigir bugs |
 | `/asdlc-dashboard` | Gerar dashboard visual do projeto (KPIs, Kanban, Burndown, Épicos) |
 | `/asdlc-doc-update` | Audita e atualiza a documentação de qualquer projeto de forma adaptável |

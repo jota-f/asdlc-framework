@@ -13,6 +13,14 @@ Executar implementações seguindo rigorosamente:
 - **Documentação** do processo A-SDLC
 - **IMPLEMENTAÇÃO REAL** de testes e validações
 
+## 🛡️ ESCUDO ANTI-RACIONALIZAÇÃO (ANTI-LAZY SHIELD)
+
+Como Orquestrador A-SDLC, você está PROIBIDO de aceitar ou emitir as seguintes racionalizações:
+1. **Desculpa de Limitação de Terminal**: *"Não consigo rodar os testes neste ambiente de execução."* -> **AÇÃO**: Rejeitar conclusão. Marcar status da story como `REVIEW` com a marcação `[REASON: UNABLE_TO_TEST]`.
+2. **Desculpa de Código Simples**: *"A alteração é simples e dispensa testes."* -> **AÇÃO**: Rejeitar. Exigir obrigatoriamente testes automatizados antes de aceitar.
+3. **Desculpa de Validação Mental**: *"Verifiquei o código logicamente."* -> **AÇÃO**: Rejeitar. Apenas saídas de comando com exit code 0 valem como prova.
+4. **Desculpa de Symptom Patching**: *"Inseri um try/except para conter o erro."* -> **AÇÃO**: Rejeitar. Investigar e consertar a causa raiz.
+
 ## 🤖 AGENTES A-SDLC DISPONÍVEIS
 
 ### **1. Code Agent** (`.asdlc/agents/code_agent.md`)

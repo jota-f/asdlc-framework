@@ -1,4 +1,4 @@
-﻿# 💻 EXECUTAR A-SDLC STORY (`/asdlc-execute`)
+# 💻 EXECUTAR A-SDLC STORY (`/asdlc-execute`)
 
 Este workflow automatiza o desenvolvimento, testes e validação de uma Story estruturada no backlog. Ele é **híbrido por design**: utiliza scripts locais do CLI para validações instantâneas quando disponíveis, mantendo a execução em memória como fallback para ambientes puros sem Python.
 
@@ -31,6 +31,7 @@ Este workflow automatiza o desenvolvimento, testes e validação de uma Story es
     - Caso a Story exija criação de novos testes (ou se os existentes precisarem de atualização), o agente entra na **Red Phase** do TDD, escrevendo testes e rodando-os no terminal para garantir que falham.
     - O agente implementa a lógica necessária nos arquivos ditados no Manifesto de Arquivos (**Green Phase**), **garantindo a modularidade**: novos arquivos devem ter no máximo **300 linhas**, e adições de novos blocos complexos a arquivos legados gigantes (> 1500 linhas) devem ser evitadas ao extrair responsabilidades para novos arquivos e componentes. O agente executa e roda os testes até que passem de forma resiliente, tentando até 3 auto-correções locais antes de envolver o humano em caso de falha de teste.
 
-5. **Fechamento e Registro de Memória**:
-    - O agente executa a validação final.
-    - Altera o `status` da Story para `CONCLUÍDO` (ou `Done`) e atualiza o histórico em `stories/MEMORY.md`.
+5. **Escudo Anti-Racionalização & Fechamento**:
+    - **LEI INVIOLÁVEL**: É expressamente PROIBIDO marcar o status como `CONCLUÍDO` sem a execução física de testes no terminal com retornos bem-sucedidos (`exit code 0`). Se os testes falharem ou o ambiente não permitir execução, marque a story como `REVIEW` com a marcação `[REASON: UNABLE_TO_TEST]`.
+    - Racionalizações como *"verifiquei mentalmente"*, *"código simples não precisa de teste"*, ou *"limitação de terminal"* são expressamente rejeitadas.
+    - Após a validação irrestrita via terminal, altera o `status` da Story para `CONCLUÍDO` (ou `Done`) e atualiza o histórico em `stories/MEMORY.md`.

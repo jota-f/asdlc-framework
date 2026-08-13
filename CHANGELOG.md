@@ -7,6 +7,21 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.
 
 ---
 
+## [2.7.0] - 2026-08-12
+
+### Adicionado
+- **🛡️ Módulo Anti-Racionalização (Anti-Lazy Shield)**:
+  - Injeção de escudos explícitos em skills e workflows para barrar desculpas comuns de IAs (como limitação de terminal, atalhos de código simples ou verificação mental).
+  - Exigência estrita de execução física de testes no terminal com `exit code 0` antes de marcar o status da story como `CONCLUÍDO`. Fallback automático para `REVIEW [REASON: UNABLE_TO_TEST]`.
+- **🚀 Skill e Workflow `/asdlc-setup`**:
+  - Auto-discovery de repositórios para mapear tecnologias, suítes de testes (`pytest`, `vitest`, `cargo test`, `go test`), linters e gerar/atualizar o `PROJECT_CONTEXT.md` automaticamente.
+- **🧹 Skill e Workflow `/asdlc-simplify`**:
+  - Refatoração pós-Green focada em eliminação de código morto, remoção de abstrações prematuras e simplificação mantendo 100% de aprovação na suíte de testes.
+- **🛡️ Skill e Workflow `/asdlc-security`**:
+  - Auditoria de segurança pré-PR / pré-commit para detecção de segredos/chaves de API hardcoded, SQL Injection, sanitização de inputs e vazamento de PII em logs.
+- **🔄 Skill `/asdlc-update` (v2.7.0)**:
+  - Skill nativa para gerenciamento e sincronização segura do A-SDLC diretamente do repositório oficial.
+
 ## [2.6.1] - 2026-07-12
 
 ### Corrigido
