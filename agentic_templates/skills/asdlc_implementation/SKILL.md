@@ -1,6 +1,9 @@
 ---
 name: asdlc_implementation
-description: Skill para atuar como o Agente de Execução Autônomo do framework A-SDLC, implementando stories via TDD.
+description: Skill para atuar como o Agente de Execução Autônomo do framework A-SDLC, implementando stories de ponta a ponta com Harness Engineering e TDD.
+user_command: /implement-story
+invocation_mode: user_and_model
+tags: [implementation, execution, tdd, harness, coding]
 ---
 
 # A-SDLC Implementation Skill (Antigravity-Native)

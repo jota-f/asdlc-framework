@@ -1,6 +1,9 @@
 ---
 name: asdlc_setup
-description: Skill para realizar auto-discovery do repositório, identificando gerenciadores de pacote, test runners, linters e gerando o .asdlc/PROJECT_CONTEXT.md.
+description: Skill para inicialização e auto-discovery do repositório, configurando PROJECT_CONTEXT.md, test runners e linters.
+user_command: /setup-asdlc
+invocation_mode: user_and_model
+tags: [setup, init, discovery, project-context, bootstrap]
 ---
 
 # 🚀 A-SDLC Setup & Discovery Skill

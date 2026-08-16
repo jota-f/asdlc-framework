@@ -1,6 +1,9 @@
 ---
 name: asdlc_dashboard
-description: Skill para gerar e interpretar o dashboard visual interativo do projeto A-SDLC diretamente do modo agentic.
+description: Skill para gerar e interpretar o dashboard visual interativo e métricas de progresso do projeto A-SDLC.
+user_command: /dashboard
+invocation_mode: user_and_model
+tags: [dashboard, metrics, burndown, progress, report]
 ---
 
 # 📊 Skill: A-SDLC Dashboard

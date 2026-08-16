@@ -1,4 +1,4 @@
-# 🌌 A-SDLC Framework (v2.5.0)
+# 🌌 A-SDLC Framework (v2.8.0)
 **AI-Driven Software Development Lifecycle**
 
 A-SDLC is a framework that turns AI assistants into autonomous agents capable of managing the full software development lifecycle. It uses **Harness Engineering**, **Mandatory TDD**, **Tracer Bullets**, and **Feedback Loops** to ensure high-fidelity code.

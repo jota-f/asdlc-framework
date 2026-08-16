@@ -1,6 +1,9 @@
 ---
 name: asdlc_security
-description: Skill para realizar auditoria de segurança em código, identificando vazamentos de credenciais, vulnerabilidades de injeção, tratamento incorreto de erros e falhas em autenticação.
+description: Skill para realizar auditoria de segurança em código, identificando vazamentos de credenciais, injeções (SQL/Command) e falhas de autenticação.
+user_command: /audit-security
+invocation_mode: user_and_model
+tags: [security, audit, vulnerability, secrets, owasp]
 ---
 
 # 🛡️ A-SDLC Security Audit Skill

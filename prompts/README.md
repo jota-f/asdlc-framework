@@ -1,6 +1,6 @@
-# 🚀 PROMPTS A-SDLC - Guia de Uso
+# 🚀 PROMPTS & SKILLS A-SDLC - Guia de Uso
 
-Este diretório contém prompts profissionais otimizados para usar com LLMs como **ChatGPT** e **Google Gemini** para gerar descrições de projetos e stories seguindo o framework **A-SDLC**.
+> 💡 **RECOMENDAÇÃO MODERNA (Padrão Matt Pocock)**: Se você utiliza IDEs ou agentes com suporte a Skills (Claude Code, Antigravity, Cursor, Windsurf), utilize diretamente o catálogo em `agentic_templates/skills/` (ex: `/grill-me`, `/to-story`, `/tdd`, `/implement-story`). Este diretório de prompts manuais serve como referência e fallback para chats web puros (ChatGPT/Gemini Web).
 
 ## 📁 ARQUIVOS DISPONÍVEIS
 

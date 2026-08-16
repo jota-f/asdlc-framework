@@ -1,6 +1,9 @@
 ---
 name: asdlc_context_compactor
-description: Skill para compactar contexto de conversation durante longas sessões, mantendo apenas informações essenciais para reduzir tokens.
+description: Skill para compactar contexto de conversação, sintetizar decisões e evitar a Dumb Zone de tokens excessivos.
+user_command: /compact-context
+invocation_mode: user_and_model
+tags: [context, tokens, optimization, compactor, smart-zone]
 ---
 
 # A-SDLC Context Compactor Skill

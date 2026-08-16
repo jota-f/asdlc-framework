@@ -1,6 +1,9 @@
 ---
 name: asdlc_update
-description: Skill para verificar novas versões, gerenciar venv e atualizar as habilidades (Skills), fluxos (Workflows) e scripts do A-SDLC com segurança sem sobrescrever dados do usuário.
+description: Skill para sincronizar, atualizar e migrar o ecossistema de Skills e agentes do A-SDLC com segurança sem sobrescrever dados do usuário.
+user_command: /update-asdlc
+invocation_mode: user_and_model
+tags: [update, upgrade, migration, sync, maintenance]
 ---
 
 # 🔄 A-SDLC Update & Migration Skill
