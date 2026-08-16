@@ -33,7 +33,6 @@ Esta skill capacita o agente a atuar como o **System Maintenance & Update Agent*
 ### 3. Cópia Segura (Preservação de Dados do Usuário)
 1. **Copiar e Atualizar**:
    - `agentic_templates/skills/` (ou `skills/`)
-   - `agentic_templates/workflows/` (ou `workflows/`)
    - `agentic_templates/templates/` (ou `templates/`)
    - `agentic_templates/validate_stories.py`
    - `asdlc/`, `main.py`, `requirements.txt` (se o CLI local existir)

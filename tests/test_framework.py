@@ -385,7 +385,7 @@ class TestInstallAgenticTemplates:
 
         # Verificar se os diretórios/arquivos esperados foram copiados
         assert (self.target_dir / "skills").exists()
-        assert (self.target_dir / "workflows").exists()
+        assert (self.target_dir / "templates").exists()
         assert (self.target_dir / "validate_stories.py").exists()
 
     def test_install_agentic_protects_user_files(self):
