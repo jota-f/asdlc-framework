@@ -1,6 +1,9 @@
-﻿---
+---
 name: asdlc_documentation_updater
-description: Skill do framework A-SDLC para analisar, descobrir e atualizar a documentação de qualquer projeto (README, CHANGELOG, BACKLOG, manuais e afins) de forma dinâmica e adaptável ao repositório.
+description: Skill para auditar, descobrir e atualizar ativamente a documentação do repositório (MEMORY.md, GLOSSARY.md, README, CHANGELOG, BACKLOG).
+user_command: /update-docs
+invocation_mode: user_and_model
+tags: [documentation, memory, glossary, changelog, audit]
 ---
 
 # 📚 A-SDLC Documentation Updater Skill

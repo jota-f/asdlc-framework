@@ -1,6 +1,9 @@
 ---
 name: asdlc_story_generator
-description: Skill A-SDLC para atuar como Product Owner Sênior e Requirements Agent gerando Stories técnicas super estruturadasprontas para implementação com foco em otimização de tokens.
+description: Skill para atuar como Product Owner e Requirements Agent gerando Stories técnicas estruturadas prontas para implementação com foco em Lean Context e critérios de aceite testáveis.
+user_command: /to-story
+invocation_mode: user_and_model
+tags: [story, requirements, planning, backlog, lean-context]
 ---
 
 # A-SDLC Story Generator Skill

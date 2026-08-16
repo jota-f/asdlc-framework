@@ -1,6 +1,9 @@
 ---
 name: asdlc_bug_hunter
-description: Skill para realizar diagnósticos profundos e resoluções seguras de bugs seguindo a metodologia A-SDLC.
+description: Skill para triagem de bugs, análise de causa raiz (RCA) e reprodução obrigatória via testes automatizados.
+user_command: /triage-bug
+invocation_mode: user_and_model
+tags: [bug, triage, rca, debugging, reproduction, tests]
 ---
 
 # 🕵️‍♂️ Skill: A-SDLC Bug Hunter

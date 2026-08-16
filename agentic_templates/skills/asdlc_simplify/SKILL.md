@@ -1,6 +1,9 @@
 ---
 name: asdlc_simplify
-description: Skill para realizar refatoração, simplificação e remoção de código morto pós-Green mantendo 100% da suíte de testes passando.
+description: Skill para refatoração e remoção de código morto e complexidade desnecessária mantendo todos os testes verdes.
+user_command: /simplify
+invocation_mode: user_and_model
+tags: [refactor, simplify, clean-code, yagni, dead-code]
 ---
 
 # 🧹 A-SDLC Code Simplify Skill

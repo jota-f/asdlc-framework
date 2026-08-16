@@ -5,6 +5,21 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2.8.0] - 2026-08-16
+
+### Adicionado
+- **🔥 Arquitetura Unificada de Skills (Padrão Matt Pocock)**:
+  - Todas as capacidades do framework agora são **Skills de Primeira Classe** padronizadas em `agentic_templates/skills/*/SKILL.md`.
+  - Separação clara entre **Comandos do Usuário (`/comandos`)** e **Skills Autônomas do Modelo** com metadados enriquecidos (`user_command`, `invocation_mode`, `tags`).
+- **🔥 Novas Skills de Engenharia Disciplinada**:
+  - `asdlc_grill_me` (`/grill-me`): Entrevista socrática prévia para desambiguação de domínio, regras de deleção e geração formal de **ADRs** (`docs/adr/`) e evolução do `GLOSSARY.md`.
+  - `asdlc_epic_planner` (`/to-epic`): Planejamento de épicos complexos e decomposição em histórias técnicas (Tracer Bullets).
+  - `asdlc_interface_design` (`/design-interface`): Modelagem estrita de contratos de API, schemas e tipagem antes do código de produção.
+  - `asdlc_tdd` (`/tdd`): Ciclo estrito Red-Green-Refactor com execução física de testes.
+  - `asdlc_architecture` (`/improve-architecture`): Auditoria de acoplamento, limites DDD e criação de ADRs.
+- **🔄 Auto-Atualização A-SDLC para Agentes**:
+  - Aprimoramento da skill `asdlc_update` para permitir que agentes em projetos legados migrem e sincronizem automaticamente o ecossistema de skills sem perder dados de stories, memória ou glossário.
+
 ---
 
 ## [2.7.0] - 2026-08-12

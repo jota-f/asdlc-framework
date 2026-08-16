@@ -1,4 +1,4 @@
-# 🤖 A-SDLC Agentic Mode Guide (v2.7.0)
+# 🤖 A-SDLC Agentic Mode Guide (v2.8.0)
 
 ## O que é este diretório?
 
@@ -45,23 +45,25 @@ seu-projeto/
 
 ## 🚀 Quick Start
 
-### Comandos disponíveis
+### Catálogo de Skills & Comandos (Padrão Matt Pocock)
 
-| Comando | Quando Usar |
-|---------|-------------|
-| `/asdlc-setup` | Auto-discovery de repositório (detecta testes, linters e gera `PROJECT_CONTEXT.md`) |
-| `/asdlc-grill` | Questionamento guiado para demandas vagas — inclui Scope Gate automático |
-| `/asdlc-architecture` | Perguntas de arquitetura e modelagem |
-| `/asdlc-plan` | Analisar escopo grande e dividir em stories (tracer bullets) |
-| `/asdlc-create-epic` | Criar um Épico para objetivos de roadmap (múltiplos sprints) |
-| `/asdlc-create-story` | Criar uma story formal |
-| `/asdlc-execute` | Implementar uma story (TDD obrigatório com Escudo Anti-Racionalização) |
-| `/asdlc-simplify` | Refatoração e simplificação de código pós-Green (Princípio YAGNI) |
-| `/asdlc-security` | Auditoria de segurança e detecção de credenciais/vulnerabilidades pré-PR |
-| `/asdlc-bug` | Diagnosticar e corrigir bugs |
-| `/asdlc-dashboard` | Gerar dashboard visual do projeto (KPIs, Kanban, Burndown, Épicos) |
-| `/asdlc-doc-update` | Audita e atualiza a documentação de qualquer projeto de forma adaptável |
-| `/asdlc-update` | Atualiza as skills e workflows do A-SDLC de forma segura |
+| Comando (Slash) | Skill (`SKILL.md`) | Tipo / Invocação | Objetivo Principal |
+| :--- | :--- | :--- | :--- |
+| `/grill-me` | [`asdlc_grill_me`](file:///d:/G/A-SDLC/agentic_templates/skills/asdlc_grill_me/SKILL.md) | **User & Model** | Questionamento socrático, desambiguação e criação de **ADRs** |
+| `/to-epic` | [`asdlc_epic_planner`](file:///d:/G/A-SDLC/agentic_templates/skills/asdlc_epic_planner/SKILL.md) | **User & Model** | Planejamento de épicos, análise de escopo e fatiamento vertical |
+| `/to-story` | [`asdlc_story_generator`](file:///d:/G/A-SDLC/agentic_templates/skills/asdlc_story_generator/SKILL.md) | **User & Model** | Criação de story técnica com critérios de aceite testáveis |
+| `/design-interface` | [`asdlc_interface_design`](file:///d:/G/A-SDLC/agentic_templates/skills/asdlc_interface_design/SKILL.md) | **User & Model** | Modelagem de interfaces, contratos de API e schemas antes do código |
+| `/tdd` | [`asdlc_tdd`](file:///d:/G/A-SDLC/agentic_templates/skills/asdlc_tdd/SKILL.md) | **Model / Loop** | Execução estrita do ciclo Red-Green-Refactor com testes reais |
+| `/implement-story` | [`asdlc_implementation`](file:///d:/G/A-SDLC/agentic_templates/skills/asdlc_implementation/SKILL.md) | **User & Model** | Implementação autônoma de ponta a ponta com Harness Engineering |
+| `/simplify` | [`asdlc_simplify`](file:///d:/G/A-SDLC/agentic_templates/skills/asdlc_simplify/SKILL.md) | **User & Model** | Refatoração pós-Green e remoção de complexidade desnecessária |
+| `/improve-architecture` | [`asdlc_architecture`](file:///d:/G/A-SDLC/agentic_templates/skills/asdlc_architecture/SKILL.md) | **User & Model** | Auditoria estrutural, limites DDD e registro formal de ADRs |
+| `/triage-bug` | [`asdlc_bug_hunter`](file:///d:/G/A-SDLC/agentic_templates/skills/asdlc_bug_hunter/SKILL.md) | **User & Model** | RCA e reprodução obrigatória de bugs via teste falhando |
+| `/audit-security` | [`asdlc_security`](file:///d:/G/A-SDLC/agentic_templates/skills/asdlc_security/SKILL.md) | **User & Model** | Auditoria de segurança, vazamento de credenciais e injeções |
+| `/compact-context` | [`asdlc_context_compactor`](file:///d:/G/A-SDLC/agentic_templates/skills/asdlc_context_compactor/SKILL.md) | **Model / Auto** | Otimização de contexto para evitar a Dumb Zone de tokens |
+| `/update-docs` | [`asdlc_documentation_updater`](file:///d:/G/A-SDLC/agentic_templates/skills/asdlc_documentation_updater/SKILL.md) | **User & Model** | Descoberta e atualização de `GLOSSARY.md`, `MEMORY.md` e docs |
+| `/dashboard` | [`asdlc_dashboard`](file:///d:/G/A-SDLC/agentic_templates/skills/asdlc_dashboard/SKILL.md) | **User & Model** | Geração e visualização do dashboard interativo do projeto |
+| `/setup-asdlc` | [`asdlc_setup`](file:///d:/G/A-SDLC/agentic_templates/skills/asdlc_setup/SKILL.md) | **User & Model** | Auto-discovery e inicialização do `PROJECT_CONTEXT.md` |
+| `/update-asdlc` | [`asdlc_update`](file:///d:/G/A-SDLC/agentic_templates/skills/asdlc_update/SKILL.md) | **User & Model** | Sincronização e migração segura de skills e agentes |
 
 ---
 
