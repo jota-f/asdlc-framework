@@ -1,7 +1,7 @@
-# 🌌 A-SDLC Framework (v2.8.0)
+# 🌌 A-SDLC Framework (v2.9.0)
 **AI-Driven Software Development Lifecycle**
 
-A-SDLC is a framework that turns AI assistants into autonomous agents capable of managing the full software development lifecycle. It uses **Harness Engineering**, **Mandatory TDD**, **Tracer Bullets**, and **Feedback Loops** to ensure high-fidelity code.
+A-SDLC is a framework that turns AI assistants into autonomous agents capable of managing the full software development lifecycle. It uses **Harness Engineering**, **Mandatory TDD**, **J-Space Cognition**, **Tracer Bullets**, and **Feedback Loops** to ensure high-fidelity code.
 
 ---
 
@@ -32,6 +32,7 @@ Unlike chat assistants, A-SDLC treats AI as a **Multi-Agent System (MAS)**. Each
 | Pillar | Description |
 |--------|-------------|
 | **Harness Engineering** | Each agent operates in an isolated environment with lean context and validation sensors |
+| **J-Space Cognition** | Fast, structured deliberation (*Judgment $\rightarrow$ Constraints $\rightarrow$ Impact*) prior to action to eliminate drifting and over-engineering |
 | **Mandatory TDD** | Tests are created BEFORE code (Red → Green → Refactor) |
 | **Tracer Bullets** | Tasks cross all layers (DB → API → UI) for immediate feedback |
 | **Smart Zone** | Context monitoring to keep LLM in the precision zone (<80k tokens) |

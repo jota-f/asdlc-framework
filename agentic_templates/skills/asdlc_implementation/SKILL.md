@@ -72,6 +72,12 @@ Ao iniciar seu trabalho com uma Story recebida, siga os tópicos abaixo passo a 
 2. Verifique o **Manifesto de Arquivos**.
 3. (Opcional, mas Altamente Recomendado) Leia o `PROJECT_CONTEXT.md` ou README da raiz para garantir as convenções, lints e sintaxes fixas do projeto atual.
 
+### Passo 1.1: J-Space Cognition Gate (Deliberação Rápida Obrigatória)
+Antes de criar qualquer arquivo ou teste, execute uma deliberação mental concisa (3 itens):
+1. **Judgment**: Qual é a solução mínima necessária para atender os critérios de aceitação?
+2. **Constraints**: Há violações de YAGNI, complexidade ou regras de arquitetura do `PROJECT_CONTEXT.md`?
+3. **Impact**: Quais contratos de APIs ou testes existentes serão afetados pelas mudanças?
+
 ### Passo 2: Verificar Testes Existentes
 Antes de criar novos testes, verifique se já existem testes para o cenário:
 1. Busque arquivos de teste relacionados (ex: `test_*.py`, `*.test.ts`, `*_test.go`)

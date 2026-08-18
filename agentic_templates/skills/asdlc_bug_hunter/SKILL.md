@@ -29,12 +29,12 @@ Antes de olhar o código, entenda o contexto:
 - O teste deve FALHAR com o erro relatado.
 - Se você não consegue criar um teste que falhe, você ainda não entendeu o bug.
 
-### 3. Root Cause Analysis (RCA)
-Use a técnica dos "5 Porquês" internamente:
-- Por que a variável estava nula? (Porque a função X retornou None)
-- Por que a função X retornou None? (Porque o DB estava offline)
-- ...e assim por diante.
+### 3. Root Cause Analysis (J-Space Cognitive Step)
+Use a técnica dos "5 Porquês" e deliberação interna antes de tocar no código:
+- **Hipótese**: Por que a falha ocorreu? (Rastreie a origem exata dos dados)
+- **Deliberação**: A correção proposta altera o comportamento esperado de outras partes do sistema?
 - **Identifique o arquivo e a linha exata.**
+- **Patch Cirúrgico**: Planeje a menor alteração suficiente para sanar o defeito sem introduzir mocks desnecessários.
 
 ### 4. Ciclo de Fix A-SDLC
 1. **Prepare a Story**: Use `/asdlc-bug` ou crie uma story manual com `type: bug_fix`.

@@ -1,7 +1,7 @@
-# 🌌 A-SDLC Framework (v2.8.0)
+# 🌌 A-SDLC Framework (v2.9.0)
 **AI-Driven Software Development Lifecycle**
 
-O A-SDLC é um framework que transforma assistentes de IA em agentes autônomos capazes de gerenciar o ciclo de vida completo de um projeto de software. Ele utiliza **Harness Engineering**, **TDD Obrigatório**, **Tracer Bullets** e **Feedback Loops** para garantir código de alta fidelidade.
+O A-SDLC é um framework que transforma assistentes de IA em agentes autônomos capazes de gerenciar o ciclo de vida completo de um projeto de software. Ele utiliza **Harness Engineering**, **TDD Obrigatório**, **J-Space Cognition**, **Tracer Bullets** e **Feedback Loops** para garantir código de alta fidelidade.
 
 ---
 
@@ -32,6 +32,7 @@ Diferente de assistentes de chat, o A-SDLC trata a IA como um **Sistema Multi-Ag
 | Pilar | Descrição |
 |-------|-----------|
 | **Harness Engineering** | Cada agente opera em ambiente isolado com contexto enxuto e sensores de validação |
+| **J-Space Cognition** | Deliberação rápida e estruturada (*Judgment $\rightarrow$ Constraints $\rightarrow$ Impact*) antes da ação para evitar drifting e sobre-engenharia |
 | **TDD Obrigatório** | Testes são criados ANTES do código (Red → Green → Refactor) |
 | **Tracer Bullets** | Tarefas atravessam todas as camadas (DB → API → UI) para feedback imediato |
 | **Smart Zone** | Monitoramento de contexto para manter a LLM na zona de precisão (<80k tokens) |
