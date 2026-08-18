@@ -30,7 +30,8 @@
 
 ### **Conceitos de Operação**:
 - **Feed Forward**: Contexto preparado (`PROJECT_CONTEXT.md` + Story) antes da execução.
-- **Feedback Loop**: Validação automática via testes/linting com retentativas de correção.
+- **J-Space Cognition**: Protocolo de deliberação prévia enxuta (*Judgment $\rightarrow$ Constraints $\rightarrow$ Impact*) antes de emitir ou alterar código.
+- **Feedback Loop & Self-Healing**: Validação automática via testes/linting com J-Space Recovery Workspace para patches cirúrgicos.
 - **Recursive Handoff**: Delegação de tarefas entre agentes usando a tag `[DELEGATE]`.
 
 ## 3. Pilha de Tecnologia (Tech Stack)

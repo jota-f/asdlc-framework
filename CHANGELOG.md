@@ -5,6 +5,20 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2.9.0] - 2026-08-18
+
+### Adicionado
+- **🧠 Paradigma J-Space Cognition (Global Workspace Architecture)**:
+  - **J-Space Cognition Gate**: Protocolo de deliberação prévia enxuta (*Judgment $\rightarrow$ Constraints $\rightarrow$ Impact*) antes de gerar ou modificar qualquer arquivo, reduzindo a perda de capacidade (*capability-realization loss*) e eliminando *drifting* de contexto.
+  - **J-Space Recovery Workspace (Self-Healing A-SDLC)**: Quando a suíte de testes ou linter falha no loop do `AgentHarness`, o agente formula uma hipótese de causa-raiz (RCA) e prevê efeitos colaterais antes de emitir um patch cirúrgico.
+  - **Atualização das Skills de Execução e Triage**:
+    - [`asdlc_implementation`](file:///d:/G/A-SDLC/agentic_templates/skills/asdlc_implementation/SKILL.md): Injeção do Passo 1.1 (J-Space Cognition Gate) entre a leitura de contexto e a implementação.
+    - [`asdlc_bug_hunter`](file:///d:/G/A-SDLC/agentic_templates/skills/asdlc_bug_hunter/SKILL.md): Reformulação do Passo 3 com o *J-Space Cognitive Step* (5 Porquês + Deliberação de Efeito Colateral + Patch Cirúrgico).
+  - **Atualização do Template de Stories**: Adicionada a diretriz cognitiva de impacto e a Fase 3 (J-Space Cognition Gate) no checklist de execução do `story_template.md`.
+  - **Governança & Arquitetura**: `PROJECT_CONTEXT.md` atualizado com o J-Space Cognition como conceito operacional formal.
+
+---
+
 ## [2.8.0] - 2026-08-16
 
 ### Adicionado

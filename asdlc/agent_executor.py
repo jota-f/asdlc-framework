@@ -113,6 +113,12 @@ class AgentHarness:
 ## 📂 ARQUIVOS RELEVANTES
 {files_content}
 
+## 🧠 J-SPACE COGNITION PROTOCOL (MANDATÓRIO ANTES DA AÇÃO)
+Antes de gerar ou alterar qualquer código, processe internamente a seguinte deliberação enxuta:
+1. [Judgment]: Qual a menor e mais cirúrgica modificação suficiente para atender o requisito?
+2. [Constraints]: Validar limites de linhas (máx 300), princípios YAGNI/KISS e regras do PROJECT_CONTEXT.md.
+3. [Impact]: Prever quais contratos ou testes existentes podem quebrar.
+
 ## 🛠️ FERRAMENTAS DISPONÍVEIS
 Você pode delegar subtarefas para outros especialistas se necessário.
 Para delegar, use o formato: [DELEGATE: tipo_do_agente | descrição_da_subtarefa]
@@ -250,7 +256,13 @@ Se não houver framework configurado ou se for um tipo de projeto que você não
                 return result
             else:
                 logger.warning(f"ERRO: Validação falhou (Tentativa {attempt + 1})")
-                error_feedback = f"A validação falhou com o seguinte erro:\n{process.stderr}\n{process.stdout}\nPor favor, corrija o código."
+                error_feedback = (
+                    f"A validação falhou com o seguinte erro:\n{process.stderr}\n{process.stdout}\n\n"
+                    "### 🧠 J-SPACE RECOVERY WORKSPACE (RCA & PATCH CIRÚRGICO)\n"
+                    "1. Analise o traceback e formule a causa-raiz exata.\n"
+                    "2. Delibere sobre efeitos colaterais da correção.\n"
+                    "3. Emita APENAS o patch cirúrgico necessário para resolver a falha sem adicionar complexidade."
+                )
                 current_task = f"{task_description}\n\n### FEEDBACK DE ERRO:\n{error_feedback}"
                 attempt += 1
         except Exception as e:

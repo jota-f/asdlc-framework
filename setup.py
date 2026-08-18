@@ -21,7 +21,7 @@ def read_requirements():
 
 setup(
     name="asdlc-framework",
-    version="2.8.0",
+    version="2.9.0",
     author="A-SDLC Framework Team",
     author_email="contact@asdlc-framework.com",
     description="Framework revolucionário para desenvolvimento de software com agentes de IA especializados",
