@@ -18,7 +18,7 @@ Esta skill capacita o agente a atuar como o **System Maintenance & Update Agent*
 1. **Versão Local**: Lê a versão registrada em `agentic_templates/README.md` ou `README.md` (ex: `v2.7.0`).
 2. **Clone Raso Temporário**: Executa no terminal:
    ```bash
-   git clone --depth 1 https://github.com/jota-f/A-SDLC.git .temp_asdlc
+   git clone --depth 1 https://github.com/jota-f/asdlc-framework.git .temp_asdlc
    ```
 3. **Versão Remota**: Lê a versão remota em `.temp_asdlc/agentic_templates/README.md`.
 4. Se já estiver atualizado e o usuário não forçou reinstall, finaliza avisando o usuário.
